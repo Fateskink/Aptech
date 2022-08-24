@@ -2,6 +2,7 @@ import { Button } from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './Part3.css'
 import { useState, useEffect } from 'react'
+import {Spinner} from 'react-bootstrap'
 const axios = require('axios').default;
 
 function Part3CallApi(props) {
@@ -11,24 +12,30 @@ function Part3CallApi(props) {
     const [products, setProducts] = useState([
         
     ])
+    const [isLoading, setIsLoading] = useState(false)
     const [cart, setCart] = useState({})
+    //const url = 'http://localhost:9000/categories.php'
+    const url = 'http://localhost:9001/categories'
     useEffect(() => {
         debugger
-        axios.get('http://localhost:9000/categories.php')
+        let mounted = true
+        setIsLoading(true)
+        axios.get(url)
         .then(function (response) {
             // handle success
             debugger
-            setProducts(response.data.categories)
-            console.log(response);
+            if(mounted) {
+                setProducts(response.data.categories)
+                setIsLoading(false)
+            }
+            return () => mounted = false;              
         })        
         .catch(function (error) {
             // handle error
-            debugger
+            setIsLoading(false)
             console.log(error);
-        })   
-        debugger
-        let xx = 11   
-    })
+        })                   
+    }, [])
     //calculated value
     function getTotal() {
         let total = 0
@@ -51,7 +58,10 @@ function Part3CallApi(props) {
             setFilteredProducts(products.filter(product => product.category.toLowerCase().includes(typedText.toLowerCase()) 
                 || product.description.toLowerCase().includes(typedText.toLowerCase())))            
         }}/>
-        <table>   
+        { isLoading == true ? <Spinner animation="border" role="status">
+                                <span className="visually-hidden">Loading...</span>
+                            </Spinner> : 
+          <table>   
             <thead>
                 <tr>
                     <th>Category</th>
@@ -89,6 +99,7 @@ function Part3CallApi(props) {
             </tbody>
             
         </table>
+        }
         <h2>Your cart</h2>
         <h2>Total = ${getTotal()}</h2>
         <Button 

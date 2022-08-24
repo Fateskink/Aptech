@@ -46,6 +46,9 @@ $categories = [
     ],
 ];
 //convert from PHP plain object => JSON object
+for($i = 0; $i < 1_000_00000; $i++) {
+    $x = 111;
+}
 echo json_encode(array("categories" => $categories));
 
 ?>
