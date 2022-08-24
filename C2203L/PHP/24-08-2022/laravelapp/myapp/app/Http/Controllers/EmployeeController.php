@@ -54,4 +54,18 @@ class EmployeeController extends Controller
         $employee->save();
         return redirect('/employees');
     }
+    public function edit(Request $request, $id) {
+        //find Employee by ID
+        $employee = Employee::find($id);
+        //dd($employee);
+        return view('question02.edit', [
+            //"dbname" => env('DB_DATABASE')
+            "employee" => $employee
+        ]);
+    }
+    public function update(Request $request, $id) {
+        //find Employee by ID
+        dd("haha");
+        $employee = Employee::find($id);
+    }
 }

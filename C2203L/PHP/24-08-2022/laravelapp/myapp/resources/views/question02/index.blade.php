@@ -9,16 +9,17 @@
       <th>Emp Name</th>
       <th>Post</th>
       <th>Emp Salary</th>
+      <th></th>
     </tr>
     @foreach ($employees as $employee)
         <tr>
-            <td>{{$employee['id']}}</td>
-            <td>{{$employee['employee_name']}}</td>
-            <td>{{$employee['post']}}</td>
-            <td>{{$employee['salary']}}</td>
-            {{-- <a href="/edit_employee.php?employeeNo=<?php echo $employee->employeeNo; ?>">
-                Edit</a>
-            <a href="/employee_list.php?deletedEmployeeNo=<?php echo $employee->employeeNo; ?>">
+            <td>{{$employee->id}}</td>
+            <td>{{$employee->employee_name}}</td>
+            <td>{{$employee->post}}</td>
+            <td>{{$employee->salary}}</td>
+            <td><a href="/employees/{{$employee->id}}">
+                Edit</a></td>
+            {{-- <a href="/employee_list.php?deletedEmployeeNo=<?php echo $employee->employeeNo; ?>">
             Delete</a> --}}
         </td>
         </tr>

@@ -9,7 +9,7 @@ class Employee extends Model
 {
     use HasFactory;
     protected $table = 'employees';
-    protected $primaryKey = 'employee_id';
+    protected $primaryKey = 'id';
     public $incrementing = true;
     protected $keyType = 'int';
     public $timestamps = true;

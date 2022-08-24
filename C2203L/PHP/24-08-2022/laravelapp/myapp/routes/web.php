@@ -20,5 +20,9 @@ use App\Http\Controllers\EmployeeController;
 
 Route::get('/question01/showName', [Question1Controller::class,'showName']);
 Route::get('/question01/showColor', [Question1Controller::class,'showColor']);
+
 Route::get('/employees', [EmployeeController::class,'index']);
+Route::get('/employees/{id}', [EmployeeController::class,'edit']);
+Route::put('/employees/{id}', [EmployeeController::class,'update']);
+
 Route::post('/employees', [EmployeeController::class,'create']);
