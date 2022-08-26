@@ -34,11 +34,14 @@ let products = [
 ]  
   router.get('/categories', (req, res) => {
     
+    debugger
     // const {x, y} = req.query
     // console.log(`x = ${x}, y = ${y}`)
-    debugger
+    const {typedText = ""} = req.query
+    let filteredProducts = products.filter(product => product.category.toLowerCase().includes(typedText.toLowerCase()) 
+                || product.description.toLowerCase().includes(typedText.toLowerCase()))
     res.json({
-        "categories": products
+        "categories": filteredProducts
     })
   })
   app.use(express.static('public', options))
