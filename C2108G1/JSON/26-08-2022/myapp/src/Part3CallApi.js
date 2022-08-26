@@ -5,8 +5,8 @@ import { useState, useEffect } from 'react'
 import {Spinner} from 'react-bootstrap'
 const axios = require('axios').default;
 
-//const url = 'http://localhost:9000/categories.php'
-const url = 'http://localhost:9001/categories'
+const url = 'http://localhost:9000/categories.php'
+//const url = 'http://localhost:9001/categories'
 
 function Part3CallApi(props) {
     //useState is called "Hook"
