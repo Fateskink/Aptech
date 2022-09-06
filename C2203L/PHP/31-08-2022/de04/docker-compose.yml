@@ -52,4 +52,6 @@ networks:
 volumes:
     sail-mysql:
         driver: local
-# docker exec -it de04-laravel-app bash
+#docker exec -it de04-laravel-app bash
+#docker exec -it de04-mysql bash
+
