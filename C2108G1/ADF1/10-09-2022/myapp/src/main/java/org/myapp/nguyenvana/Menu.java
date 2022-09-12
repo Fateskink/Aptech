@@ -70,6 +70,7 @@ public class Menu {
                         physics = getScanner().nextFloat();
                         if(physics >= 0 && physics <= 10) {
                             mark.setPhysics(physics);
+                            //mark.physics = physics;
                         }else {
                             System.err.println("Incorrect value, please input again");
                         }
