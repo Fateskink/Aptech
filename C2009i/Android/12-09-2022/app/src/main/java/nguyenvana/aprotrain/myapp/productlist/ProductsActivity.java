@@ -16,6 +16,7 @@ import nguyenvana.aprotrain.myapp.models.Product;
 public class ProductsActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private ArrayList<Product> products = new ArrayList<>();
+    private ProductsAdapter productsAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,7 +26,8 @@ public class ProductsActivity extends AppCompatActivity {
         LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(),
                 LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
-        
+        productsAdapter = new ProductsAdapter(this, products);
+        recyclerView.setAdapter(productsAdapter);
     }
     private void generateFakeData() {
         //fake data
