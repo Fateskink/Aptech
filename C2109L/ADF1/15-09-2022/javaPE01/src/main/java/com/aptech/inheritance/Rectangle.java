@@ -11,9 +11,7 @@ public class Rectangle extends Shape{
         this.height = height;
     }
 
-    public int getArea() {
-        return width * height;
-    }
+
 
     public int getWidth() {
         return width;
@@ -32,10 +30,17 @@ public class Rectangle extends Shape{
     }
 
     @Override
+    public int getArea() {
+        //You MUST implement abstract method from super class
+        return width * height;
+    }
+
+    @Override
     public String toString() {
         return super.toString() + "\n"+
                 "width: "+width +"\n"+
-                "height: "+height +"\n";
+                "height: "+height +"\n" +
+                "area: "+this.getArea();
     }
 }
 

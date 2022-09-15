@@ -1,7 +1,7 @@
 package com.aptech.inheritance;
 
 //parent class or super class
-public class Shape {
+public abstract class Shape {
     private String name;
     private String color;
 
@@ -25,7 +25,10 @@ public class Shape {
     public void setColor(String color) {
         this.color = color;
     }
-
+    /*
+    Sometime doc here
+    * */
+    public abstract int getArea(); //abstract method have no implementation
     @Override
     public String toString() {
         return "name='" + name + '\'' +
