@@ -7,27 +7,27 @@ import android.database.sqlite.SQLiteOpenHelper;
 import androidx.annotation.Nullable;
 
 public class DBHelper extends SQLiteOpenHelper {
-    private static final String DB_NAME = "notedb";
-    private static final int DB_VERSION = 1;
+
 
     public DBHelper(@Nullable Context context,
                     @Nullable String name,
                     @Nullable SQLiteDatabase.CursorFactory factory, int version) {
-        super(context, DB_NAME, factory, DB_VERSION);
+        super(context, name, factory, version);
     }
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         String query = "CREATE TABLE tblNotes ("
-                + "id INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + "content TEXT,"
-                + "isImportant INTEGER,"
-                + "createdDate REAL)";
+                + TblNotes.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + TblNotes.COLUMN_CONTENT +  " TEXT,"
+                + TblNotes.COLUMN_IMPORTANT +  " INTEGER,"
+                + TblNotes.COLUMN_CREATED_DATE +  " REAL)";
         sqLiteDatabase.execSQL(query);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TblNotes.TABLE_NAME);
+        onCreate(sqLiteDatabase);
     }
 }
