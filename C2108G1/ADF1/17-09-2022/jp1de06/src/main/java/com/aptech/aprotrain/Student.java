@@ -75,14 +75,14 @@ public class Student implements IStudent{
                 + "mark: "+mark
         );
         */
-        System.out.println(this.toString());
+        System.out.println(toString());
     }
 
     @Override
     public String toString() {
         return "id: "+id
-                + "fullName: "+fullName
-                + "email: "+email
-                + "mark: "+mark;
+                + ", fullName: "+fullName
+                + ", email: "+email
+                + ", mark: "+mark;
     }
 }
