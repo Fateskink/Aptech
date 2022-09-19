@@ -10,7 +10,11 @@ import android.widget.TextView;
 
 import androidx.cardview.widget.CardView;
 
+import java.util.Date;
+
 import nguyenvana.aprotrain.com.R;
+import nguyenvana.aprotrain.com.Utilities;
+import nguyenvana.aprotrain.com.database.TblNotes;
 import nguyenvana.aprotrain.com.models.Note;
 
 public class CustomAdapter extends CursorAdapter {
@@ -32,6 +36,17 @@ public class CustomAdapter extends CursorAdapter {
         CardView cardView = view.findViewById(R.id.cardView);
         TextView textViewContent = view.findViewById(R.id.textViewContent);
         TextView textViewCreatedDate = view.findViewById(R.id.textViewCreatedDate);
+        String content = cursor.getString((char)cursor
+                            .getColumnIndex(TblNotes.COLUMN_CONTENT));
+        boolean isImportant = cursor.getInt((char)cursor
+                .getColumnIndex(TblNotes.COLUMN_IMPORTANT)) > 0;
+        Date createdDate = new Date(cursor.getLong((char)cursor
+                .getColumnIndex(TblNotes.COLUMN_CREATED_DATE)));
+        long id = cursor.getLong((char)cursor.getColumnIndex(TblNotes.COLUMN_ID));
         //Note selectedNode = cursor.get
+        //fetch data to ui
+        cardView.setCardBackgroundColor(isImportant ? 0xFF00FF00 : 0xFFFF0000);
+        textViewContent.setText(content);
+        textViewCreatedDate.setText(Utilities.convertDateToString(createdDate));
     }
 }
