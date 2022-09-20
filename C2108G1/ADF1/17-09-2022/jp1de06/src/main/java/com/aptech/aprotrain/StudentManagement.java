@@ -12,7 +12,14 @@ public class StudentManagement {
         for(int i = 0; i<3; i++) {
             Student student = new Student();
             student.input();
-            this.students.add(student);
+            boolean isExistingStudentName = (students
+                    .stream()
+                    .filter(eachStudent -> eachStudent.getFullName()
+                            .equals(student.getFullName())).toList()).size() > 0;
+            if(!isExistingStudentName) {
+                this.students.add(student);
+            }
+
         }
     }
     public void showStudent(){
