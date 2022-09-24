@@ -17,6 +17,15 @@ public class DocumentManager {
     void searchByAuthorName(String authorName){
         //common method
         ArrayList<Book> booksResult = new ArrayList<>();
+        /*
+        for(int i = 0; i < books.size(); i++) {
+            Book eachBook = books.get(i);
+            String eachAuthorName = eachBook.getAuthorName();
+            if(eachAuthorName.toLowerCase().equals(authorName.toLowerCase())) {
+                booksResult.add(eachBook);
+            }
+        }
+        */
         for (Book eachBook: this.books) {
             if(eachBook.getAuthorName().toLowerCase().equals(authorName.toLowerCase())) {
                 booksResult.add(eachBook);
