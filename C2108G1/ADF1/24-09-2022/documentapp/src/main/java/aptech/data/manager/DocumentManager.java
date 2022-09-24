@@ -3,8 +3,10 @@ package aptech.data.manager;
 import aptech.data.impl.Book;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Map;
 import java.util.function.Predicate;
-import java.util.stream.Stream;
 
 public class DocumentManager {
     private ArrayList<Book> books = new ArrayList<>();
@@ -12,7 +14,7 @@ public class DocumentManager {
 
     }
     void displayAllDocument(){
-
+        
     }
     void searchByAuthorName(String authorName){
         //common method
@@ -39,7 +41,7 @@ public class DocumentManager {
                     public boolean test(Book book) {
                         return book.getAuthorName().toLowerCase().equals(authorName.toLowerCase());
                     }
-                  })
+                })
                 .toList();
         //use stream + lambda expression + oneline function
         booksResult = (ArrayList<Book>) this.books
@@ -53,5 +55,38 @@ public class DocumentManager {
             book.show();
         }
     }
-
+    public void analyze(){
+        /*
+        "Java" : 2 items
+        "C#": 1 item
+        * */
+        Hashtable<String, Integer> hashMap = new Hashtable<String, Integer>();
+        for (Book book: books) {
+            String bookName = book.getBookName().toLowerCase();
+            if(!hashMap.containsKey(bookName)) {
+                hashMap.put(bookName, 1);
+            } else {
+                hashMap.put(bookName, hashMap.get(bookName) + 1);
+            }
+            //print hashmap =>
+        }
+        for (Map.Entry<String, Integer> set : hashMap.entrySet()) {
+            System.out.println(set.getKey() + ": "
+                    +set.getValue()+
+                    (set.getValue() > 1 ? " items" : " item"));
+        }
+    }
+    public void fakeData() {
+        books.add(new Book(1, "java", "Andrew", 12.3f));
+        books.add(new Book(2, "c#", "Afdijfi", 12.3f));
+        books.add(new Book(3, "java", "Andrew", 12.3f));
+        books.add(new Book(4, "Java", "Andrew", 12.3f));
+        books.add(new Book(5, "c++", "Andrew", 12.3f));
+        books.add(new Book(6, "python", "Andrew", 12.3f));
+        books.add(new Book(7, "winform", "Andrew", 12.3f));
+        books.add(new Book(8, "swift", "Andrew", 12.3f));
+        books.add(new Book(9, "python", "Andrew", 12.3f));
+        books.add(new Book(10, "Go", "Andrew", 12.3f));
+        books.add(new Book(11, "go", "Andrew", 12.3f));
+    }
 }
