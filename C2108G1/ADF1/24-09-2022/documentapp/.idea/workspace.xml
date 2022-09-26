@@ -71,7 +71,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/aptech/data/manager/DocumentManager.java</url>
-          <line>71</line>
+          <line>75</line>
           <option name="timeStamp" value="5" />
         </line-breakpoint>
       </breakpoints>

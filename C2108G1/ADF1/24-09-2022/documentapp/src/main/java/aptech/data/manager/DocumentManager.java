@@ -14,7 +14,7 @@ public class DocumentManager {
 
     }
     void displayAllDocument(){
-        
+
     }
     void searchByAuthorName(String authorName){
         //common method
@@ -62,14 +62,19 @@ public class DocumentManager {
         * */
         Hashtable<String, Integer> hashMap = new Hashtable<String, Integer>();
         for (Book book: books) {
+            /*
             String bookName = book.getBookName().toLowerCase();
             if(!hashMap.containsKey(bookName)) {
                 hashMap.put(bookName, 1);
             } else {
                 hashMap.put(bookName, hashMap.get(bookName) + 1);
             }
-            //print hashmap =>
+             */
+            hashMap.put(book.getBookName().toLowerCase(),
+                    !hashMap.containsKey(book.getBookName().toLowerCase()) ? 1
+                    : hashMap.get(book.getBookName().toLowerCase()) + 1);
         }
+        //iterate a hashmap in Java
         for (Map.Entry<String, Integer> set : hashMap.entrySet()) {
             System.out.println(set.getKey() + ": "
                     +set.getValue()+
