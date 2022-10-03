@@ -1,6 +1,7 @@
 package nguyenvana.aprotrain.callapi;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ProgressDialog;
@@ -30,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         photoAdapter = new PhotoAdapter(photos);
         recyclerView.setAdapter(photoAdapter);
 
@@ -44,10 +46,12 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call<ArrayList<Photo>> call, Response<ArrayList<Photo>> response) {
                 //response.body();
                 photos = (ArrayList<Photo>)response.body();
-                photoAdapter.setPhotos(photos);
-                photoAdapter.notifyDataSetChanged();
-                recyclerView.invalidate();
+                photoAdapter = new PhotoAdapter(photos);
+                recyclerView.setAdapter(photoAdapter);
                 progressBar.setVisibility(View.GONE);
+//                runOnUiThread(() -> {
+//
+//                });
             }
 
             @Override
