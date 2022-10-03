@@ -1,6 +1,7 @@
 package nguyenvana.aprotrain.callapi;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
@@ -22,19 +23,30 @@ public class MainActivity extends AppCompatActivity {
     private APIInterface apiInterface;
     private ArrayList<Photo> photos = new ArrayList<>();
     private ProgressBar progressBar;
+    private RecyclerView recyclerView;
+    private PhotoAdapter photoAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        recyclerView = findViewById(R.id.recyclerView);
+        photoAdapter = new PhotoAdapter(photos);
+        recyclerView.setAdapter(photoAdapter);
+
         apiInterface = APIClient.getClient().create(APIInterface.class);
         Call<ArrayList<Photo>> call = apiInterface.getPhotos(1);
         progressBar = findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
+
+
         call.enqueue(new Callback<ArrayList<Photo>>() {
             @Override
             public void onResponse(Call<ArrayList<Photo>> call, Response<ArrayList<Photo>> response) {
                 //response.body();
                 photos = (ArrayList<Photo>)response.body();
+                photoAdapter.setPhotos(photos);
+                photoAdapter.notifyDataSetChanged();
+                recyclerView.invalidate();
                 progressBar.setVisibility(View.GONE);
             }
 
