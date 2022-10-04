@@ -37,4 +37,10 @@ public class Employee extends Person{
         super.display();
         System.out.println("salary:"+salary);
     }
+
+    @Override
+    public String toString() {
+        return super.toString()+
+                ",salary:"+salary;
+    }
 }

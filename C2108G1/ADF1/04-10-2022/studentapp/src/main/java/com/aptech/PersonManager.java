@@ -6,7 +6,9 @@ import java.util.Scanner;
 public class PersonManager {
     private ArrayList<Person> persons = new ArrayList<>();
     public void getPersons() {
+        System.out.println("How many persons ? ");
         int numberOfPersons = (new Scanner(System.in)).nextInt();
+
         if(numberOfPersons <= 0) {
             System.err.println("Please enter a positive value");
         } else {
@@ -34,6 +36,11 @@ public class PersonManager {
         }catch (Exception error) {
             System.err.println("Cannot find person.Error: "+error.getMessage());
             return null;
+        }
+    }
+    public void showAllPersons() {
+        for(int i = 0; i < persons.size(); i++) {
+            System.out.println(persons.get(i));
         }
     }
 }

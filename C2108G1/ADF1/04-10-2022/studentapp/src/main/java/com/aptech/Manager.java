@@ -28,4 +28,9 @@ public class Manager extends Employee implements Tax{
         super.display();//"employee".display()
         System.out.println("bonus: "+this.bonus);
     }
+    @Override
+    public String toString() {
+        return super.toString()+
+                ",bonus:"+bonus;
+    }
 }
