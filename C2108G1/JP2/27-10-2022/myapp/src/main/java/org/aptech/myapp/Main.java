@@ -1,8 +1,12 @@
 package org.aptech.myapp;
 
+import javax.swing.*;
+import java.util.jar.JarEntry;
+
 public class Main {
     public static void main(String[] args) {
-        //ContactManagementFrame contactManagementFrame = new ContactManagementFrame(400, 500);
+        ContactManagementForm contactManagementForm = new ContactManagementForm("App");
+
 
     }
 }
