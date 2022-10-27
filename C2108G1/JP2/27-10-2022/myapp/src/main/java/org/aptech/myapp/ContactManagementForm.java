@@ -4,15 +4,15 @@ import javax.swing.*;
 
 public class ContactManagementForm {
     private JPanel panel1;
-    private JTable table1;
-    private JTextField textField1;
-    private JTextField textField2;
+    private JTable tableContact;
+    private JTextField textFieldContactID;
+    private JTextField textFieldFirstName;
     private JTextField textField3;
-    private JTextField textField4;
-    private JTextField textField5;
-    private JComboBox comboBox1;
+    private JTextField textFieldContactNo;
+    private JTextField textFieldAddress;
+    private JComboBox comboBoxGender;
     private JButton buttonAdd;
-    private JButton button2;
-    private JButton button3;
-    private JButton button4;
+    private JButton buttonUpdate;
+    private JButton buttonDelete;
+    private JButton buttonClear;
 }
