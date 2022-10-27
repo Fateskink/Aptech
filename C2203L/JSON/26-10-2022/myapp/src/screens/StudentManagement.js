@@ -147,6 +147,7 @@ export function StudentManagement(props) {
             </tr>                                    
         </table>
         <button onClick={(event) => {
+            //CUUih9XJufRnt1ziHFarmn7DCJWcpJVU
             const selectedClass = klasses
                     .find(klass => klass.selected == true)            
             const selectedLanguages = languages
