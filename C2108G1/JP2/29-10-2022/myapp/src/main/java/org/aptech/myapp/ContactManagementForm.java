@@ -4,8 +4,11 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 
 public class ContactManagementForm extends JFrame{
+    private Database database = new Database();
     //private JFrame frame;
-
+    private void alert(String message) {
+        JOptionPane.showMessageDialog(null, message);
+    }
     public ContactManagementForm(String formName) {
         this.setTitle(formName);
         //JFrame frame = new JFrame(formName);
@@ -15,12 +18,11 @@ public class ContactManagementForm extends JFrame{
         this.setVisible(true);
         this.setupActions();
         //get data from DB
-        Database database = new Database();
         try {
             database.getContacts();
         }catch (Exception e) {
             //show alert in UI
-            JOptionPane.showMessageDialog(null, e.getMessage());
+            alert(e.getMessage());
         }
     }
     /*
@@ -63,7 +65,13 @@ public class ContactManagementForm extends JFrame{
             String lastName = textFieldLastName.getText();
             String contactNo = textFieldContactNo.getText();
             String address = textFieldAddress.getText();
-            String gender = textFieldGender.getText();
+            String gender = (String)(comboBoxGender.getModel().getSelectedItem());
+            try {
+                this.database.insertContact(new Contact(id, firstName,
+                        lastName, contactNo, address, gender));
+            } catch (Exception e) {
+                alert(e.getMessage());
+            }
         });
         this.buttonUpdate.addActionListener((ActionEvent actionEvent) -> {
             System.out.println("buttonUpdate");

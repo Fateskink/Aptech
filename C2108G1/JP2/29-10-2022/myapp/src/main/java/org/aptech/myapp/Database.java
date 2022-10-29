@@ -40,7 +40,8 @@ public class Database {
         try {
             String sql = "INSERT INTO T_CONTACT(id, first_name, last_name,contact_no,address,gender) " +
                     "VALUES(?,?,?,?,?,?)";
-            PreparedStatement statement = this.getConnection().prepareStatement(sql);
+            PreparedStatement statement = this.getConnection()
+                                    .prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             //prevent SQL injection
             statement.setString(1, contact.getId());
             statement.setString(2, contact.getFirstName());
@@ -48,9 +49,9 @@ public class Database {
             statement.setString(4, contact.getContactNo());
             statement.setString(5, contact.getAddress());
             statement.setString(6, contact.getGender());
-            statement.executeUpdate("");
+            statement.executeUpdate();
         } catch (Exception exception) {
-            throw new Exception("cannot get data from DB");
+            throw new Exception("Cannot insert, please do later");
         }
     }
 }
