@@ -4,7 +4,6 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import static org.bookmanager.forms.Utility.alert;
 
@@ -29,6 +28,7 @@ public class  BookManagerFrame extends JFrame{
         mainPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
         this.setVisible(true);
         this.setupActions();
+        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
     private void setupActions() {
         buttonUpdate.addActionListener((ActionEvent actionEvent) -> {
@@ -38,7 +38,12 @@ public class  BookManagerFrame extends JFrame{
             alert("Ban bam nut buttonAddNew");
         });
         buttonShowAll.addActionListener((ActionEvent actionEvent) -> {
-            alert("Ban bam nut buttonShowAll");
+            //alert("Ban bam nut buttonShowAll");
+
+//            this.bookListFrame = bookListFrame == null ?
+//                    new BookListFrame("Bool list"): bookListFrame;
+            this.setVisible(false);
+
         });
         buttonDelete.addActionListener((ActionEvent actionEvent) -> {
             alert("Ban bam nut buttonDelete");
