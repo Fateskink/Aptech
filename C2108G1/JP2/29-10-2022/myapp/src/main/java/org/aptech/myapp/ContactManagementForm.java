@@ -1,9 +1,7 @@
 package org.aptech.myapp;
 
 import javax.swing.*;
-import javax.xml.crypto.Data;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class ContactManagementForm extends JFrame{
     //private JFrame frame;
@@ -41,7 +39,7 @@ public class ContactManagementForm extends JFrame{
     private JTable tableContact;
     private JTextField textFieldContactID;
     private JTextField textFieldFirstName;
-    private JTextField textField3;
+    private JTextField textFieldLastName;
     private JTextField textFieldContactNo;
     private JTextField textFieldAddress;
     private JComboBox comboBoxGender;
@@ -62,7 +60,10 @@ public class ContactManagementForm extends JFrame{
              */
             String id = textFieldContactID.getText();
             String firstName = textFieldFirstName.getText();
-            String lastName = textFieldLa
+            String lastName = textFieldLastName.getText();
+            String contactNo = textFieldContactNo.getText();
+            String address = textFieldAddress.getText();
+            String gender = textFieldGender.getText();
         });
         this.buttonUpdate.addActionListener((ActionEvent actionEvent) -> {
             System.out.println("buttonUpdate");
