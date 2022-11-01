@@ -26,4 +26,12 @@ public class Track {
     public void setViewCount(int viewCount) {
         this.viewCount = viewCount;
     }
+
+    @Override
+    public String toString() {
+        return "Track{" +
+                "name='" + name + '\'' +
+                ", viewCount=" + viewCount +
+                '}';
+    }
 }
