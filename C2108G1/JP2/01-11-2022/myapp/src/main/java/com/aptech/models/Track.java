@@ -1,4 +1,4 @@
-package org.albummanager;
+package com.aptech.models;
 
 public class Track {
     private String name;

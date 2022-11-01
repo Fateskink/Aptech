@@ -1,10 +1,9 @@
-package org.albummanager;
+package com.aptech.models;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Album {
-
     private String name;
     private List<Track> tracks = new ArrayList<Track>();
     private List<Artist> musicians = new ArrayList<Artist>();

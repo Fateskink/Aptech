@@ -1,10 +1,10 @@
-package org.albummanager;
+package com.aptech;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import com.aptech.models.*;
 
-public class TestAlbum {
+import java.util.*;
+
+public class Main {
     public static void main(String[] args) {
         Artist tungDuong = new Artist("Tung Duong");
         Artist quangTho = new Artist("Quang Tho");
@@ -26,12 +26,11 @@ public class TestAlbum {
                 new Track("Vung la me bay", 1000),
                 new Track("Noi buon hoa phuong", 134),
                 new Track("Phuong hong", 10000)
-                );
+        );
         Album album1 = new Album("Tung Duong hat tinh ca");
         album1.setTracks(track1);
         ArrayList<Artist> musicians = (ArrayList<Artist>)album1.getMusicians();
         musicians.add(tungDuong);
-//        (album1.getMusicians()).add(new Artist());
-
+        (album1.getMusicians()).add(new Artist());
     }
 }
