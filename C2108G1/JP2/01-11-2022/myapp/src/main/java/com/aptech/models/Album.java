@@ -2,10 +2,12 @@ package com.aptech.models;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class Album {
     private String name;
-    private List<Track> tracks = new ArrayList<Track>();
+    private List<Track> tracks = new ArrayList<Track>();//eager
+    //private List<Track> tracks;//lazy
     private List<Artist> musicians = new ArrayList<Artist>();
     public Album() {
 
@@ -24,7 +26,8 @@ public class Album {
     }
 
     public List<Track> getTracks() {
-        return tracks;
+        //return tracks == null ? new ArrayList<Track>() : tracks;//lazy init
+        return tracks;//eager init
     }
 
     public void setTracks(List<Track> tracks) {
