@@ -1,6 +1,7 @@
 package org.bookmanager.forms;
 
 import org.bookmanager.database.Database;
+import org.bookmanager.models.Book;
 import org.bookmanager.models.Category;
 
 import javax.swing.*;
@@ -23,6 +24,7 @@ public class  BookManagerFrame extends JFrame{
     private JButton buttonAddNew;
     private JButton buttonShowAll;
     private JButton buttonDelete;
+    private BookListFrame bookListFrame;
     private Category selectedCategory;
 
     public Category getSelectedCategory() {
@@ -43,8 +45,8 @@ public class  BookManagerFrame extends JFrame{
         mainPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
         this.setVisible(true);
         this.setupActions();
-        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        database = new Database();
+        //this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        database = Database.getInstance();
         try {
             database.getConnection();
             categories = database.getCategories();
@@ -57,6 +59,9 @@ public class  BookManagerFrame extends JFrame{
                     //alert(selectedCategory.getCategoryName());
                 }
             });
+            //test update, delete
+            //database.updateBook("x22", new Book("x22", "javaaa2", 22.33f, 13));
+            //database.deleteBook("x22");
         }catch (Exception e) {
 
         }
@@ -90,8 +95,10 @@ public class  BookManagerFrame extends JFrame{
         buttonShowAll.addActionListener((ActionEvent actionEvent) -> {
             //alert("Ban bam nut buttonShowAll");
 
-//            this.bookListFrame = bookListFrame == null ?
-//                    new BookListFrame("Bool list"): bookListFrame;
+            this.bookListFrame = bookListFrame == null ?
+                    new BookListFrame("Bool list"): bookListFrame;
+            this.bookListFrame.setVisible(true);
+            this.bookListFrame.bookManagerFrame = this;
             this.setVisible(false);
 
         });

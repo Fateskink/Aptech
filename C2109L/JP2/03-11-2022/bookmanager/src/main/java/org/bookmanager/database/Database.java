@@ -13,6 +13,16 @@ public class Database {
     static final String PASSWORD = "";
     public static String TABLE_CATEGORY = "Category";
     public static String TABLE_BOOK = "Book";
+    private static Database instance;
+    private Database() {
+
+    }
+    public static Database getInstance() {
+        if(instance == null) {
+            instance = new Database();
+        }
+        return instance;
+    }
     public Connection getConnection() throws Exception{
         try {
             if(connection == null) {
@@ -48,6 +58,26 @@ public class Database {
             throw new Exception("cannot get data from DB");
         }
     }
+    public ArrayList<Book> getBooks() throws Exception{
+        ArrayList<Book> result = new ArrayList<Book>();
+        try {
+            Statement statement = this.getConnection().createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM "+TABLE_BOOK);
+            // Extract data from result set
+            while (resultSet.next()) {
+                // Fetch data to object
+                Book book = new Book();
+                book.setCode(resultSet.getString("code"));
+                book.setBookName(resultSet.getString("bookName"));
+                book.setPrice(resultSet.getFloat("price"));
+                book.setCategoryId(resultSet.getInt("categoryId"));
+                result.add(book);
+            }
+            return result;
+        } catch (Exception exception) {
+            throw new Exception("Cannot get books from DB");
+        }
+    }
     public void insertBook(String code, String name, int categoryId, float price) throws Exception{
         try {
             String sql = "INSERT INTO "+TABLE_BOOK+"(code, bookName, price, categoryId) VALUES(?, ?, ?, ?);";
@@ -78,7 +108,7 @@ public class Database {
     }
     public void updateBook(String code, Book book) throws Exception{
         try {
-            String sql = "UPDATE "+TABLE_BOOK+" SET name=?, categoryId=?, price=? WHERE code = ?;";
+            String sql = "UPDATE "+TABLE_BOOK+" SET bookName=?, categoryId=?, price=? WHERE code = ?;";
             PreparedStatement statement = this.getConnection()
                     .prepareStatement(sql);
             //prevent SQL injection
