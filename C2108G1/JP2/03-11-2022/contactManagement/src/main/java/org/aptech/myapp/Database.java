@@ -56,5 +56,33 @@ public class Database {
             throw new Exception("Cannot insert, please do later");
         }
     }
+    public void updateContact(int contactId, Contact contact) throws Exception{
+        try {
+            String sql = "UPDATE "+TABLE_CONTACT+" SET first_name=?, last_name=?,contact_no=?,address=?,gender=?" +
+                    " WHERE id = ?";
+            PreparedStatement statement = this.getConnection()
+                    .prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            //prevent SQL injection
+            statement.setString(1, contact.getFirstName());
+            statement.setString(2, contact.getLastName());
+            statement.setString(3, contact.getContactNo());
+            statement.setString(4, contact.getAddress());
+            statement.setString(5, contact.getGender());
+            statement.setInt(6, contactId);
+            statement.executeUpdate();
+        } catch (Exception exception) {
+            throw new Exception("Cannot update, please do later");
+        }
+    }
+    public void deleteContact(int contactId) throws Exception{
+        try {String sql = "DELETE FROM "+TABLE_CONTACT+" WHERE id = ?";
+            PreparedStatement statement = this.getConnection().prepareStatement(sql);
+            //prevent SQL injection
+            statement.setInt(1, contactId);
+            statement.executeUpdate();
+        } catch (Exception exception) {
+            throw new Exception("Cannot insert, please do later");
+        }
+    }
 }
 
