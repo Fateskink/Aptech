@@ -61,4 +61,13 @@ public class Member implements Serializable {
     public void setAddress(String address) {
         this.address = address;
     }
+
+    @Override
+    public String toString() {
+        return "Member{" +
+                "memberID='" + memberID + '\'' +
+                ", memberName='" + memberName + '\'' +
+                ", address='" + address + '\'' +
+                '}';
+    }
 }

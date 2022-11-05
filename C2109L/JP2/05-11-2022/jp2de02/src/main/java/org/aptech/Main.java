@@ -5,5 +5,6 @@ public class Main {
         ClubManager clubManager = new ClubManager();
         clubManager.inputMembers();
         clubManager.saveToFile();
+        clubManager.readFile();
     }
 }

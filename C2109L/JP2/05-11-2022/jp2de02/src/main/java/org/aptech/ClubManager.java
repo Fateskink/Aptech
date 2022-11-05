@@ -6,6 +6,7 @@ import java.util.function.Consumer;
 
 public class ClubManager {
     private ArrayList<Member> members = new ArrayList<>();
+    private ArrayList<Member> outputMembers = new ArrayList<>();
     private BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
     private String outputFile = "member_of_club.txt";
     public void inputMembers() {
@@ -51,14 +52,20 @@ public class ClubManager {
         try {
             FileInputStream fileInputStream = new FileInputStream(new File(outputFile));
             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+            outputMembers.clear();
             while (true) {
-                Member member = (Member)objectInputStream.readObject();
-                if(member == null) {
+                try {
+                    Member member = (Member)objectInputStream.readObject();
+                    outputMembers.add(member);
+                }catch (IOException e){
                     break;
                 }
             }
             objectInputStream.close();
             fileInputStream.close();
+            outputMembers.forEach((member -> {
+                System.out.println(member);
+            }));
         } catch (FileNotFoundException e) {
             System.err.println("File not found");
         } catch (IOException | ClassNotFoundException e) {
