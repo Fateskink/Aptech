@@ -33,17 +33,13 @@ public class Student {
             if(!isValidRollNumber) {
                 System.err.println("Invalid rollnumber, please input again");
             }else {
+                this.rollNumber = rollNumber;
                 break;
             }
         }
-
 //        if(!isValidRollNumber) {
 //            throw new InvalidAttributeValueException("Invalid roll number");
 //        }
-
-
-        System.out.println("Enter name: ");
-        this.name = bufferedReader.readLine();
 
         System.out.println("Enter name: ");
         this.name = bufferedReader.readLine();
@@ -52,7 +48,7 @@ public class Student {
         this.address = bufferedReader.readLine();
 
         System.out.println("Enter age: ");
-        this.age = bufferedReader.read();
+        this.age = Integer.valueOf(bufferedReader.readLine());
     }
 
     public String getRollNumber() {
