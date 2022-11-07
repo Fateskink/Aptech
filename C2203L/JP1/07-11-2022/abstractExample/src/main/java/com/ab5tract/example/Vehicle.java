@@ -19,6 +19,11 @@ public abstract class Vehicle {
         this.owner = owner;
     }
 
+    //other business
+    public void transferOwnership(Person newOwner) {
+        this.owner = newOwner;
+    }
+
     public String getBrand() {
         return brand;
     }
@@ -49,5 +54,16 @@ public abstract class Vehicle {
 
     public void setOwner(Person owner) {
         this.owner = owner;
+    }
+
+    @Override
+    public String toString() {
+        super.toString();
+        return "Vehicle{" +
+                "brand='" + brand + '\'' +
+                ", model='" + model + '\'' +
+                ", registrationNumber='" + registrationNumber + '\'' +
+                ", owner=" + owner +
+                '}';
     }
 }
