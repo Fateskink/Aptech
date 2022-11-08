@@ -5,8 +5,8 @@ public class Question02 {
         Data data = new Data();
         ThreadOne threadOne = new ThreadOne(data);
         ThreadTwo threadTwo = new ThreadTwo(data);
-        threadOne.run();
-        threadTwo.run();
+        threadOne.start();
+        threadTwo.start();
         System.out.println("2 threads ended");
     }
 }

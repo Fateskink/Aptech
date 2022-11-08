@@ -12,11 +12,13 @@ public class ThreadTwo extends Thread{
             try {
                 synchronized (this) {
                     sleep(1000);
-                    if(data.getSelectedString() == null) {
-                        break;
-                    } else {
-                        System.out.println("Thread2 received: " + data.getSelectedString());
-                    }
+                    System.out.println("222222");
+                    System.out.println("Thread2 received: " + data.getSelectedString());
+//                    if(data.getSelectedString() == null) {
+//                        break;
+//                    } else {
+//
+//                    }
                 }
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
