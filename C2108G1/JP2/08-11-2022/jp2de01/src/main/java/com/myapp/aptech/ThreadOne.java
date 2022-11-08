@@ -13,15 +13,17 @@ public class ThreadOne extends Thread{
                 synchronized (this) {
                     sleep(1000);
                     String eachItem = data.getData()[i].toUpperCase();
+                    System.out.println("Thread1 set item: "+eachItem);
+                    this.getData().setSelectedString(eachItem);
                     //notify to thread2
-                    wait();
                     notify();
                 }
             }
-
-
+            synchronized (this) {
+                this.getData().setSelectedString(null);
+            }
         } catch (InterruptedException e) {
-            System.err.println("Cannot run thread: "+e.getMessage());
+            System.err.println("Cannot run thread1: "+e.getMessage());
         }
     }
 

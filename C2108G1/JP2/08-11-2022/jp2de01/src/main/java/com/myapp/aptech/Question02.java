@@ -7,6 +7,6 @@ public class Question02 {
         ThreadTwo threadTwo = new ThreadTwo(data);
         threadOne.run();
         threadTwo.run();
-        System.out.println("haha");
+        System.out.println("2 threads ended");
     }
 }
