@@ -28,15 +28,15 @@ public class DocumentManager {
         }
     }
     public void displayAllDocument(){
-        //traditional
-        for(int i = 0; i < books.size(); i++) {
-            Book book = books.get(i);
-            book.show();
-        }
-        //better
-        for(Book book: books) {
-            book.show();
-        }
+//        //traditional
+//        for(int i = 0; i < books.size(); i++) {
+//            Book book = books.get(i);
+//            book.show();
+//        }
+//        //better
+//        for(Book book: books) {
+//            book.show();
+//        }
         //better
         books.forEach((Book book) -> {
             book.show();

@@ -23,14 +23,18 @@ public class Test {
                 choice = Integer.valueOf(bufferedReader.readLine());
                 switch (choice) {
                     case 1:
-                        System.out.println("you choose 1");
-                        
+                        //System.out.println("you choose 1");
+                        documentManager.addDocument();
                         break;
                     case 2:
-                        System.out.println("you choose 2");
+                        //System.out.println("you choose 2");
+                        documentManager.displayAllDocument();
                         break;
                     case 3:
-                        System.out.println("you choose 3");
+                        //System.out.println("you choose 3");
+                        System.out.println("Enter author name to search: ");
+                        String authorName = bufferedReader.readLine();
+                        documentManager.searchByAuthorName(authorName);
                         break;
                     default:
                         System.out.println("Please choose 1-4");
