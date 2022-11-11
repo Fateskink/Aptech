@@ -80,13 +80,16 @@ public class Employee {
     public void setDailySalary(Float dailySalary) {
         this.dailySalary = dailySalary;
     }
-
+    public Float getMonthlySalary() {
+        return dailySalary * workingDays;
+    }
     @Override
     public String toString() {
         return "Employee{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", workingDays=" + workingDays +
-                ", dailySalary=" + dailySalary;
+                ", dailySalary=" + dailySalary +
+                ", MonthlySalary =" + getMonthlySalary();
     }
 }

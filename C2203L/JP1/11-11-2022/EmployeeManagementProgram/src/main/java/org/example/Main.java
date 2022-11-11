@@ -26,10 +26,12 @@ public class Main {
                     employeeManagement.sort();
                     break;
                 case 3:
-                    System.out.println("You choose 3");
+                    //System.out.println("You choose 3");
+                    employeeManagement.analyze();
                     break;
                 case 4:
-                    System.out.println("You choose 4");
+                    employeeManagement.findHighestSalary();
+                    //System.out.println("You choose 4");
                     break;
                 case 5:
                     System.out.println("You choose 5");
