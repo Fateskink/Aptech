@@ -1,33 +1,53 @@
 ﻿using System;
+using System.Xml.Linq;
 //namespace = "package in Java"
 namespace myapp
 {
 	public class Result
 	{
-        //private float math;//fields/atribute 
-        //private float physics;
-        //private float chemistry;
-        //getter,
 
         public float Math { get; set; } //property, short-form
         public float Physics { get; set; }
         public float Chemistry { get; set; }
 
-        //property is "Function"
+        public void Input()
+        {
+            //validate here!
+            while (true) {
+                Console.WriteLine("Enter  Math: ");
+                Math = (float)Convert.ToDouble(Console.ReadLine()); //explicit casting
+                bool isValidMath = Math >= 0 && Math <= 10;                
+                if (isValidMath) {
+                    break;
+                }
+            }
 
-        //full-form
-        //private float math;//fields/atribute 
-        //public float Math {
-        //    get {
-        //        Console.WriteLine("get get");
-        //        return math;
-        //    }
-        //    set {
-        //        Console.WriteLine("call SET");//validate data here !
-        //        math = value;
-        //    }
-        //}
-        //get detail object's information => override method ToString()
+
+            //float x = 123f;
+            //Double y = x; //ok, implicit casting
+
+            while (true)
+            {
+                Console.WriteLine("Enter  Physics: ");
+                Physics = (float)Convert.ToDouble(Console.ReadLine());
+                bool isValidPhysics = Physics >= 0 && Physics <= 10;
+                if (isValidPhysics)
+                {
+                    break;
+                }
+            }
+            while (true)
+            {
+                Console.WriteLine("Enter  Chemistry: ");
+                Chemistry = (float)Convert.ToDouble(Console.ReadLine());
+                bool isValidChemistry = Chemistry >= 0 && Chemistry <= 10;
+                if (isValidChemistry)
+                {
+                    break;
+                }
+            }            
+        }
+
         public override string ToString()
         {
             return  $"Math = {Math}, " +

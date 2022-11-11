@@ -6,34 +6,9 @@ namespace myapp {
     public class Program
     {
         public static void Main(String[] args)
-        {
-            int x = 100; //variables
-            int y = 100;
-            Console.WriteLine($"Value of x : {x}, value of y: {y}");//string concatenation
-            Console.WriteLine("x = " + x);
-            for (int i = 0; i < 10; i++)
-            {
-                Console.WriteLine($"i = {i}");
-            }
-            //create an object typed "Result"
-            Result result = new Result();//default constructor   
-            result.Math = 9.0f;//call "setter"
-            Console.WriteLine(result.Math);//call getter
-
-            //Init an object using constructor with arguments
-            Result result2 = new Result()
-            {
-                Physics = 6f,
-                //Math = 5.5f, //labelled parameters                
-                Chemistry = 8f,
-            }; //builder pattern
-            //reference an object
-            Result result3 = result2;
-            result2.Chemistry = 10;
-            Console.WriteLine("haha");
-            Console.WriteLine(result3);
-            
+        {                        
             int choice = 0;
+            StudentManagement studentManagement = new StudentManagement();
             while (choice != 7) {
                 Console.WriteLine("+------------------------------------------------------------------+");
                 Console.WriteLine("| STUDENT EXAM RESULT MANAGEMENT PROGRAM |");
@@ -44,7 +19,8 @@ namespace myapp {
                 choice = Convert.ToInt32(Console.ReadLine());
                 switch (choice) {
                     case 1:
-                        Console.WriteLine("You choose 1 ");
+                        //Console.WriteLine("You choose 1 ");
+                        studentManagement.Input();
                         break;
                     case 2:
                         Console.WriteLine("You choose 2 ");
