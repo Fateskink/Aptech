@@ -1,11 +1,10 @@
 package com.aptech.nguyenvana.database;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
+import java.sql.*;
 import java.time.ZoneId;
 import java.util.*;
 import java.util.ArrayList;
+import java.util.Date;
 
 import com.aptech.nguyenvana.models.*;
 public class Database {
@@ -55,10 +54,7 @@ public class Database {
                     .prepareStatement(sql);
             //prevent SQL injection
             statement.setString(1, name);
-            statement.setDate(2, java.sql.Date
-                    .valueOf(date.toInstant()
-                            .atZone(ZoneId.of("America/Montreal"))
-                            .toLocalDate()));
+            statement.setDate(2,new java.sql.Date(date.getTime()));
             statement.setInt(3, duration);
             statement.setString(4, room);
             statement.executeUpdate();
