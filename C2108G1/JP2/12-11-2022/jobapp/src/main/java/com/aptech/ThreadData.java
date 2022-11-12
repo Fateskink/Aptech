@@ -16,7 +16,7 @@ public class ThreadData {
         map.put("Friday", "Thu 6");
         map.put("Saturday", "Thu 7");
         map.put("Sunday", "Chu nhat");
-        this.randomIndex = 0;
+        this.randomIndex = -1;
     }
 
     public Map<String, String> getMap() {

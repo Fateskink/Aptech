@@ -11,7 +11,7 @@ public class Question02 {
                 super.run();
                 try {
                     while (true) {
-                        sleep(1000);
+                        sleep(1);
                         synchronized (this) {
                             Map<String, String > map = threadData.getMap();
                             int randomIndex = (new Random()).nextInt(map.size() - 1);
@@ -34,15 +34,16 @@ public class Question02 {
                 super.run();
                 try {
                     while (true) {
-                        sleep(1000);
+                        sleep(1);
                         synchronized (this) {
                             Map<String, String > map = threadData.getMap();
                             int randomIndex = threadData.getRandomIndex();
-                            threadData.setRandomIndex(randomIndex);
-                            List<String> keysAsArray = new ArrayList<String>(map.keySet());
-                            System.out.println("thread2: "
-                                    +map.get(keysAsArray.get(randomIndex))
-                                    +",randomIndex: "+randomIndex);
+                            if(randomIndex > 0) {
+                                List<String> keysAsArray = new ArrayList<String>(map.keySet());
+                                System.out.println("thread2: "
+                                        +map.get(keysAsArray.get(randomIndex))
+                                        +",randomIndex: "+randomIndex);
+                            }
                         }
                     }
                 } catch (InterruptedException e) {
