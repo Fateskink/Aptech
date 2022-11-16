@@ -28,7 +28,8 @@ namespace myapp {
                         studentManagement.Sort();
                         break;
                     case 3:
-                        Console.WriteLine("You choose 3 ");
+                        //Console.WriteLine("You choose 3 ");
+                        studentManagement.Analyze();
                         break;
                     case 4:
                         Console.WriteLine("You choose 4 ");

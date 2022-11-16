@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using myapp.models;
 
 namespace myapp
@@ -20,7 +21,7 @@ namespace myapp
 			_students.Add(new Student()
 			{
 				Name = "n1",
-				Province = "p1",
+				Province = "Nam Dinh",
 				BirthYear = 1993,
 				Mark = new Result() {
 					Math = 1,
@@ -31,7 +32,7 @@ namespace myapp
             _students.Add(new Student()
             {
                 Name = "n2",
-                Province = "p2",
+                Province = "Ha noi",
                 BirthYear = 1997,
                 Mark = new Result()
                 {
@@ -43,7 +44,7 @@ namespace myapp
             _students.Add(new Student()
             {
                 Name = "n2",
-                Province = "p2",
+                Province = "Nam Dinh",
                 BirthYear = 1997,
                 Mark = new Result()
                 {
@@ -87,6 +88,17 @@ namespace myapp
             });
 
         }
-	}
+		public void Analyze() {
+			Dictionary<String, int> dictionary = new Dictionary<string, int>();
+			foreach (Student student in _students) {
+				String key = (student.Province?? "").ToLower();				
+                dictionary[key] = (dictionary.ContainsKey(key) == true) ? 1 : dictionary[key] + 1;
+            }
+			foreach (String key in dictionary.Keys) {
+				Console.WriteLine($"There are {dictionary[key]} students from {key}");
+
+			}
+		}
+    }
 }
 
