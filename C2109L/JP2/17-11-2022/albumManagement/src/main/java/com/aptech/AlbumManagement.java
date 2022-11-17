@@ -42,18 +42,33 @@ public class AlbumManagement {
                 })));
         return albums;
     }
-    public Track getMaxViewCount(List<Album> albums) {
+    private List<Track> getAllTracks() {
         List<Track> allTracks = new ArrayList<Track>();
         albums.forEach((Album album) -> {
             album.getTracks().forEach((Track track) -> {
                 allTracks.add(track);
             });
         });
+        return allTracks;
+    }
+    public Track getMaxViewCount() {
+        List<Track> allTracks = getAllTracks();
         int maxViewCount = allTracks.stream()
                 .mapToInt((Track track) -> track.getViewCount())
                 .max().getAsInt();
         return allTracks.stream()
                 .filter((Track track) -> track.getViewCount() == maxViewCount)
+                .findFirst()
+                .get();
+
+    }
+    public Track getMinViewCount() {
+        List<Track> allTracks = getAllTracks();
+        int minViewCount = allTracks.stream()
+                .mapToInt((Track track) -> track.getViewCount())
+                .min().getAsInt();
+        return allTracks.stream()
+                .filter((Track track) -> track.getViewCount() == minViewCount)
                 .findFirst()
                 .get();
 
