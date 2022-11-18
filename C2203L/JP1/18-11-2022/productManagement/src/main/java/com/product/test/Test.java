@@ -59,14 +59,31 @@ public class Test {
                     computers.forEach(Computer::display);
                     */
                     //unchange computers, create new separated list
+                    //fake data
+                    computers = Arrays.asList(new Computer[] {
+                            new Computer("1", "c1", 2021, 112f, "s1","Apple"),
+                            new Computer("2", "c2", 2021, 200f, "s1","Apple"),
+                            new Computer("3", "c3", 2021, 100f, "s1","Apple"),
+                            new Computer("4", "c4", 2021, 300f, "s1","Apple")
+                    });
                     computers.stream()
                             .sorted((Computer computer1, Computer computer2)
-                            -> (int)(computer2.getPrice() - computer1.getPrice()))
+                                -> (int)(computer2.getPrice() - computer1.getPrice()))
                             .toList()
                             .forEach(Computer::display);
                     break;
                 case 4:
-                    System.out.println("case 4");
+                    books = Arrays.asList(new Book[] {
+                            new Book("1", "c1", 2021, 112f, "techno","Apple"),
+                            new Book("2", "c2", 2021, 200f, "techno","Dell"),
+                            new Book("3", "c3", 2021, 100f, "techno","Asus"),
+                            new Book("4", "c4", 2021, 300f, "techno","Intel")
+                    });
+
+                    books.stream()
+                            .sorted(Comparator.comparing(Book::getPublisher))
+                            .toList()
+                            .forEach(Book::display);
                     break;
                 case 5:
                     System.out.println("case 5");
