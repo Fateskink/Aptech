@@ -13,16 +13,17 @@ namespace apDe6
         private float   _vat;
         private string  _stock = "";
         //encapsulation: fields are "private", properties(getter, setter) is "public"
+        public Laptop():base() { }
         public Laptop(int id) : base(id)
         {
             this._price = 0;
             this._vat = 0.1f;
         }
 
-        public Laptop(int id, string name, int price) : base(id, name)
+        public Laptop(int id, string name, int price, float? vat) : base(id, name)
         {
             _price = price;
-            _vat = 0.1f;
+            _vat = vat ?? 0.1f;
         }        
 
         public int Price { get => _price;
@@ -42,18 +43,23 @@ namespace apDe6
 
         public float PriceCal => _price * (1 + _vat);
 
-        public void Input() {
+        public override void Input() {
+            base.Input();
             Console.WriteLine("Enter price");
             this._price = Convert.ToInt32(Console.ReadLine());
 
             Console.WriteLine("Enter VAT");
-            this._price = Convert.ToInt32(Console.ReadLine());
+            this._vat = (float)Helper.InputDouble();
+
+            Console.WriteLine("Enter stock");
+            this._stock = Console.ReadLine() ?? "";
         }
         public override void showInfo() { 
             base.showInfo();
             Console.WriteLine($"price: "+this.Price+
                                $"Stock: "+this.Stock+
-                               $"VAT: " + this.VAT);
+                               $"VAT: " + this.VAT+
+                               $"calculated Price: " + this.PriceCal);
         }
     }
 }

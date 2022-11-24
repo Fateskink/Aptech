@@ -47,7 +47,7 @@ namespace apDe6
             this._id = Convert.ToInt32(Console.ReadLine());
 
             Console.WriteLine("Enter name");
-            this._name = Console.ReadLine();
+            this._name = Console.ReadLine() ?? "";
         }
 
     }
