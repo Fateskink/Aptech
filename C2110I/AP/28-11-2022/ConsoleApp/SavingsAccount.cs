@@ -34,6 +34,7 @@ namespace ConsoleApp
         }
         public static void DoSomething2() {
             //y = 30;// NO!
+            
         }
     }
 }
