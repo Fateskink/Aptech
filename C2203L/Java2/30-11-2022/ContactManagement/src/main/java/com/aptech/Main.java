@@ -2,6 +2,7 @@ package com.aptech;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Hello world!");
+        ContactForm contactForm = new ContactForm("Contact Management");
+        contactForm.show();
     }
 }
