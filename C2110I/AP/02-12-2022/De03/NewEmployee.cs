@@ -19,5 +19,9 @@ namespace De03
                 return base.CalculateBonus(designation, tenure, salary);
             }
         }
+        public override void DisplayDetails()
+        {
+            base.DisplayDetails();
+        }
     }
 }

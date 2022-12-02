@@ -44,8 +44,9 @@ namespace De03
 
         public virtual double CalculateBonus(string designation, int tenure, double salary)
         {
+            this.designation = designation;
            
-            if (designation.Trim().ToLower().Equals("manager")) {
+            if (designation.Trim().ToLower().Equals("engineer")) {
                 /*
                 if (tenure <= 5) {
                     bonus = salary * 1.5;
@@ -72,7 +73,7 @@ namespace De03
         //virtual = overridable
         public virtual void DisplayDetails()
         {
-            CalculateBonus(designation, YearsOfService, salary);//not good
+            //CalculateBonus(designation, YearsOfService, salary);//not good
             Console.WriteLine(
                 "Employee's name: " + _empName +
                 "year of service: " + _yearsOfService +
