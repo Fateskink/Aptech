@@ -14,7 +14,7 @@ public class Main {
         //ArrayList<Contact> contacts = contactRepository.getContacts();
 //        contactRepository.updateContact("11", new Contact("11", "nguyen1",
 //                "van axx", "0991544545", "street B, roadB", "famele"));
-        contactRepository.deleteContact("11");
+        //contactRepository.deleteContact("11");
         ContactForm contactForm = new ContactForm("Contact Management");
         contactForm.show();
     }

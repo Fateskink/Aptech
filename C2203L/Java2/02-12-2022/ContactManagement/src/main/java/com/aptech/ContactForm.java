@@ -1,8 +1,12 @@
 package com.aptech;
 
+import com.aptech.models.Contact;
+
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class ContactForm implements IAction{
     private JFrame frame;
@@ -30,9 +34,28 @@ public class ContactForm implements IAction{
         this.setupActions();
     }
     private void reloadTable() {
-        tableContact.set
+        try {
+            DefaultTableModel tableModel = (DefaultTableModel) tableContact.getModel();
+            //tableModel.setRowCount(0);
+            ArrayList<Contact> contacts = contactRepository.getContacts();
+            for (Contact contact: contacts) {
+                String[] row = new String[6];
+                row[0] = contact.getId();
+                row[1] = contact.getFirstName();
+                row[2] = contact.getLastName();
+                row[3] = contact.getContactNo();
+                row[4] = contact.getAddress();
+                row[5] = contact.getGender();
+                tableModel.addRow(row);
+            }
+            tableContact.setModel(tableModel);
+            tableModel.fireTableDataChanged();
+        }catch (Exception e) {
+            System.out.println("cannot show data"+e.getMessage());
+        }
     }
     public void show() {
+        reloadTable();
         this.frame.setVisible(true);
     }
     @Override
