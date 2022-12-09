@@ -27,6 +27,7 @@ public class OddEven {
             fileWriterOdd.close();
             fileWriterEven.close();
             System.out.println("Successfully wrote to the file.");
+
         } catch (Exception e) {
             System.out.println("An error occurred.");
             e.printStackTrace();

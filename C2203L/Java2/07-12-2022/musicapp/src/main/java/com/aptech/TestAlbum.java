@@ -2,7 +2,9 @@ package com.aptech;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class TestAlbum {
     public static void main(String[] args) {
@@ -17,6 +19,12 @@ public class TestAlbum {
                 new Track("Que nha", 1500),
                 new Track("Me yeu con", 12300)
         ));
+        tracks1.forEach(new Consumer<Track>() {
+            @Override
+            public void accept(Track track) {
+
+            }
+        });
         List<Track> tracks2 = new ArrayList<Track>(List.of(
                 new Track("Ha buon", 500),
                 new Track("Vung la me bay", 1000),
