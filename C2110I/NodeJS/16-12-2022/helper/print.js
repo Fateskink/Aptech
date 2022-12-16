@@ -1,15 +1,9 @@
 import chalk from 'chalk'
-// export class OutputType {
-//     static INFORMATION = "INFORMATION"
-//     static SUCCESS = "SUCCESS"
-//     static WARNING = "WARNING"
-//     static ERROR = "ERROR"
-// }
-const OutputType = {
-    INFORMATION: "INFORMATION",
-    SUCCESS: "SUCCESS",
-    WARNING: "WARNING",
-    ERROR: "ERROR"
+export class OutputType {
+    static INFORMATION = "INFORMATION"
+    static SUCCESS = "SUCCESS"
+    static WARNING = "WARNING"
+    static ERROR = "ERROR"
 }
 export function print(message, outputType) {    
     debugger
