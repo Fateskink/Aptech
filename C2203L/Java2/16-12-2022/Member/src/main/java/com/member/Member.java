@@ -1,6 +1,10 @@
 package com.member;
 
 import java.io.Serializable;
+import java.io.Serializable;
+import java.util.regex.Pattern;
+
+import static com.member.Helper.inputString;
 
 //^[T|V|A]{1}(MB|MT|MN)[\d]+$
 public class Member implements Serializable {
@@ -13,6 +17,19 @@ public class Member implements Serializable {
         this.memberID = memberID;
         this.memberName = memberName;
         this.address = address;
+    }
+    public void input() throws Exception{
+        try {
+            //validate here
+            while(!Pattern.compile("^[T|V|A]{1}(MB|MT|MN)[\\d]+$")
+                    .matcher(this.memberID).matches()) {
+                this.memberID = inputString("Enter memberID");
+            };
+            this.memberName = inputString("Enter memberName");
+            this.address = inputString("Enter address");
+        }catch (Exception e) {
+            throw new Exception("Cannot input student's information"+e.getMessage());
+        }
     }
 
     @Override
