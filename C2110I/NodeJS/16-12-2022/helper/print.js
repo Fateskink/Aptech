@@ -5,8 +5,7 @@ export class OutputType {
     static WARNING = "WARNING"
     static ERROR = "ERROR"
 }
-export function print(message, outputType) {    
-    debugger
+export function print(message, outputType) {        
     switch(outputType) {
         case OutputType.INFORMATION:
             console.log(chalk.white(message))

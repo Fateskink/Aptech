@@ -56,17 +56,28 @@ const getAllStudents = async () => {
         throw new Error('Cannot students from DB'+error)
     }
 }
-const insertStudent = async () => {
+const insertStudent = async ({
+    name, email, languages, gender, phoneNumber,address
+}) => {
     try {
-        let students = await Student.find().exec()
-        return students
+        debugger
+        let student = await Student
+                        .create({name, email, languages, gender, phoneNumber,address})        
+        debugger
+        console.log('jhaha')  
     }catch(error) {
-        print('Cannot students from DB'+error)        
-        throw new Error('Cannot students from DB'+error)
+        debugger
+        if(!!error.errors) {
+            //loi do validation
+        } else {
+            //loi do db
+            print('Cannot students from DB'+error)        
+            throw new Error('Cannot students from DB'+error)
+        }                
     }
 }
-export {
+export default {
     getAllStudents,
     insertStudent,
-    deleteStudent,    
+    //deleteStudent,    
 }

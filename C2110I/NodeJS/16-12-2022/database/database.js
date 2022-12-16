@@ -1,7 +1,8 @@
 import mongoose from 'mongoose'
 import { OutputType, print } from '../helper/print.js'
+
 mongoose.set('strictQuery', true)
-const connectionString = 'mongodb+srv://hoangnd:Abc123456789@cluster0.ktfzfqy.mongodb.net/?retryWrites=true&w=majority'
+const connectionString = 'mongodb+srv://hoangnd:Abc123456789@cluster0.ktfzfqy.mongodb.net/c2110i?retryWrites=true&w=majority'
 let errorMessage = ''
 const connect = async () => {  
     try {
@@ -28,5 +29,5 @@ const connect = async () => {
         
     }
 }
-connect()
+//connect()
 export default connect

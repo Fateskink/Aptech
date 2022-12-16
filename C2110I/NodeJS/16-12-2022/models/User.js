@@ -1,5 +1,6 @@
-import { ObjectId } from "mongoose"
-import { isEmail } from 'validator'
+import { ObjectId, Schema } from "mongoose"
+import mongoose from "mongoose"
+import isEmail from 'validator/lib/isEmail.js'
 const User = mongoose.model('User', 
     new Schema({
         id: {type: ObjectId},

@@ -4,12 +4,16 @@ import {
   studentsRouter, 
   usersRouter    
 } from './routes/index.js'
+import connect from './database/database.js'
+import { OutputType, print } from './helper/print.js'
 
 
 const app = express()
 const port = 3002
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json())
+app.use(express.json())
+
+// app.use(bodyParser.urlencoded({ extended: false }))
+// app.use(bodyParser.json())
 /**
  mongodb: MongoServer | MongodB+Docker | MongoCloud
  mongo client: Mongo shell, Mongo compass, Robo3T
@@ -26,5 +30,6 @@ app.get('/', async (req, res) => {
 })
 
 app.listen(port, async () => {
-  console.log(`Example app listening on port ${port}`)
+  await connect()
+  print(`Example app listening on port ${port}`, OutputType.SUCCESS)  
 })

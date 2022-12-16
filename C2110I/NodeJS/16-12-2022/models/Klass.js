@@ -1,5 +1,5 @@
-import { ObjectId } from "mongoose"
-import { isEmail } from 'validator'
+import { ObjectId, Schema } from "mongoose"
+import mongoose from "mongoose"
 const Klass = mongoose.model('Klass', 
     new Schema({
         id: {type: ObjectId},
