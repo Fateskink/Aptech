@@ -25,14 +25,21 @@ const register = async (req, res) => {
     //     password, 
     //     phoneNumber,
     //     address
-    // }
-    debugger
-    let user = await userRepository.register(req.body)
-    res.json({
-        //Output Response Format
-        message: 'Register user succesfully',
-        data: user
-    })
+    // }    
+    try {
+        let user = await userRepository.register(req.body)
+        res.json({
+            //Output Response Format(for ReactJS, Angular,....)
+            message: 'Register user succesfully',
+            data: user
+        })
+    } catch(error) {
+        res.json({
+            //Output Response Format(for ReactJS, Angular,....)
+            message: 'Register user failed',
+            error
+        })
+    }
     //res.json({result: 'This is Register, POST'})
 }
 export default {

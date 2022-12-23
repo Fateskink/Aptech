@@ -1,27 +1,29 @@
 import { studentRepository } from "../repositories/index.js"
 
-function getAllStudents(req, res) {
-    let students = studentRepository.getAllStudents
-    res.json({
-        result: 'get all students',
-        message: "haha"
+async function getAllStudents(req, res) {
+    debugger
+    let students = await studentRepository.getAllStudents()
+    res.json({        
+        message: "Get student list successfully",
+        count: students.length,
+        data: students,        
     })
 }
-function getStudentById(req, res) {    
+async function getStudentById(req, res) {    
     res.status(200).json({
         result: `get student infor from student's id = ${req.params.id} `
     })
 }
-function updateStudent(req, res) {
+async function updateStudent(req, res) {
     res.send(`Update a student with id = ${req.params.id}`)
 }
-function insertStudent(req, res) { 
+async function insertStudent(req, res) { 
     //validate ? YES    
     try {
         debugger
         let student = studentRepository.insertStudent(req.body)
         res.json({
-            student,
+            data: student,
             message: 'Insert student successfully'
         })
     }catch(error) {

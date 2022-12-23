@@ -2,36 +2,34 @@ import { User } from "../models/index.js"
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import { ObjectId, Schema } from "mongoose"
+import Exception from '../Globals/Exception.js'
 
-const login = async ({email, password}) => {
-    try {
-        // let students = await Student.find().exec()
-        // return students
-        debugger
-        let existingUser = await User.findOne({email}).exec()
-        if(existingUser) {
-             let isMatch = await bcrypt.compare(password, existingUser.password)   
-             if(!!isMatch) {
-                debugger
-                //generate Java Web Token
-                let token = jwt.sign({                    
-                    data: existingUser
-                  }, 
-                  process.env.JWT_SECRET, 
-                  {
-                    //expiresIn: '60',
-                    expiresIn: '2 days',
-                  })                  
-                  return {...existingUser, token: token} //clone an object
-             } else {
-                throw new Error('Wrong email or password')    
-             }
+const login = async ({ email, password }) => {
+    debugger
+    let existingUser = await User.findOne({ email }).exec() //collection(table) User
+    if (existingUser) {
+        let isMatch = await bcrypt.compare(password, existingUser.password)
+        if (!!isMatch) {
+            debugger
+            //generate Java Web Token
+            let token = jwt.sign({
+                data: existingUser
+            },
+                process.env.JWT_SECRET,
+                {
+                    expiresIn: '60',
+                    //expiresIn: '2 days',
+                })
+            return {
+                ...existingUser.toObject(),
+                password: 'Not show',
+                token: token
+            } //clone an object
         } else {
-            throw new Error('Wrong email or password')
+            throw new Exception(Exception.WRONG_EMAIL_OR_PASSWORD)
         }
-    }catch(error) {
-        print('Cannot students from DB'+error)        
-        throw new Error('Cannot students from DB'+error)
+    } else {
+        throw new Exception(Exception.WRONG_EMAIL_OR_PASSWORD)
     }
 }
 

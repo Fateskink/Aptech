@@ -5,6 +5,7 @@ const checkToken = async (req, res, next) => {
     //bypass login, register
     const isLoginOrRegisterRouter = req.url.toLowerCase() == '/users/login' ||
                         req.url.toLowerCase() == '/users/register'
+    debugger
     if(isLoginOrRegisterRouter) {
         next()
         return
@@ -12,11 +13,13 @@ const checkToken = async (req, res, next) => {
     //validate token
     let token = req.headers.authorization?.split(" ")[1]
     try {
-        let decodedObject = jwt.verify(token, process.env.JWT_SECRET);    
+        let jwtObject = jwt.verify(token, process.env.JWT_SECRET);    
+        const {data, iat, exp} = jwtObject
+        req.user = data
         next()
     }catch(error) {
         res.json({            
-            message: 'Invalid Token or token is expired',            
+            message: error.message,            
         })        
     }
 }

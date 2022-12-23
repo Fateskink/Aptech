@@ -7,7 +7,8 @@
   "scripts": {
     "debug": "node inspect ./server.js",
     "start:dev": "nodemon ./server.js",
-    "test": "jest --config ./test/jest.config.json"
+    "test:dev": "node node_modules/jest/bin/jest.js --config ./test/jest.config.json",
+    "test:dev:debug": "node inspect node_modules/jest/bin/jest.js --config ./test/jest.config.json"    
   },
   "author": "",
   "license": "ISC",

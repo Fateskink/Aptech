@@ -11,12 +11,18 @@ const login = async (req, res) => {
     //emitter something, emit a event
     //myEvent.emit('event-login', {x: 1, y: 2})    
     //destructuring
-    const {email, password} = req.body
-    let user = await userRepository.login(req.body)
-    res.json({
-        message: 'Login user succesfully',
-        data: user
-    })
+    try {
+        const {email, password} = req.body
+        let user = await userRepository.login(req.body)
+        res.json({
+            message: 'Login user succesfully',
+            data: user
+        })
+    }catch(exception) {
+        res.json({
+            message: exception.message            
+        })
+    }
 }
 const register = async (req, res) => {
     //validate req.body ? need a "Data Transfer Object"
