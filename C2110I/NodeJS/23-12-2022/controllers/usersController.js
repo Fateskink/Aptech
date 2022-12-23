@@ -7,6 +7,13 @@ myEvent.on('event-login', (params) => {
     //listen an event, listen anywhere
     console.log(`They talked about ... ${JSON.stringify(params)}`)
 })
+/**
+
+curl -X POST http://localhost:3002/users/login \
+   -H 'Content-Type: application/json' \
+   -d '{"email":"nguyenvana123@gmail.com","password":"123456"}'
+
+*/
 const login = async (req, res) => {
     //emitter something, emit a event
     //myEvent.emit('event-login', {x: 1, y: 2})    
