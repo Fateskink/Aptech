@@ -18,11 +18,13 @@ namespace StudentManagement
                     .GetConnectionString("SQLServerConnection")));
             builder.Services.AddControllersWithViews();
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+            /*
             StudentManagementContext context = builder
                                                 .Services?.BuildServiceProvider()
                                                 .GetRequiredService<StudentManagementContext>();
 
             DbInitializer.Initialize(context);
+            */
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

@@ -18,13 +18,13 @@
             {
                 new Student {
                     StudentName = "Nguyen Van A",
-                    DOB = DateOnly.Parse("1993-12-22"),
+                    DOB = DateTime.Parse("1993-12-22"),
                     Email = "nguyenvaa@gmail.com",
                     Address = "Nha A, ngo B"
                 },
                 new Student {
                     StudentName = "Alan",
-                    DOB = DateOnly.Parse("2000-11-25"),
+                    DOB = DateTime.Parse("2000-11-25"),
                     Email = "alanba@gmail.com",
                     Address = "Nhsssa A, nssgo B"
                 },
