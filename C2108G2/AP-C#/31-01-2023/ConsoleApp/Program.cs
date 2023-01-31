@@ -50,6 +50,8 @@ namespace ConsoleApp
             Console.WriteLine("Please enter your name");
             string name = Console.ReadLine() ?? ""; //?? = default value
             Console.WriteLine($"You entered {name}");
+            StringUtility stringUtility = new StringUtility();
+            Console.WriteLine($"There are {stringUtility.CountWord(name)} words in this name");
 
         }
     }
