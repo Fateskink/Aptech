@@ -24,14 +24,21 @@ namespace WAD_C2110i_NguyenVanA.Models
         [Required]
         public string Address { get; set; }
         [Required]
+        [EmailAddress]
         public string Email { get; set; }
         [Required]
         [StringLength(20, MinimumLength = 8, ErrorMessage = "Fullname must be 8 to 20")]
+        [RegularExpression("^[^_.](?!.*[_.]{2})[a-zA-Z0-9._]+[^_.]$", 
+            ErrorMessage = "Invalid characters in username")]
         public string Username { get; set; }
-        [Required]
-        [DataType(DataType.Password)]
+        [Required]        
+        [StringLength(20, MinimumLength = 8, 
+            ErrorMessage = "Password must be at least 8 characters long")]
+        [RegularExpression("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]+$", 
+            ErrorMessage = "Password must contain at least one digit, one upper-case letter, one lower-case letter and one special character")]
         public string Password { get; set; }
         [Required]
+        [Compare("Password", ErrorMessage = "Password and Confirm Password must match")]
         public string ConfirmPassword { get; set; }        
         public int ClassId { get; set; }
     

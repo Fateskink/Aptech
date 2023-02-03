@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PagedList;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -15,10 +16,43 @@ namespace WAD_C2110i_NguyenVanA.Controllers
         private C2110iDatabaseEntities db = new C2110iDatabaseEntities();
 
         // GET: Customers
-        public ActionResult Index()
+        public ActionResult Index(string sortOrder, 
+            string currentFilter, 
+            string searchString, int? page) 
         {
+            ViewBag.CurrentSort = sortOrder;
+            ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewBag.CurrentFilter = searchString;
+
             var customers = db.Customers.Include(c => c.Class);
-            return View(customers.ToList());
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                customers = customers
+                            .Where(customer => customer.Fullname.Contains(searchString)
+                                  || customer.Email.Contains(searchString));
+            }
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    customers = customers.OrderByDescending(customer => customer.Fullname);
+                    break;                
+                default:  // Name ascending 
+                    customers = customers.OrderByDescending(customer => customer.Fullname);
+                    break;
+            }
+            int pageSize = 3;
+            int pageNumber = (page ?? 1);
+            return View(customers.ToPagedList(pageNumber, pageSize));            
         }
 
         // GET: Customers/Details/5
