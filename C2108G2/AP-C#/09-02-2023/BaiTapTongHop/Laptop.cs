@@ -20,6 +20,18 @@ namespace BaiTapTongHop
             _price = price;
             _vat = 0.1f;
         }
+        public void Input() {
+            Console.WriteLine("input price :");
+            Price = int.Parse(Console.ReadLine() ?? "0");
+
+
+            Console.WriteLine("input name :");
+            Name = Console.ReadLine() ?? "";
+
+            Console.WriteLine("input stock :");
+            Stock = Console.ReadLine() ?? "";
+
+        }
         public int Price { 
             get => _price;
             
@@ -40,11 +52,11 @@ namespace BaiTapTongHop
         public override void ShowInfo()
         {
             Console.WriteLine(
-                $"Product id: {ID}" +
-                $"name: {Name}"+
-                $"price: {Price}" +
-                $"price include VAT: {PriceCal}"+
-                $"stock: {Stock}"
+                $"Product id: {ID}, " +
+                $"name: {Name}, "+
+                $"price: {Price}, " +
+                $"price include VAT: {PriceCal}, "+
+                $"stock: {Stock}\n"
             );    
         }
     }

@@ -40,9 +40,18 @@ namespace BaiTapTongHop
             llist.Where(item => item.PriceCal <= maxprice)
                 .ToList()
                 .ForEach(item =>
-            {
-                Console.WriteLine(item);
+            {                
+                item.ShowInfo();
             });
+        }
+        public void Input()
+        {
+            for (int i = 0; i < _capacity; i++) {                
+                Laptop laptop = new Laptop(i+ 1);
+                Console.WriteLine($"Input laptop {i + 1}");
+                laptop.Input();
+                AddLaptop(laptop);
+            }
         }
     }
 }
