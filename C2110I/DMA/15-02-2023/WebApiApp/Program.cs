@@ -1,4 +1,7 @@
 
+using Microsoft.EntityFrameworkCore;
+using WebApiApp.Models;
+
 namespace WebApiApp
 {
     public class Program
@@ -14,6 +17,15 @@ namespace WebApiApp
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            if (builder.Configuration.GetValue<bool>("UseInMemoryDatabase"))
+            {
+                builder.Services.AddDbContext<MyDBContext>(options =>
+                options.UseInMemoryDatabase(databaseName: "C2110i"));//no connection string
+            }
+            else {
+                builder.Services.AddDbContext<MyDBContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("SQLServerConnection")));
+            }            
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

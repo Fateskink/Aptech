@@ -8,16 +8,38 @@ using System.IO;
 using System.Net;
 using System.Text;
 using Newtonsoft.Json;
-
+using DiplomaClient.Repositories;
+using DiplomaClient.Models;
 
 namespace DiplomaClient.Controllers
 {
     public class UsersController : Controller
     {
+        private UsersRepository usersRepository = new UsersRepository();//old pattern
         // GET: Users
         public ActionResult Index()
         {
+            //trang login
             return View();
+        }
+        [HttpPost]
+        //nguoi dung bam login
+        public ActionResult Login(FormCollection collection)
+        {
+            string username = collection["username"];
+            string password = collection["password"];
+            User loggedInUser = usersRepository.Login(username, password);
+
+            if (loggedInUser != null)
+            {
+                return RedirectToAction("ListOfUsers");
+            }
+            else
+            {
+                //call api get all users
+                return RedirectToAction("Index");
+            }
+            //return RedirectToAction("Index");
         }
 
         // GET: Users/Details/5
@@ -31,47 +53,7 @@ namespace DiplomaClient.Controllers
         {
             return View();
         }
-        private string SendPostRequest(string url, string postData)
-        {
-            WebRequest request = WebRequest.Create(url);
-            request.Method = "POST";
-            byte[] byteArray = Encoding.UTF8.GetBytes(postData);
-            //request.ContentType = "application/x-www-form-urlencoded";
-            request.ContentType = "application/json";
-            request.ContentLength = byteArray.Length;
-            Stream dataStream = request.GetRequestStream();
-            dataStream.Write(byteArray, 0, byteArray.Length);
-            dataStream.Close();
-            WebResponse response = request.GetResponse();
-            dataStream = response.GetResponseStream();
-            StreamReader reader = new StreamReader(dataStream);
-            string responseFromServer = reader.ReadToEnd();
-            reader.Close();
-            dataStream.Close();
-            response.Close();
-            return responseFromServer;
-        }
-        [HttpPost]
-        public ActionResult Login(FormCollection collection)
-        {
-            string username = collection["username"];
-            string password = collection["password"];
-            //call api
-            string url = $"https://localhost:44315/api/Users/CheckLogin?UserName={username}&Password={password}";
-            //string postData = $"";
-            string jsonString = this.SendPostRequest(url, "");
-            Dictionary<string, string> dictResponse = JsonConvert
-                .DeserializeObject<Dictionary<string, string>>(jsonString);
-            if (!string.IsNullOrEmpty(dictResponse["UserName"]))
-            {
-                return RedirectToAction("ListOfUsers");
-            }
-            else {
-                //call api get all users
-                return RedirectToAction("Index");
-            }            
-            //return RedirectToAction("Index");
-        }
+                
 
         [HttpGet]
         public ActionResult ListOfUsers() {
