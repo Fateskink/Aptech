@@ -1,5 +1,7 @@
 
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using WebApiApp.Models;
 
 namespace WebApiApp
@@ -25,7 +27,23 @@ namespace WebApiApp
             else {
                 builder.Services.AddDbContext<MyDBContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("SQLServerConnection")));
-            }            
+            }
+
+            builder.Services.AddIdentity<User, IdentityRole>()
+                    .AddEntityFrameworkStores<MyDBContext>()
+                    .AddDefaultTokenProviders();
+
+            builder.Services.Configure<IdentityOptions>(options =>
+            {
+                // Remove the PasswordRequiresNonAlphanumeric requirement
+                options.Password.RequireNonAlphanumeric = false;
+                // Set other password requirements as desired
+                options.Password.RequireDigit = true;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequiredLength = 6;
+            });
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -37,6 +55,7 @@ namespace WebApiApp
 
             app.UseHttpsRedirection();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
 

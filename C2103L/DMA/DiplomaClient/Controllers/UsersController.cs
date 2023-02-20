@@ -32,6 +32,7 @@ namespace DiplomaClient.Controllers
 
             if (loggedInUser != null)
             {
+                List<User> users = usersRepository.GetUsers();
                 return RedirectToAction("ListOfUsers");
             }
             else

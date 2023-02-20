@@ -18,7 +18,7 @@ namespace DiplomaClient.Models
             {
                 UserName = dictionary["UserName"] ?? "",
                 UsersID = int.Parse(dictionary["UsersID"]),
-                Discription = dictionary["Description"],
+                Discription = dictionary["Discription"],
             };                    
     }
 }

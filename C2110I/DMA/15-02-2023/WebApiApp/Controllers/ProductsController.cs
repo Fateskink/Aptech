@@ -27,11 +27,16 @@ namespace WebApiApp.Controllers
             //_context.Products = products; //NO !
             context.SaveChanges();
         }
-
-        [HttpGet]
+        
         [HttpGet("GetAllProducts")]
+        //http:localhost:12345/api/Products/GetAllProducts
         public ActionResult<IEnumerable<Product>> Get()
         {
+            /*
+            var dictionary = new Dictionary<string, object>();
+            dictionary["message"] = "Get products successfuly";
+            dictionary["data"] = _context.Products.Take(100).ToList();
+            */
             return Ok(_context.Products.Take(100).ToList());            
         }
         
