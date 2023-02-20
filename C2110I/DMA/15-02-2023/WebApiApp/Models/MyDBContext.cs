@@ -18,6 +18,9 @@ namespace WebApiApp.Models
             modelBuilder.Entity<User>().ToTable("Users");
             //Add-Migration AddUserTable
             //Update-Database AddUserTable
+
+            //Add-Migration AddUserNameToUserTable 
+            //Update-Database AddUserNameToUserTable 
             modelBuilder.Entity<Product>().ToTable("Products");
         }
     }
