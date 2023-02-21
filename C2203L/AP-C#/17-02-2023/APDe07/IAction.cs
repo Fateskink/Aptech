@@ -11,6 +11,6 @@ namespace APDe07
     {
         void AddToList(T item);
         void Dislay();
-        public T this[int index] {get; set}
+        public T this[int index] {get; set; }
     }
 }

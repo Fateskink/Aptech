@@ -1,9 +1,14 @@
-﻿namespace APDe07
+﻿using System;
+
+namespace APDe07
 {
     internal class Program
     {
+        static int evenNumber;
+        static int oddNumber;
         static void Main(string[] args)
         {
+                        
             int choice = 0;
             CatManagement catManagement = new CatManagement();
             while (choice != 4)
@@ -56,6 +61,40 @@
                         break;
                 }
             }
+            /*
+            Thread t1 = new Thread(delegate ()
+            {
+                Thread.Sleep(1000);
+                Random random = new Random();                
+                while (true)
+                {
+                    int number = random.Next(1, 100);
+                    oddNumber = number % 2 == 1 ? number : 0;
+                    if (oddNumber > 0) {
+                        Console.WriteLine("Random odd number: " + oddNumber);
+                    }
+                    
+                }
+            });
+            Thread t2 = new Thread(delegate ()
+            {
+                Thread.Sleep(1000);
+                Random random = new Random();
+                while (true)
+                {
+                    int number = random.Next(1, 100);
+                    evenNumber = number % 2 == 0 ? number : 0;
+                    if (evenNumber > 0) {
+                        Console.WriteLine("Random even number: " + evenNumber);
+                    }
+                    
+                }
+            });
+
+            t1.Start();
+            t2.Start();
+            return;
+            */
         }
     }
 }
