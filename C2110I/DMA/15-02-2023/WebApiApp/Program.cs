@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using WebApiApp.Controllers;
 using WebApiApp.Models;
 
 namespace WebApiApp
@@ -32,6 +33,7 @@ namespace WebApiApp
             builder.Services.AddIdentity<User, IdentityRole>()
                     .AddEntityFrameworkStores<MyDBContext>()
                     .AddDefaultTokenProviders();
+            builder.Services.AddScoped<JwtMiddleware>();
 
             builder.Services.Configure<IdentityOptions>(options =>
             {
@@ -46,6 +48,7 @@ namespace WebApiApp
             });
 
             var app = builder.Build();
+            app.UseMiddleware<JwtMiddleware>();//validate token
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -55,10 +58,9 @@ namespace WebApiApp
             }
 
             app.UseHttpsRedirection();
-
+            
             app.UseAuthentication();
             app.UseAuthorization();
-
 
             app.MapControllers();
 

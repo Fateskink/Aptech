@@ -8,6 +8,7 @@ using System.Security.Claims;
 using System.Text;
 using WebApiApp.Models;
 using WebApiApp.RequestModels;
+using WebApiApp.Utilities;
 
 namespace WebApiApp.Controllers
 {
@@ -34,18 +35,21 @@ namespace WebApiApp.Controllers
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterRequestModel requestModel)
     {
-        var passwordHasher = new PasswordHasher<User>();
+        /*
+            var passwordHasher = new PasswordHasher<User>();
         var hashedPassword = passwordHasher.HashPassword(null, requestModel.Password);
+        */
             var user = new User
         {
             Email = requestModel.Email,
             UserName = requestModel.Email,
             FullName = requestModel.FullName ?? "",  
-            PasswordHash = hashedPassword,
+            PasswordHash = ""
+
             };
 
 
-        var result = await _userManager.CreateAsync(user);
+        var result = await _userManager.CreateAsync(user, requestModel.Password);
 
         if (result.Succeeded)
         {
@@ -56,22 +60,7 @@ namespace WebApiApp.Controllers
         // User creation failed, return error messages
         return BadRequest(result.Errors);
     }
-    private string GenerateJwtToken(User user)
-        {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_configuration["Secret"]);
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(new Claim[]
-                {
-            new Claim(ClaimTypes.Name, user.Email)
-                }),
-                Expires = DateTime.UtcNow.AddDays(7),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            };
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
-        }
+    
 
         [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginRequestModel requestModel)
@@ -83,11 +72,15 @@ namespace WebApiApp.Controllers
                 return BadRequest(new { message = "Invalid credentials." });
             }
 
-            var result = await _signInManager.CheckPasswordSignInAsync(user, requestModel.Password, false);
+            var result = await _signInManager
+                            .CheckPasswordSignInAsync(
+                            user, 
+                            requestModel.Password, false);
 
             if (result.Succeeded)
             {
-                var token = GenerateJwtToken(user);
+                
+                var token = JWTToken.GenerateJwtToken(user, _configuration);
 
                 return Ok(new { token });
             }
