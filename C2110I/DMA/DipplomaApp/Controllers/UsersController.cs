@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DipplomaApp.Models;
+using com.sun.org.apache.xpath.@internal.operations;
+using DipplomaApp.RequestModels;
 
 namespace DipplomaApp.Controllers
 {
@@ -18,6 +20,16 @@ namespace DipplomaApp.Controllers
         public UsersController(DlmmsContext context)
         {
             _context = context;
+        }
+
+        [HttpPost("CheckLogin")]
+        public async Task<ActionResult<Bool>> CheckLogin(LoginRequestModel loginRequestModel)
+        {
+            var selectedUser = await _context.Users.Where(user => (user.UserName ?? "")
+                .Equals(loginRequestModel.UserName) 
+                    && (user.Password ?? "").Equals(loginRequestModel.Password))
+                .FirstOrDefaultAsync();
+            return Ok(selectedUser != null);
         }
 
         // GET: api/Users

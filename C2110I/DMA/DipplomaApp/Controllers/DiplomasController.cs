@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DipplomaApp.Models;
+using com.sun.org.apache.xpath.@internal.operations;
+using static com.sun.tools.@internal.xjc.reader.xmlschema.bindinfo.BIConversion;
 
 namespace DipplomaApp.Controllers
 {
@@ -19,18 +21,36 @@ namespace DipplomaApp.Controllers
         {
             _context = context;
         }
-
         // GET: api/Diplomas
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Diploma>>> GetDiplomas()
+        public async Task<ActionResult<IEnumerable<Diploma>>> GetDiplomas(string strSearch)
         {
           if (_context.Diplomas == null)
           {
               return NotFound();
           }
-            return await _context.Diplomas.ToListAsync();
-        }
+            if (string.IsNullOrEmpty(strSearch))
+            {
+                return await _context.Diplomas.ToListAsync();
+            }
+            var diplomas = await _context.Diplomas               
+               .ToListAsync();
 
+            return await _context.Diplomas
+                .Where(diploma =>
+                    (diploma.FullName ?? "").ToLower().Contains(strSearch.ToLower())
+                    || (diploma.BirthPlace ?? "").ToLower().Contains(strSearch.ToLower()))
+                .ToListAsync();
+
+            /*
+            return diplomas
+                   .Where(item 
+                    => Utilities.CheckContain(item.FullName, strSearch) ||
+                           Utilities.CheckContain(item.BirthPlace, strSearch))
+               .ToList();            
+            */            
+        }
+        
         // GET: api/Diplomas/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Diploma>> GetDiploma(int id)
