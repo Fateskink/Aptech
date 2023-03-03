@@ -28,7 +28,6 @@ rectangle.color = 'red'
 console.log(`rectangle'width = ${rectangle.width}`)
 //JSON = Javascript Object Notation
 console.log(`rectangle = ${JSON.stringify(rectangle)}`)
-
 let area = rectangle.getArea()
 console.log(`area = ${area}`)
 console.log(`x = ${!rectangle.x || rectangle.x.length == 0 ? 0 : rectangle.x}`) //filter du lieu

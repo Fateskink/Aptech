@@ -6,21 +6,19 @@ namespace DiplomaAppClient.Controllers
     public class UsersController : Controller
     {
         // GET: UsersController
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            Console.WriteLine("haha");
             return View();
         }
 
         // GET: UsersController/Details/5
-        public ActionResult Details(int id)
+        public async Task<ActionResult> Details(int id)
         {
             return View();
         }
 
-
         // GET: UsersController/Create
-        public ActionResult Create()
+        public async Task<ActionResult> Create()
         {
             return View();
         }
@@ -28,12 +26,8 @@ namespace DiplomaAppClient.Controllers
         // POST: UsersController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<ActionResult> Create(IFormCollection collection)
         {
-            //login
-            string userName = collection["username"];
-            string password = collection["password"];
-            Console.WriteLine("aaaa");
             try
             {
                 return RedirectToAction(nameof(Index));
@@ -45,7 +39,7 @@ namespace DiplomaAppClient.Controllers
         }
 
         // GET: UsersController/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<ActionResult> Edit(int id)
         {
             return View();
         }
@@ -53,7 +47,7 @@ namespace DiplomaAppClient.Controllers
         // POST: UsersController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<ActionResult> Edit(int id, IFormCollection collection)
         {
             try
             {
@@ -66,7 +60,7 @@ namespace DiplomaAppClient.Controllers
         }
 
         // GET: UsersController/Delete/5
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
             return View();
         }
@@ -74,7 +68,7 @@ namespace DiplomaAppClient.Controllers
         // POST: UsersController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<ActionResult> Delete(int id, IFormCollection collection)
         {
             try
             {
