@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using DipplomaApp.Models;
 using com.sun.org.apache.xpath.@internal.operations;
 using DipplomaApp.RequestModels;
+using System.Reflection.Metadata.Ecma335;
 
 namespace DipplomaApp.Controllers
 {
@@ -23,13 +24,16 @@ namespace DipplomaApp.Controllers
         }
 
         [HttpPost("CheckLogin")]
-        public async Task<ActionResult<Bool>> CheckLogin(LoginRequestModel loginRequestModel)
+        public async Task<ActionResult<User>> CheckLogin(LoginRequestModel loginRequestModel)
         {
-            var selectedUser = await _context.Users.Where(user => (user.UserName ?? "")
+            User selectedUser = await _context.Users.Where(user => (user.UserName ?? "")
                 .Equals(loginRequestModel.UserName) 
                     && (user.Password ?? "").Equals(loginRequestModel.Password))
                 .FirstOrDefaultAsync();
-            return Ok(selectedUser != null);
+            if (selectedUser != null) {
+                return Ok(selectedUser);
+            }
+            return NotFound("Invalid username or password");
         }
 
         // GET: api/Users

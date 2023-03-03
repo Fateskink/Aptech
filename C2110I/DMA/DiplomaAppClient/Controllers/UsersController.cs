@@ -1,12 +1,21 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using DipplomaApp.Repositories;
+using DipplomaAppClient.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DiplomaAppClient.Controllers
 {
     public class UsersController : Controller
     {
+        private readonly IUserRepository _repository;
         // GET: UsersController
-        public async Task<ActionResult> Index()
+        
+        public UsersController(IUserRepository repository)
+        {
+            _repository = repository;
+        }
+        // GET: UsersController
+        public async Task <ActionResult> Index()
         {
             return View();
         }
@@ -28,9 +37,21 @@ namespace DiplomaAppClient.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(IFormCollection collection)
         {
+            string userName = collection["username"];
+            string password = collection["password"];
             try
             {
-                return RedirectToAction(nameof(Index));
+                
+                Console.WriteLine("aaaa");
+                
+                    User user = await _repository.Login(userName, password);
+                    if (user == null)
+                    {
+                        ViewBag.Error = "Name or password incorrect";
+                        return View();
+                    }
+                    return RedirectToAction(nameof(Index));
+                                
             }
             catch
             {

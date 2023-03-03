@@ -1,5 +1,7 @@
 ﻿using DipplomaApp.Repositories;
 using DipplomaAppClient.Models;
+using Newtonsoft.Json;
+using System;
 using System.Text.Json;
 
 namespace DiplomaAppClient.Repositories
@@ -10,12 +12,13 @@ namespace DiplomaAppClient.Repositories
         public async Task<User> Login(string username, string password)
         {
             //call api
-            string jsonString = await Api.SendGetRequestAsync(urlLogin, new Dictionary<string, string>
+            string jsonString = await Api.SendPostRequestAsync(urlLogin, new Dictionary<string, string>
             {
                 { "username", username },
                 { "password", password }
             });
-            return JsonSerializer.Deserialize<User>(jsonString);            
+            var xx = JsonConvert.DeserializeObject<User>(jsonString);
+            return JsonConvert.DeserializeObject<User>(jsonString);            
         }
     }
 }
