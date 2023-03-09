@@ -1,0 +1,35 @@
+﻿@model ECommerceApp.ViewModels.UserViewModel
+@* @model List<Book> *@
+@{
+    ViewData["Title"] = "Home Page";
+    //@model Book
+}
+
+<div class="text-center">
+    <h1 class="display-4">@ViewData["Message"]</h1>
+    <h1 class="display-4">@ViewBag.x</h1>
+    @*
+    @foreach (var book in Model)
+    {
+        <p>@book.ID - @book.Title - @book.Price</p>
+    }
+    *@
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form method="post" asp-action="SubmitForm">
+                <div class="form-group">
+                    <label asp-for="Email">Email:</label>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Password">Password:</label>
+                    <input asp-for="Password" class="form-control" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>                
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+   
+</div>
