@@ -1,3 +1,7 @@
+using ECommerceApp.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+
 namespace ECommerceApp
 {
     public class Program
@@ -7,7 +11,11 @@ namespace ECommerceApp
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            builder.Services.AddControllersWithViews();
+            builder.Services.AddControllersWithViews();            
+            var settings = builder.Configuration
+                .GetRequiredSection("ConnectionStrings"); //read data from appsettings.json
+            builder.Services.AddDbContext<ECommerceDbContext>(options =>
+                options.UseSqlServer(settings["ECommerceDb"]));
 
             var app = builder.Build();
 
