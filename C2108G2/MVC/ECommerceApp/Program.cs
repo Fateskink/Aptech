@@ -44,3 +44,8 @@ namespace ECommerceApp
         }
     }
 }
+/*
+dotnet ef migrations add CreateTables
+dotnet ef database update
+dotnet ef migrations remove CreateTables
+ */

@@ -4,6 +4,7 @@ namespace ECommerceApp.ViewModels
 {
     public class UserViewModel
     {
+        //ViewModel = client send data(ViewModel) to server
         [EmailAddress]
         public string Email { get; set; }
         [Required(ErrorMessage = "Password is required.")]
