@@ -1,4 +1,5 @@
 CREATE DATABASE c2108g2;
+USE c2108g2;
 -- Create the Users table
 CREATE TABLE Users (
     UserId INT PRIMARY KEY IDENTITY(1,1),
@@ -59,12 +60,15 @@ CREATE UNIQUE INDEX ProductName_Unique_Index ON Products (ProductName)
 DROP TRIGGER EncryptPasswordTrigger;
 CREATE TRIGGER EncryptPasswordTrigger
 ON Users
-AFTER INSERT
+AFTER INSERT, UPDATE
 AS
 BEGIN
-    SET NOCOUNT ON;    
-    UPDATE Users SET Password = HASHBYTES('SHA2_256', Password)
-    SELECT * FROM inserted i;
+    SET NOCOUNT ON;
+
+    UPDATE Users
+    SET password = dbo.HashPassword(Users.password)
+    FROM inserted
+    WHERE Users.UserId = inserted.UserId;
 END
 
 -- Create a stored procedure to check if a user exists in the Users table with a given email and password
@@ -77,3 +81,9 @@ BEGIN
     FROM Users
     WHERE Email = @Email AND Password = HASHBYTES('SHA2_256', @Password)
 END
+
+SELECT * FROM Users;
+DELETE FROM Users WHERE Email='aaa@gmail.com';
+
+INSERT INTO Users(Username, Email, Address, Phone)
+VALUES('hoangnd', 'aaa@gmail.com', 'aa111', '0912212');
