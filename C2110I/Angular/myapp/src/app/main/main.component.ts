@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { Student } from '../models/student.model';
+import { Language } from './../models/Language.model';
+import { Student } from './../models/student.model';
 
 @Component({
   selector: 'app-main',
@@ -7,11 +8,55 @@ import { Student } from '../models/student.model';
   styleUrls: ['./main.component.css']
 })
 export class MainComponent {
-  message:string = 'This is a test message';
-  x:number | string = 123;
-  student:Student;
+  // message:string = 'This is a test message';
+  // x:number | string = 123;
+  //student:Student;
+  students: Student [] = []
+  studentName: string = ""
+  studentDOB?: Date
+  gender: string = "Male"
+  klass: string = ""
+  klasses: string[] = ["C2110i", "C2003L", "c1234L", "c2233Y"]  
+  languages: Language[] = [
+    {
+      name: "English",
+      checked: true
+    },
+    {
+      name: "French",
+      checked: false
+    },
+    
+    {
+      name: "German",
+      checked: false
+    },
+    {
+      name: "Vietnamese",
+      checked: false
+    },
+    {
+      name: "Korean",
+      checked: false
+    }]  
+
+  getSelectedLanguages = () => this.languages
+                                   .filter(language => language.checked)
+  onClickAdd() {    
+    let selectedLanguages = this.getSelectedLanguages()
+    this.students.push({
+      name: this.studentName,
+      dob: !!this.studentDOB ? new Date(this.studentDOB) : new Date(),
+      gender: this.gender,
+      languages: selectedLanguages,
+      klass: this.klass
+    })
+    debugger  
+  }
   
   constructor() {
-    this.student =  new Student({name: 'Hoang', age:18});
+    this.klass = this.klasses[0]
+    debugger
+    //this.student =  new Student({name: 'Hoang', age:18});
   }
 }

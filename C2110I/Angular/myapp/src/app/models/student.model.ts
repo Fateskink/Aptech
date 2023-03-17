@@ -1,8 +1,8 @@
-export class Student {
+import { Language } from './Language.model';
+export interface Student {
     name: string;
-    age: number;    
-    constructor(params: {name: string, age: number}) { 
-        this.name = params.name;
-        this.age = params.age;
-    }
+    dob:Date;
+    gender: string
+    languages: Language[]
+    klass: string    
 }
