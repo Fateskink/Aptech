@@ -1,6 +1,7 @@
 const express = require('express');
 const Product = require('../models/Product');
 const router = express.Router();
+const {sequelize, connect} = require('../database/db')
 
 router.get('/', function(req, res) {
     //res.send('Get all products');
@@ -18,14 +19,21 @@ router.get('/', function(req, res) {
     })
 });
 
-router.get('/:id', function(req, res) {
+router.get('/:id', async function(req, res) {
     const productId = req.params.id;
     res.send(`Get product with ID ${productId}`);
 });
 
-router.post('/', function(req, res) {    
-    const {name, price, description} = req //destructuring
+router.post('/', async function(req, res) {    
+    const {name,amount, price, description} = req.body //destructuring
     debugger    
+    try {        
+        await Product(sequelize)
+            .create({name,amount, price, description});
+        debugger
+    }catch(err) {
+      debugger
+    }
     res.send('Create a new product');
 });
 

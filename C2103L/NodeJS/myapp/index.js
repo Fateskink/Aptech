@@ -46,7 +46,7 @@ app.use(`/v${VERSION}/users`, usersRouter);
 app.use(`/v${VERSION}/products`, productsRouter)
 
 Log.warn('This is an errro')
-debugger
+
 app.listen(process.env.PORT, function() {
     console.log(`haha Server listening on port ${process.env.PORT}`);
 });
