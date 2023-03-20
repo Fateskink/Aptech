@@ -64,4 +64,29 @@
     </tr>
     <button (click)="onClickAdd()">Add</button>
 </table>
+<table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>DOB</th>
+        <th>Gender</th>
+        <th>Languages</th>
+        <th>klass</th>        
+        <th></th>        
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let student of students">
+        <td>{{ student.name }}</td>
+        <td>{{ convertDateTimeToString(student.dob) }}</td>
+        <td>{{ student.gender}}</td>
+         <td>{{ getLanguageString(student)}}</td> 
+        <td>{{ student.klass }}</td>        
+        <td><button (click)="onDeleteStudent(student)">Delete</button></td>        
+      </tr>
+    </tbody>
+  </table>
+  <p *ngIf="students.length > 0">There are {{students.length }}</p>
+  
+  
 

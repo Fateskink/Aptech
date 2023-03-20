@@ -29,10 +29,12 @@ router.post('/', async function(req, res) {
     debugger    
     try {        
         await Product(sequelize)
-            .create({name,amount, price, description});
-        debugger
+            .create({name,amount, price, description});        
+        //res.json({})
     }catch(err) {
-      debugger
+        res.status(401).json({
+            message: err.message,        
+        })
     }
     res.send('Create a new product');
 });
