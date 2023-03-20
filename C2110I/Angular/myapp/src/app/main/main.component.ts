@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
-import { Language } from './../models/Language.model';
-import { Student } from './../models/student.model';
+import { Component, Inject, Injectable } from '@angular/core';
+import { Language } from './../models/Language.model'
+import { Student } from './../models/student.model'
 
 @Component({
   selector: 'app-main',
@@ -68,6 +68,6 @@ export class MainComponent {
   }
   onDeleteStudent(student: Student) {
     debugger  //confirm 
-    this.students = this.students.filter(item => item.name != student.name)
+    this.students = this.students.filter(item => item.name != student.name)        
   }
 }
