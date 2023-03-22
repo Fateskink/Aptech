@@ -34,6 +34,15 @@ namespace WebApiApp
                     .AddEntityFrameworkStores<MyDBContext>()
                     .AddDefaultTokenProviders();
             builder.Services.AddScoped<JwtMiddleware>();
+            builder.Services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder =>
+                {
+                    builder.AllowAnyOrigin()
+                           .AllowAnyHeader()
+                           .AllowAnyMethod();
+                });
+            });
 
             builder.Services.Configure<IdentityOptions>(options =>
             {
@@ -48,6 +57,7 @@ namespace WebApiApp
             });
 
             var app = builder.Build();
+            app.UseCors();
             app.UseMiddleware<JwtMiddleware>();//validate token
 
             // Configure the HTTP request pipeline.
