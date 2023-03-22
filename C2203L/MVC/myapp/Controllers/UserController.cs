@@ -35,8 +35,20 @@ namespace myapp.Controllers
         public IActionResult Login() {
             LoginViewModel viewModel = new LoginViewModel
             {
+                UserName = Request.Cookies["UserName"] ?? "",
+                Password = Request.Cookies["Password"] ?? "",
+                RememberPassword = true
+            };
+            return View(viewModel);//Views/Login.cshtml
+        }
+        [HttpGet]
+        public IActionResult Register()
+        {
+            RegisterViewModel viewModel = new RegisterViewModel
+            {
                 UserName = "",
-                Password = ""
+                Password = "",
+                RetypePassword = "",
             };
             return View(viewModel);//Views/Login.cshtml
         }
@@ -47,10 +59,27 @@ namespace myapp.Controllers
             // handle form submission
             //if success, show all classes 
             if (ModelState.IsValid) {
+                if (viewModel.RememberPassword == true) {
+                    Response.Cookies.Append("UserName", viewModel.UserName);
+                    Response.Cookies.Append("Password", viewModel.Password);
+                }
                 return RedirectToAction(nameof(ShowKlasses));
             }
             return View(viewModel);
             
+        }
+        [HttpPost]
+        public IActionResult Register(RegisterViewModel viewModel)
+        {
+
+            // handle form submission
+            //if success, show all classes 
+            if (ModelState.IsValid)
+            {
+                return RedirectToAction(nameof(ShowKlasses));
+            }
+            return View(viewModel);
+
         }
 
         [HttpGet]

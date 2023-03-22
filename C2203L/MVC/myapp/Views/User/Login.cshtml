@@ -13,12 +13,21 @@
                 <div class="mb-3">
                     <label for="UserName" class="form-label">Username</label>
                     <input type="text" class="form-control" 
-                           name="UserName" required>
+                           asp-for="UserName" required>
                 </div>
                 <div class="mb-3">
                     <label for="Password" class="form-label">Password</label>
-                    <input type="password" class="form-control"
-                           name="Password" required>
+                    <input type="password" 
+                        asp-for="Password"
+                        value="@Model.Password"
+                        class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <div class="checkbox">
+                        <label>
+                            <input asp-for="RememberPassword" /> Remember Password
+                        </label>
+                    </div>
                 </div>
                 <button type="submit" class="btn btn-primary">Login</button>
             </form>
