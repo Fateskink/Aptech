@@ -1,11 +1,12 @@
 const express = require('express')
 const app = express();
+const cors = require('cors');
 const studentRoutes = require('./routes/student.js')
 const bodyParser = require('body-parser');
 const path = require('path')
 
 //const __dirname = path.dirname(path.resolve());
-
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/api/students', studentRoutes);

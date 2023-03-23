@@ -7,3 +7,5 @@ CREATE TABLE student(
     javaScore decimal(18,2),
     csharpScore decimal(18,2)
 );
+ALTER TABLE student ADD CONSTRAINT unique_name UNIQUE (name);
+
