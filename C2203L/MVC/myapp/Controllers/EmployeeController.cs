@@ -18,6 +18,9 @@ namespace myapp.Controllers
         [HttpPost]
         public IActionResult AddEmployee(AddEmployeeViewModel viewModel)
         {
+            if (ModelState.IsValid) {
+                return RedirectToAction(nameof(Index));
+            }
             return View();//Views/Employee/AddEmployee.cshtml
         }
     }

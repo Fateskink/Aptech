@@ -4,6 +4,17 @@
 @{
 }
 @model myapp.ViewModels.AddEmployeeViewModel;
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        @foreach (var error in ViewData.ModelState.Values.SelectMany(x => x.Errors))
+        {
+            <span>@error.ErrorMessage</span>
+
+            <br />
+        }
+    </div>
+}
 <form method="post" asp-controller="Employee" asp-action="AddEmployee">
     <div class="form-row">
         <div class="form-group col-md-6">
@@ -28,8 +39,15 @@
     <div class="form-row">
         <div class="form-group col-md-12">
             <button type="submit" class="btn btn-primary">Save</button>
-            <a href="/employees" class="btn btn-secondary">Back to List</a>
-            <a href="/employees/create" class="btn btn-success">Add New</a>
-        </div>
-    </div>
 </form>
+    <form>
+        <button asp-action="Index" asp-controller="Employee"
+                class="btn btn-secondary">
+            Back to List
+        </button>
+    </form>
+    </div>
+
+            
+    </div>
+
