@@ -37,6 +37,7 @@
           <th>Address</th>
           <th>Java Score</th>
           <th>C# Score</th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
@@ -46,6 +47,8 @@
           <td>{{student.address}}</td>
           <td>{{student.javaScore}}</td>
           <td>{{student.csharpScore}}</td>
+          <td><button ng-click="deleteStudent(student)">Delete</button>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -60,17 +63,41 @@
       $scope.age = ""
       $scope.address = ""
       $scope.javaScore = ""
-      $scope.csharpScore = ""
-      
+      $scope.csharpScore = ""      
+      $scope.loadAllStudents = function() {
+        $http({
+                method: 'GET',
+                url: urlStudents,            
+            }).then(function(response) {     
+                debugger           
+                $scope.students = response.data?.data ?? []
+            }, function(error) {
+                // handle error response
+            });
+      }
+      $scope.deleteStudent = function(student) {                
+        debugger
+        if (confirm("Are you sure to delete ?") == true) {
+          debugger
+          $http({
+              method: 'DELETE',
+              url: `${urlStudents}/${student.id}`,            
+          }).then((response) => {
+              debugger
+              // handle success response
+              alert("delete successful")
+              $scope.loadAllStudents()
+          }, (error) => {
+              debugger
+              // handle error response
+          })    
+        }         
+      }
       $scope.addStudent = function() {                
         debugger
         $http({
             method: 'POST',
             url: urlStudents,
-            // params: {
-            //     param1: 'value1',
-            //     param2: 'value2'
-            // },
             data: {
                 name: $scope.name,
                 age: parseInt($scope.age),
@@ -81,20 +108,13 @@
         }).then((response) => {
             debugger
             // handle success response
-            $http({
-                method: 'GET',
-                url: urlStudents,            
-            }).then(function(response) {
-                debugger
-                // handle success response
-            }, function(error) {
-                // handle error response
-            });
+            $scope.loadAllStudents()
         }, (error) => {
             debugger
             // handle error response
-        })
+        })        
       }
+      $scope.loadAllStudents()
     })
   </script>
 </body>
