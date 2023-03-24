@@ -7,12 +7,13 @@ import { AppRoutingModule } from './app-routing.module';
 import { MainComponent } from './main/main.component';
 import { FormsModule } from '@angular/forms';
 import { LoginComponent } from './login/login.component';
-import { HttpClientModule } from '@angular/common/http'
+import { HttpClientModule } from '@angular/common/http';
+import { ProductComponent } from './product/product.component'
 
 
 @NgModule({
   declarations: [    
-    MainComponent, LoginComponent, 
+    MainComponent, LoginComponent, ProductComponent, 
     
   ],
   imports: [
@@ -26,6 +27,9 @@ import { HttpClientModule } from '@angular/common/http'
     JwtHelperService,
     { provide: JWT_OPTIONS, useValue: JWT_OPTIONS }
   ],
-  bootstrap: [LoginComponent]
+  bootstrap: [
+    ProductComponent,
+    // LoginComponent,
+  ]
 })
 export class AppModule { }

@@ -26,6 +26,7 @@ export class LoginComponent {
     .subscribe(
       (value: UserResponse) => {                
         const decodedToken = this.jwtHelper.decodeToken(value?.token ?? "")
+        localStorage.setItem('token', value?.token ?? "");
         debugger        
       },
       error => {
