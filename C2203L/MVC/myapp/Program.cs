@@ -1,3 +1,7 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using myapp.Models;
+
 namespace myapp
 {
     public class Program
@@ -8,6 +12,8 @@ namespace myapp
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            string connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+            builder.Services.AddDbContext<MyDbContext>(options => options.UseSqlServer(connectionString));
 
             var app = builder.Build();
 
@@ -21,9 +27,7 @@ namespace myapp
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
-            app.UseRouting();
-
+            app.UseRouting();            
             app.UseAuthorization();
 
             app.MapControllerRoute(
