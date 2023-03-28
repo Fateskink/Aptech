@@ -1,5 +1,6 @@
 const chalk = require('chalk')
 const fs = require('fs');
+const path = require('path');
 const LOG_FILE_PATH = path.join(__dirname, 'log.txt')
 const LOG_TYPE = {
     ERROR : 'error',
@@ -16,11 +17,11 @@ function print(message, logType) {
     } else if(logType == LOG_TYPE.INFO) { 
         console.log(outMessage)    
     }    
-    saveLog(outMessage, null)    
+    saveLog(outMessage, ()=>{})    
 }
 //DRY - Donot repeat yourself
 function saveLog(message, finished) {
-    fs.appendFile(LOG_FILE_PATH, message, (err) => {
+    fs.appendFile(LOG_FILE_PATH, "\n" + message, (err) => {
         if (err) throw err;
         finished()        
     });

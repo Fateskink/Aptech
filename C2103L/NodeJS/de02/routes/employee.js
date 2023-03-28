@@ -30,10 +30,10 @@ router.get('/:id', async (req, res) => {
 })
 
 router.post('/', async (req, res) => {
-  const {Id, Name, Address, Salary} = req.body
+  const {Name, Age, Address, Salary} = req.body
   debugger
-  const sql = 'INSERT INTO employees(Id, Name, Address, Salary) VALUES (?,?,?,?)'
-  const values = [Id, Name, Address, Salary]  
+  const sql = 'INSERT INTO employees(Name, Age, Address, Salary) VALUES (?,?,?, ?)'
+  const values = [Name, Age, Address, Salary]  
   connection.execute(sql, values, (err, result) => {
     debugger
     if (err) {

@@ -4,6 +4,7 @@
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
     using System.Linq;
+    using WAD_C2108G2_NguyenVanA.Models;
 
     internal sealed class Configuration : DbMigrationsConfiguration<WAD_C2108G2_NguyenVanA.Models.DataContext>
     {
@@ -18,6 +19,7 @@
 
             //  You can use the DbSet<T>.AddOrUpdate() helper extension method
             //  to avoid creating duplicate seed data.
+            DataInitializer.SeedData(context);
         }
     }
 }

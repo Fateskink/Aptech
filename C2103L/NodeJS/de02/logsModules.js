@@ -10,43 +10,58 @@ const URL_UPDATE_EMPLOYEE = (id) => `http://${SERVER_NAME}:${SERVER_PORT}/api/em
 const URL_DELETE_EMPLOYEE = (id) => `http://${SERVER_NAME}:${SERVER_PORT}/api/employees/${id}`
 
 
-const getAllEmployees = () => {
-    axios.get(URL_EMPLOYEES())
-  .then(response => {
-    console.log(response.data);
-  })
-  .catch(error => {
-    print(error.message);
-  });
+const getAllEmployees = async () => {  
+  try {
+      let response = await axios.get(URL_EMPLOYEES())
+      debugger
+      //print("Status: " + response.status, LOG_TYPE.INFO)
+  }catch(error) {
+    debugger
+    print("Status: " + response.status, LOG_TYPE.ERROR)      
+  }   
 }
-const insertEmployee = async ({name, age, address, salary}) => {
+const insertEmployee = async ({Name, Age, Address, Salary}) => {
     try {
       let response = await axios.post(
         URL_INSERT_EMPLOYEE(),
-        {name, age, address, salary})
+        {Name, Age, Address, Salary})
+        debugger
+        print("Status: " + response.status, LOG_TYPE.INFO)
     }catch(error) {
-      print(error.message);
+      debugger
+      print("Status: " + error.message, LOG_TYPE.ERROR)      
     }      
 }
-const getDetailEmployee = async(id) => {
+const getDetailEmployee = async (id) => {
   try {
-    let response = await axios.get(id)
+    let response = await axios.get(URL_DETAIL_EMPLOYEE(id))
+    debugger
+    print("Status: " + response.status+', data: '+JSON.stringify(response?.data?.data), 
+      LOG_TYPE.INFO)
   }catch(error) {
-    print(error.message);
+    debugger
+    print("Status: " + error.message, LOG_TYPE.ERROR)      
   }      
 }
-const updateEmployee = async ({id, name, age, address, salary}) => {
+const updateEmployee = async ({Id, Name, Age, Address, Salary}) => {
   try {
-    let response = await axios.put(id, {name, age, address, salary})
+    let response = await axios.put(URL_UPDATE_EMPLOYEE(Id), { Name, Age, Address, Salary})
+    debugger
+    print("Status: " + response.status+', data: '+JSON.stringify(response?.data), 
+      LOG_TYPE.INFO)
   }catch(error) {
-    print(error.message);
+    debugger
+    print("Status: " + error.message, LOG_TYPE.ERROR)      
   }        
 }
 const deleteEmployee = async (id) => {
   try {
-    let response = await axios.delete(`${URL_DELETE_EMPLOYEE}/${id}`, )
+    let response = await axios.delete(URL_DELETE_EMPLOYEE(id))
+    print("Status: " + response.status, LOG_TYPE.INFO)
+    debugger
   }catch(error) {
-    print(error.message);
+    debugger
+    print("Status: " + error.message, LOG_TYPE.ERROR)      
   }  
 }
 module.exports = {
@@ -59,8 +74,15 @@ module.exports = {
 //run test
 const testAll = async () => {
   await getAllEmployees()
-  await insertEmployee()
-  await updateEmployee()
-  await deleteEmployee()
+  await getDetailEmployee(2)
+  await insertEmployee({Name: 'Nguyen Van Y', Age: 19, Address: '123 nha a ngo B', Salary: 1122})
+  await updateEmployee({
+    Id: 26, 
+    Name: 'Nguyen Van Y', 
+    Age: 19, 
+    Address: '123 nha a ngo B', 
+    Salary: 1122
+  })
+  //await deleteEmployee(2)
 }
 testAll()

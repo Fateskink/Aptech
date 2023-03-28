@@ -12,18 +12,16 @@ namespace WAD_C2108G2_NguyenVanA.Models
         {
             base.InitializeDatabase(context);
         }
-
-        protected override void Seed(DataContext context)
-        {
-            base.Seed(context);
+        public static void SeedData(DataContext context) {
             if (!context.Projects.Any() && !context.Employees.Any()
-                    && !context.ProjectEmployees.Any()) {
+                    && !context.ProjectEmployees.Any())
+            {
                 context.Projects.AddRange(new List<Project> {
                 new Project {
                     ProjectId = 1,
                     ProjectName = "pro 11",
                     ProjectStartDate =DateTime.Parse("2023-12-23"),
-                    ProjectEndDate = DateTime.Parse("2023-12-23"),
+                    ProjectEndDate = DateTime.Parse("2024-12-23"),
                 },
                 new Project {
                     ProjectId = 2,
@@ -55,7 +53,7 @@ namespace WAD_C2108G2_NguyenVanA.Models
                 });
                 context.SaveChanges();
                 context.ProjectEmployees.AddRange(new List<ProjectEmployee> {
-                    new ProjectEmployee{ 
+                    new ProjectEmployee{
                         EmployeeId = 1,
                         ProjectId = 2,
                         Tasks = "Java app",
@@ -67,7 +65,12 @@ namespace WAD_C2108G2_NguyenVanA.Models
                     }
                 });
                 context.SaveChanges();
-            }                        
+            }
+        }
+        protected override void Seed(DataContext context)
+        {
+            base.Seed(context);
+            DataInitializer.SeedData(context);                       
         }
     }
 }

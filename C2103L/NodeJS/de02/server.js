@@ -1,7 +1,7 @@
 const express = require('express')
 const app = express();
 const cors = require('cors');
-const studentRoutes = require('./routes/employees.js')
+const studentRoutes = require('./routes/employee.js')
 const bodyParser = require('body-parser');
 const path = require('path')
 

@@ -7,6 +7,7 @@ CREATE TABLE employees(
     Address VARCHAR(500) DEFAULT '',
     Salary DECIMAL(18, 1) DEFAULT 0
 );
+ALTER TABLE employees ADD CONSTRAINT UN_Employees_Name UNIQUE (Name);
 DELETE FROM employees WHERE 1<2;
 INSERT INTO employees(Name, Age, Address, Salary)
 VALUES
