@@ -17,7 +17,8 @@ namespace de11.Controllers
             ViewBag.ColorText = "";
             foreach (var word in arrayOfWords)
             {
-                var newWord = $"<span style=\"color:red;\">" + word[0] + "</span>" + word.Substring(1);
+                var newWord = $"<span style=\"color:red;\">" + word[0] 
+                    + "</span>" + word.Substring(1);
                 ViewBag.ColorText = ViewBag.ColorText + newWord + " ";
             }
 

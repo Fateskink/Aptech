@@ -1,0 +1,24 @@
+﻿@model IEnumerable<Employee>;
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<h1>Employee list</h1>
+<table>
+    <tr>
+        <th>Emp No</th>
+        <th>Emp Name</th>
+        <th>Emp Position</th>
+        <th>Emp Salary</th>
+    </tr>
+    @foreach(Employee employe in Model)
+    {
+        <tr>
+            <td>@employe.EmployeeNo</td>
+            <td>@employe.EmployeeName</td>
+            <td>@employe.Position</td>
+            <td>@employe.Salary</td>                
+        </tr>        
+    }
+</table>

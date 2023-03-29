@@ -1,3 +1,8 @@
+using de11.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
+
 namespace de11
 {
     public class Program
@@ -8,6 +13,9 @@ namespace de11
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            string connectionString = builder.Configuration.GetConnectionString("MyConnection");
+            builder.Services.AddDbContext<DataContext>(
+                options => options.UseSqlServer(connectionString));
 
             var app = builder.Build();
 
