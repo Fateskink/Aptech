@@ -6,6 +6,8 @@
         <th>Emp Name</th>
         <th>Emp Position</th>
         <th>Emp Salary</th>
+        <th>Update details</th>
+        <th>Delete</th>
     </tr>
     @foreach(Employee employee in ViewBag.Employees)
     {
@@ -14,6 +16,20 @@
             <td>@employee.EmployeeName</td>
             <td>@employee.Position</td>
             <td>@employee.Salary</td>
+            <td>
+                <a 
+                asp-action="EditEmployee" 
+                asp-controller="Employee"
+                asp-route-employeeNo="@employee.EmployeeNo">Edit infor
+            </a>
+           </td>
+            <td>
+                <a asp-action="DeleteEmployee"
+               asp-controller="Employee"
+               asp-route-employeeNo="@employee.EmployeeNo">
+                    Delete
+                </a>
+            </td>
         </tr>        
     }
 </table>
