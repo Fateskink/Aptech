@@ -8,6 +8,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 const employeeRoutes = require('./routes/employee.js')
+const userRoutes = require('./routes/user.js')
 /*
 const organizationRoutes = require('./routes/organization.js')
 const positionRoutes = require('./routes/position.js')
@@ -16,6 +17,7 @@ const usersRoutes = require('./routes/users.js')
 */
 
 app.use('/api/employees', employeeRoutes);
+app.use('/api/users', userRoutes);
 /*
 app.use('/api/organizations', organizationRoutes);
 app.use('/api/positions', positionRoutes);
