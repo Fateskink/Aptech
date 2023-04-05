@@ -1,72 +1,21 @@
-﻿<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register New User</title>
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.0/css/bootstrap.min.css"
-        integrity="sha512-h/yN2+8WYzMW9/vjxTtnZMUNQdf8kFzofVyFXpwO+flz17JvYsYsRZ18acxJMBdLZoAxky13hJtErxQr3F3hyA=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="style.css">
-</head>
-
-<body>
-    <!-- Header -->
-    <header class="fixed-top bg-light">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <div class="container">
-                <a class="navbar-brand" href="#">Register New User</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
-                    aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav ms-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">About</a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                                More
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="#">Contact Us</a></li>
-                                <li><a class="dropdown-item" href="#">FAQs</a></li>
-                            </ul>
-                        </li>
-                    </ul>
+﻿<main class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8 col-sm-10">
+            <h1 class="text-center mb-4">Create a New Account</h1>
+            <form>
+                <div class="mb-3">
+                    <label for="firstName" class="form-label">First Name</label>
+                    <input type="text" class="form-control" id="firstName" required>
                 </div>
-            </div>
-        </nav>
-    </header>
-
-    <!-- Main Content -->
-    <main class="container my-5">
-        <div class="row justify-content-center">
-            <div class="col-lg-6 col-md-8 col-sm-10">
-                <h1 class="text-center mb-4">Create a New Account</h1>
-                <form>
-                    <div class="mb-3">
-                        <label for="firstName" class="form-label">First Name</label>
-                        <input type="text" class="form-control" id="firstName" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="lastName" class="form-label">Last Name</label>
-                        <input type="text" class="form-control" id="lastName" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Email address</label>
-                        <input type="email" class="form-control" id="email" aria-describedby="emailHelp"
-                            required>
-                        <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+                <div class="mb-3">
+                    <label for="lastName" class="form-label">Last Name</label>
+                    <input type="text" class="form-control" id="lastName" required>
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email address</label>
+                    <input type="email" class="form-control" id="email" aria-describedby="emailHelp"
+                           required>
+                    <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
                 </div>
                 <div class="mb-3">
                     <label for="password" class="form-label">Password</label>
@@ -81,24 +30,3 @@
         </div>
     </div>
 </main>
-
-<!-- Footer -->
-<footer class="bg-dark text-light py-3">
-    <div class="container">
-        <div class="row">
-            <div class="col text-center">
-                &copy; 2023 Register New User. All rights reserved.
-            </div>
-        </div>
-    </div>
-</footer>
-
-<!-- Bootstrap JavaScript and dependencies -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.3/umd/popper.min.js"
-    integrity="sha512-8/+iW9JvKqZI73nv1OQ+yl/twz6vwxq3y/NJ1K/8WsU+9XGv7EuqlNj6UJpV5w5wjDgSjJexaeHnG7VnJhtXuQ=="
-    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.0/js/bootstrap.min.js"
-    integrity="sha512-g0YQmEFM8WZhfx0PwmszrECOxL+9X1Ji/pB0N7OaIYByNUpiWpOwzdRdb7KNHe/zydI9XWqzHsC7VZ+YkC49Fw=="
-    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
-</body>

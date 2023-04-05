@@ -1,12 +1,8 @@
 /*
 Write a html file of Register new user, with modern colors, responsively bootstrap(latest version)
-This page must contain these colors: #FDF4F5
-#E8A0BF
-#BA90C6
-#C0DBEA
 FirstName, LastName ,Email,Password
 This page must have Header, Footer, responsive mobile first
-Header must not be hidden when scrolling down
+Header must be fixed(not move) when scrolling down
 have some sub menu, footer must have Copyright, modern color
 */
 CREATE TABLE Users (
@@ -18,6 +14,11 @@ CREATE TABLE Users (
     OrderHistory VARCHAR(MAX),
     Preferences VARCHAR(MAX)
 );
+/*
+Write html code Display a catalog of perfumes with descriptions, images, and prices.
+with modern colors, responsively bootstrap(latest version), mobile ok
+Image from url from the internet
+*/
 CREATE TABLE Products (
     ProductID INT PRIMARY KEY IDENTITY(1,1),
     ProductName VARCHAR(100) NOT NULL,
@@ -25,6 +26,14 @@ CREATE TABLE Products (
     ImageURL VARCHAR(MAX),
     Price DECIMAL(10,2) NOT NULL
 );
+/*
+Write html code:
+Product search and filtering: Allow users to search for perfumes by name, brand, scent, price range, and other criteria.
+Image from url from the internet
+No need header, footer, navbar
+*/
+
+
 
 CREATE TABLE ProductReviews (
     ReviewID INT PRIMARY KEY IDENTITY(1,1),
