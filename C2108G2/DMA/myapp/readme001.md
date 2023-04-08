@@ -1,4 +1,4 @@
--- Users table (Bảng người dùng)
+We have a SQL Server table like this:
 CREATE TABLE users (
     user_id INT PRIMARY KEY AUTO_INCREMENT, -- ID người dùng
     username NVARCHAR(50) UNIQUE NOT NULL, -- Tên đăng nhập
@@ -8,6 +8,43 @@ CREATE TABLE users (
     full_name NVARCHAR(255), -- Họ và tên
     date_of_birth DATE, -- Ngày sinh
     country NVARCHAR(255) -- Quốc gia
+);
+-password must be hashed
+-users must store token key, or something like that
+-1 user can login maximum 3 devices
+-user can login using email and password
+-Write some triggers, procedures, functions to login, register, create token keys,...
+-After login, the expiration is 30 days
+-A function or Procedure to check if the expiration
+-All must be run on SQL Server(latest version)
+-Write execute commands, eg: exec functionA(params,...),...
+
+
+
+I have an securities app installed in my mobile
+I see some tabs: Index, Derivatives, Covered Warrants, ETF, Top Stock
+I have a SQL Server database like below, 
+how can I get those information: Index, Derivatives, Covered Warrants, ETF, Top Stock
+If I have to modify the database, let's show me
+
+CREATE TABLE users (
+    user_id INT PRIMARY KEY AUTO_INCREMENT, -- ID người dùng
+    username NVARCHAR(50) UNIQUE NOT NULL, -- Tên đăng nhập
+    hashed_password NVARCHAR(255) NOT NULL,
+    email NVARCHAR(255) UNIQUE NOT NULL, -- Email
+    phone NVARCHAR(20) NOT NULL, -- Số điện thoại
+    full_name NVARCHAR(255), -- Họ và tên
+    date_of_birth DATE, -- Ngày sinh
+    country NVARCHAR(255) -- Quốc gia
+);
+
+CREATE TABLE user_devices (
+    id INT PRIMARY KEY IDENTITY,
+    user_id INT NOT NULL,
+    device_id NVARCHAR(255) NOT NULL,
+    token NVARCHAR(255) NOT NULL,
+    token_expiration DATETIME NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
 -- Stocks table (Bảng cổ phiếu)
@@ -38,17 +75,6 @@ CREATE TABLE orders (
     status NVARCHAR(20), -- Trạng thái (ví dụ: pending, executed, canceled)
     order_date DATETIME -- Ngày đặt hàng
 );
-
--- Order types available values (Giá trị có sẵn của loại đơn hàng)
--- "market", "limit", "stop"
-
--- Order directions available values (Giá trị có sẵn của hướng đơn hàng)
--- "buy", "sell"
-
--- Order statuses available values (Giá trị có sẵn của trạng thái đơn hàng)
--- "pending", "executed", "canceled"
-
--- Portfolios table (Bảng danh mục đầu tư)
 CREATE TABLE portfolios (
     user_id INT FOREIGN KEY REFERENCES users(user_id), -- ID người dùng
     stock_id INT FOREIGN KEY REFERENCES stocks(stock_id), -- ID cổ phiếu
@@ -103,6 +129,3 @@ CREATE TABLE transactions (
     amount DECIMAL(18, 2), -- Số tiền
     transaction_date DATETIME -- Ngày giao dịch
 );
-
--- Transaction types available values (Giá trị có sẵn của loại giao dịch)
--- "deposit", "withdrawal"
