@@ -25,6 +25,7 @@ the policy and premium paid by the homeowner. There are various
 types of home insurance plans that you can choose from to suit your
 needs.
 Thiết kế cơ sở dữ liệu(SQL Server) cho ứng dụng trên:
+- Database convention.eg: NumberOfStudents
 - Bao gồm cả câu lệnh sql cho từng bảng
 - Chức năng đăng nhập yêu cầu mã hóa mật khẩu
 - Tên thực thể, trường bằng tiếng Anh, có comment giải thích bằng song ngữ Anh-Việt

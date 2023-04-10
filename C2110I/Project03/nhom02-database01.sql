@@ -149,6 +149,46 @@ CREATE TABLE advisors (
     phone_number NVARCHAR(20)
 );
 
+ALTER TABLE users
+ADD advisor_id INT FOREIGN KEY REFERENCES advisors(id);
+
+CREATE PROCEDURE create_advisor
+    @FullName NVARCHAR(255),
+    @Email NVARCHAR(255),
+    @PhoneNumber NVARCHAR(20),
+    @Result NVARCHAR(MAX) OUTPUT
+AS
+BEGIN
+    IF EXISTS(SELECT 1 FROM advisors WHERE email = @Email)
+    BEGIN
+        SET @Result = N'Địa chỉ email đã được sử dụng!'
+    END
+    ELSE
+    BEGIN
+        INSERT INTO advisors (full_name, email, phone_number) VALUES (@FullName, @Email, @PhoneNumber)
+        SET @Result = N'Thêm mới nhân viên tư vấn bảo hiểm thành công!'
+    END
+END
+
+CREATE PROCEDURE assign_customer_to_advisor
+    @UserId INT,
+    @AdvisorId INT,
+    @Result NVARCHAR(MAX) OUTPUT
+AS
+BEGIN
+    IF EXISTS(SELECT 1 FROM users WHERE id = @UserId) AND EXISTS(SELECT 1 FROM advisors WHERE id = @AdvisorId)
+    BEGIN
+        UPDATE users
+        SET advisor_id = @AdvisorId
+        WHERE id = @UserId
+        SET @Result = N'Gán khách hàng cho nhân viên tư vấn bảo hiểm thành công!'
+    END
+    ELSE
+    BEGIN
+        SET @Result = N'Khách hàng hoặc nhân viên tư vấn bảo hiểm không tồn tại!'
+    END
+END
+
 
 CREATE PROCEDURE login
     @Email NVARCHAR(255),
@@ -297,3 +337,6 @@ BEGIN
         FOR JSON PATH
     )
 END
+
+
+advisors có quyền đăng nhập vào hệ thống và quan sát khách hàng của mình
