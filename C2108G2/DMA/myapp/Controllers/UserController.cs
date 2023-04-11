@@ -23,14 +23,13 @@ namespace myapp.Controllers
         {
             _context = context;
             _mapper = mapper;
-        }
-        [HttpPost("Register")]
+        }       
         // POST: api/Users/Register
         [HttpPost("Register")]
-        public async Task<ActionResult> Register(RegisterViewModel userViewModel)
+        public async Task<ActionResult> Register(RegisterViewModel registerViewModel)
         {
             // Validate input and map UserViewModel to User
-            var user = _mapper.Map<User>(userViewModel);
+            var user = _mapper.Map<User>(registerViewModel);
 
             // Call the stored procedure to register the user
 
@@ -39,43 +38,43 @@ namespace myapp.Controllers
                             ParameterName = "@Username",
                             SqlDbType =  System.Data.SqlDbType.VarChar,                            
                             Direction = System.Data.ParameterDirection.Input,
-                            Value = userViewModel.Username
+                            Value = registerViewModel.Username
                         },
                         new SqlParameter() {
                             ParameterName = "@Password",
                             SqlDbType =  System.Data.SqlDbType.VarChar,
                             Direction = System.Data.ParameterDirection.Input,
-                            Value = userViewModel.Password
+                            Value = registerViewModel.Password
                         },
                         new SqlParameter() {
                             ParameterName = "@Email",
                             SqlDbType =  System.Data.SqlDbType.VarChar,
                             Direction = System.Data.ParameterDirection.Input,
-                            Value = userViewModel.Email
+                            Value = registerViewModel.Email
                         },
                         new SqlParameter() {
                             ParameterName = "@Phone",
                             SqlDbType =  System.Data.SqlDbType.VarChar,
                             Direction = System.Data.ParameterDirection.Input,
-                            Value = userViewModel.Phone
+                            Value = registerViewModel.Phone
                         },
                         new SqlParameter() {
                             ParameterName = "@FullName",
                             SqlDbType =  System.Data.SqlDbType.VarChar,
                             Direction = System.Data.ParameterDirection.Input,
-                            Value = userViewModel.FullName
+                            Value = registerViewModel.FullName
                         },
                         new SqlParameter() {
                             ParameterName = "@DateOfBirth",
                             SqlDbType =  System.Data.SqlDbType.DateTime,
                             Direction = System.Data.ParameterDirection.Input,
-                            Value = userViewModel.DateOfBirth
+                            Value = registerViewModel.DateOfBirth
                         },
                         new SqlParameter() {
                             ParameterName = "@Country",
                             SqlDbType =  System.Data.SqlDbType.VarChar,
                             Direction = System.Data.ParameterDirection.Input,
-                            Value = userViewModel.Country
+                            Value = registerViewModel.Country
                         },
             };
             var sql = "EXEC RegisterUser @Username, @Password, @Email, @Phone, @FullName, @DateOfBirth, @Country";

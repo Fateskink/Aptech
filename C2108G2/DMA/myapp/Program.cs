@@ -1,4 +1,5 @@
 
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using myapp.Models;
 
@@ -11,17 +12,16 @@ namespace myapp
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-
+            builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-            builder.Services.AddEndpointsApiExplorer();
+            //builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.AddScoped<UserService>();
             var settings = builder.Configuration
                 .GetRequiredSection("ConnectionStrings"); //read data from appsettings.json
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(settings["DefaultConnection"]));
-
+                options.UseSqlServer(settings["DefaultConnection"]));            
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
