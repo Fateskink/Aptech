@@ -1,3 +1,4 @@
+USE UserManagementAPI;
 EXEC RegisterUser 'nguyenhuy', 'password_1', 'nguyenhuy@example.com', '0123456789', 'Nguyễn Văn Huy', '1990-01-01', 'Việt Nam';
 EXEC RegisterUser 'tranphuong', 'password_2', 'tranphuong@example.com', '0987654321', 'Trần Thị Phương', '1992-02-15', 'Việt Nam';
 EXEC RegisterUser 'leminh', 'password_3', 'leminh@example.com', '0123412345', 'Lê Văn Minh', '1985-05-30', 'Việt Nam';
@@ -363,7 +364,7 @@ VALUES
 (6, 7, 400, 62.75, '2022-09-27 10:50:00'),
 (2, 21, 50, 35.90, '2022-08-19 14:15:00'),
 (3, 3, 200, 11.80, '2022-12-06 09:40:00'),
-(4, 18, 75, 39.20, '2023-02-05 11:25:00'),
+(4, 18, 75, 39.20, '2023-02-05 11:25:00');
 
 
 INSERT INTO educational_resources (title, content, category, date_published) VALUES 
@@ -375,7 +376,6 @@ INSERT INTO educational_resources (title, content, category, date_published) VAL
 ('10 điều cần lưu ý khi đầu tư cổ phiếu', '1. Tìm hiểu kỹ về công ty trước khi đầu tư. 2. Đặt mục tiêu đầu tư rõ ràng. 3. Phân bổ tài sản đúng cách. 4. Tránh mua cổ phiếu quá đắt. 5. Tránh đầu tư vào những công ty lỗ. 6. Theo dõi tình hình kinh doanh của công ty thường xuyên. 7. Không nên quá tập trung vào một số cổ phiếu. 8. Nắm rõ thông tin về thị trường và các yếu tố ảnh hưởng đến giá cổ phiếu. 9. Cân nhắc giữ cổ phiếu trong thời gian dài. 10. Sử dụng kỹ thuật stop loss để giảm thiểu rủi ro.', 'Đầu tư', '2022-05-11 09:45:00'),
 ('Làm thế nào để phân bổ tài sản đúng cách', 'Phân bổ tài sản đúng cách là một trong những yếu tố quan trọng nhất trong việc quản lý đầu tư. Theo các chuyên gia, việc phân bổ tài sản nên dựa trên độ tuổi, mục đích đầu tư, trình độ kiến thức và mức độ chấp nhận rủi ro của mỗi người. Để phân bổ tài sản đúng cách, bạn nên chia tài sản thành các khoản đầu tư khác nhau như tiền mặt, cổ phiếu, trái phiếu và vàng. Ngoài ra, việc chia tài sản thành nhiều khoản nhỏ hơn cũng giúp giảm thiểu rủi ro.', 'Quản lý rủi ro', '2022-05-13 14:20:00'),
 ('5 chiến lược giao dịch hiệu quả', '1. Giao dịch theo xu hướng. 2. Giao dịch theo tin tức. 3. Giao dịch theo động lực giá. 4. Giao dịch theo mô hình kỹ thuật. 5. Sử dụng chỉ báo kỹ thuật. Việc sử dụng các chiến lược giao dịch này giúp bạn giảm thiểu rủi ro và tăng tỷ lệ thành công trong giao dịch.', 'Chiến lược giao dịch', '2022-05-15 10:00:00'),
-
 
 INSERT INTO linked_bank_accounts (user_id, bank_name, account_number, routing_number, account_type) VALUES
 (1, 'Vietcombank', '1234567890', '12345678', 'checking'),
@@ -397,19 +397,9 @@ INSERT INTO linked_bank_accounts (user_id, bank_name, account_number, routing_nu
 (9, 'KB Kookmin Bank', '9012345678', '90123456', 'checking'),
 (9, 'KEB Hana Bank', '0123456789', '01234567', 'savings'),
 (10, 'Bank of America', '2345678901', '23456789', 'checking'),
-(10, 'JPMorgan Chase', '3456789012', '34567890', 'savings'),
-(11, 'Wells Fargo', '4567890123', '45678901', 'checking'),
-(11, 'Goldman Sachs', '5678901234', '56789012', 'savings'),
-(12, 'Morgan Stanley', '6789012345', '67890123', 'checking'),
-(12, 'UBS', '7890123456', '78901234', 'savings'),
-(13, 'Credit Suisse', '9012345678', '90123456', 'checking'),
-(13, 'Deutsche Bank', '0123456789', '01234567', 'savings'),
-(14, 'BNP Paribas', '2345678901', '23456789', 'checking'),
-(14, 'Societe Generale', '3456789012', '34567890', 'savings'),
-(15, 'Natixis', '4567890123', '45678901', 'checking'),
-(15, 'Crédit Agricole', '5678901234', '56789012', 'savings');
+(10, 'JPMorgan Chase', '3456789012', '34567890', 'savings');
 
-
+--SELECT * FROM linked_bank_accounts;
 INSERT INTO transactions (user_id, linked_account_id, transaction_type, amount, transaction_date) VALUES
 (1, 1, 'deposit', 5000.00, '2022-03-10 08:23:10'),
 (1, 1, 'withdrawal', 1000.00, '2022-03-15 12:34:56'),
@@ -430,18 +420,4 @@ INSERT INTO transactions (user_id, linked_account_id, transaction_type, amount, 
 (9, 9, 'deposit', 6000.00, '2022-04-22 09:56:32'),
 (9, 9, 'withdrawal', 4000.00, '2022-04-25 14:19:47'),
 (10, 10, 'deposit', 4000.00, '2022-04-28 10:17:35'),
-(10, 10, 'withdrawal', 2500.00, '2022-05-01 15:37:58'),
-(11, 11, 'deposit', 10000.00, '2022-05-03 11:24:13'),
-(11, 11, 'withdrawal', 8000.00, '2022-05-06 16:56:24'),
-(12, 12, 'deposit', 7000.00, '2022-05-09 09:45:17'),
-(12, 12, 'withdrawal', 5000.00, '2022-05-12 14:38:59');
-
-Generate 30 fake records for this table:
-CREATE TABLE transactions (
-    transaction_id INT PRIMARY KEY AUTO_INCREMENT, -- ID giao dịch
-    user_id INT FOREIGN KEY REFERENCES users(user_id), -- ID người dùng
-    linked_account_id INT FOREIGN KEY REFERENCES linked_bank_accounts(account_id), -- ID tài khoản liên kết
-    transaction_type NVARCHAR(50), -- Loại giao dịch (ví dụ: deposit, withdrawal)
-    amount DECIMAL(18, 2), -- Số tiền
-    transaction_date DATETIME -- Ngày giao dịch
-);
+(10, 10, 'withdrawal', 2500.00, '2022-05-01 15:37:58');

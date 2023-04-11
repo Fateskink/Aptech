@@ -1,6 +1,12 @@
+/*
+use master;
+DROP DATABASE UserManagementAPI;
+CREATE DATABASE UserManagementAPI;
+*/
+USE UserManagementAPI;
 -- Users table (Bảng người dùng)
 CREATE TABLE users (
-    user_id INT PRIMARY KEY AUTO_INCREMENT, -- ID người dùng
+    user_id INT PRIMARY KEY IDENTITY(1,1), -- ID người dùng
     username NVARCHAR(50) UNIQUE NOT NULL, -- Tên đăng nhập
     hashed_password NVARCHAR(255) NOT NULL,
     email NVARCHAR(255) UNIQUE NOT NULL, -- Email
@@ -21,7 +27,7 @@ CREATE TABLE user_devices (
 
 -- Stocks table (Bảng cổ phiếu)
 CREATE TABLE stocks (
-    stock_id INT PRIMARY KEY AUTO_INCREMENT, -- ID cổ phiếu
+    stock_id INT PRIMARY KEY IDENTITY(1,1), -- ID cổ phiếu
     symbol NVARCHAR(10) UNIQUE NOT NULL, -- Mã cổ phiếu
     company_name NVARCHAR(255) NOT NULL, -- Tên công ty
     market_cap DECIMAL(18, 2), -- Vốn hóa thị trường
@@ -70,10 +76,10 @@ CREATE TABLE etfs (
 );
 
 CREATE TABLE etf_holdings (
-    etf_id: INT FOREIGN KEY REFERENCES etfs(etf_id) - ID của Quỹ Đầu Tư Chứng Khoán (ETF) liên quan đến mã cổ phiếu được giữ (tham chiếu đến bảng etfs).
-    stock_id: INT FOREIGN KEY REFERENCES stocks(stock_id) - ID của cổ phiếu mà Quỹ Đầu Tư Chứng Khoán (ETF) đang giữ (tham chiếu đến bảng stocks).
-    shares_held: DECIMAL(18, 4) - Số lượng cổ phiếu của mã cổ phiếu đó mà Quỹ Đầu Tư Chứng Khoán (ETF) đang nắm giữ.
-    weight: DECIMAL(18, 4) - Trọng số của cổ phiếu đó trong tổng danh mục đầu tư của Quỹ Đầu Tư Chứng Khoán (ETF), thể hiện tỷ lệ phần trăm của cổ phiếu đó so với tổng giá trị danh mục.
+    etf_id INT FOREIGN KEY REFERENCES etfs(etf_id), -- ID của Quỹ Đầu Tư Chứng Khoán (ETF) liên quan đến mã cổ phiếu được giữ (tham chiếu đến bảng etfs).
+    stock_id INT FOREIGN KEY REFERENCES stocks(stock_id), -- ID của cổ phiếu mà Quỹ Đầu Tư Chứng Khoán (ETF) đang giữ (tham chiếu đến bảng stocks).
+    shares_held DECIMAL(18, 4), -- Số lượng cổ phiếu của mã cổ phiếu đó mà Quỹ Đầu Tư Chứng Khoán (ETF) đang nắm giữ.
+    weight DECIMAL(18, 4) -- Trọng số của cổ phiếu đó trong tổng danh mục đầu tư của Quỹ Đầu Tư Chứng Khoán (ETF), thể hiện tỷ lệ phần trăm của cổ phiếu đó so với tổng giá trị danh mục.
 );
 
 -- Watchlists table (Bảng danh sách theo dõi)
@@ -84,7 +90,7 @@ CREATE TABLE watchlists (
 
 -- Orders table (Bảng đơn hàng)
 CREATE TABLE orders (
-    order_id INT PRIMARY KEY AUTO_INCREMENT, -- ID đơn hàng
+    order_id INT PRIMARY KEY IDENTITY(1,1), -- ID đơn hàng
     user_id INT FOREIGN KEY REFERENCES users(user_id), -- ID người dùng
     stock_id INT FOREIGN KEY REFERENCES stocks(stock_id), -- ID cổ phiếu
     order_type NVARCHAR(20), -- Loại đơn hàng (ví dụ: market, limit, stop)
@@ -115,11 +121,11 @@ CREATE TABLE portfolios (
 
 -- Notifications table (Bảng thông báo)
 CREATE TABLE notifications (
-    notification_id INT PRIMARY KEY AUTO_INCREMENT, -- ID thông báo
+    notification_id INT PRIMARY KEY IDENTITY(1,1), -- ID thông báo
     user_id INT FOREIGN KEY REFERENCES users(user_id), -- ID người dùng
     notification_type NVARCHAR(50), -- Loại thông báo (ví dụ: order_executed, price_alert, news_event)
     content TEXT NOT NULL, -- Nội dung thông báo
-    is_read BOOLEAN DEFAULT 0, -- Đánh dấu đã đọc hay chưa đọc (1: đã đọc, 0: chưa đọc)
+    is_read BIT DEFAULT 0, -- Đánh dấu đã đọc hay chưa đọc (1: đã đọc, 0: chưa đọc)
     created_at DATETIME -- Thời điểm tạo thông báo
 );
 
@@ -127,7 +133,7 @@ CREATE TABLE notifications (
 -- "order_executed", "price_alert", "news_event"
 -- Educational resources table (Bảng tài liệu giáo dục)
 CREATE TABLE educational_resources (
-    resource_id INT PRIMARY KEY AUTO_INCREMENT, -- ID tài liệu
+    resource_id INT PRIMARY KEY IDENTITY(1,1), -- ID tài liệu
     title NVARCHAR(255) NOT NULL, -- Tiêu đề
     content TEXT NOT NULL, -- Nội dung
     category NVARCHAR(100), -- Danh mục (ví dụ: đầu tư, chiến lược giao dịch, quản lý rủi ro)
@@ -139,7 +145,7 @@ CREATE TABLE educational_resources (
 
 -- Linked bank accounts table (Bảng tài khoản ngân hàng liên kết)
 CREATE TABLE linked_bank_accounts (
-    account_id INT PRIMARY KEY AUTO_INCREMENT, -- ID tài khoản
+    account_id INT PRIMARY KEY IDENTITY(1,1), -- ID tài khoản
     user_id INT FOREIGN KEY REFERENCES users(user_id), -- ID người dùng
     bank_name NVARCHAR(255) NOT NULL, -- Tên ngân hàng
     account_number NVARCHAR(50) NOT NULL, -- Số tài khoản
@@ -152,7 +158,7 @@ CREATE TABLE linked_bank_accounts (
 
 -- Transactions table (Bảng giao dịch)
 CREATE TABLE transactions (
-    transaction_id INT PRIMARY KEY AUTO_INCREMENT, -- ID giao dịch
+    transaction_id INT PRIMARY KEY IDENTITY(1,1), -- ID giao dịch
     user_id INT FOREIGN KEY REFERENCES users(user_id), -- ID người dùng
     linked_account_id INT FOREIGN KEY REFERENCES linked_bank_accounts(account_id), -- ID tài khoản liên kết
     transaction_type NVARCHAR(50), -- Loại giao dịch (ví dụ: deposit, withdrawal)

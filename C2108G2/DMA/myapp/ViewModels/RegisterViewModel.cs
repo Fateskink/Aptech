@@ -5,18 +5,28 @@ namespace myapp.ViewModels
     public class RegisterViewModel
     {
         [Required]
+        [MaxLength(50)]
+        public string Username { get; set; }
+
+        [Required]
+        [MaxLength(255)]
         [EmailAddress]
         public string Email { get; set; }
-        [Required]
-        public string FirstName { get; set; }
 
-        [Required]
-        public string LastName { get; set; }
-
-        [Required]
+        [MaxLength(255)]
         public string Password { get; set; }
-        
+
         [Required]
-        public string RetypePassword { get; set; }
+        [MaxLength(20)]
+        [Phone]
+        public string Phone { get; set; }
+
+        [MaxLength(255)]
+        public string FullName { get; set; }
+
+        public DateTime? DateOfBirth { get; set; }
+
+        [MaxLength(255)]
+        public string Country { get; set; }
     }
 }

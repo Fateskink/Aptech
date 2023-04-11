@@ -1,3 +1,4 @@
+USE UserManagementAPI;
 CREATE FUNCTION HashPassword (@password NVARCHAR(255))
 RETURNS NVARCHAR(255)
 AS
@@ -75,3 +76,5 @@ BEGIN
         RETURN 1;
     ELSE
         RETURN 0;
+    RETURN 0;
+END;
