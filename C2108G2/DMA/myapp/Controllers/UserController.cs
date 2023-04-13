@@ -10,6 +10,7 @@ using myapp.Responses;
 using myapp.ViewModels;
 using System.Data;
 using System.Drawing;
+using System.Collections;
 
 namespace myapp.Controllers
 {
@@ -26,62 +27,55 @@ namespace myapp.Controllers
         }       
         // POST: api/Users/Register
         [HttpPost("Register")]
-        public async Task<ActionResult> Register(RegisterViewModel registerViewModel)
+        public async Task<ActionResult> Register([FromBody] RegisterViewModel registerViewModel)
         {
             // Validate input and map UserViewModel to User
-            var user = _mapper.Map<User>(registerViewModel);
+            //var user = _mapper.Map<User>(registerViewModel);
 
             // Call the stored procedure to register the user
+            var parameters = new[]
+                {
+                    new SqlParameter("@username", registerViewModel.Username),
+                    new SqlParameter("@password", registerViewModel.Password),
+                    new SqlParameter("@email", registerViewModel.Email),
+                    new SqlParameter("@phone", registerViewModel.Phone),
+                    new SqlParameter("@full_name", registerViewModel.FullName),
+                    new SqlParameter("@date_of_birth", registerViewModel.DateOfBirth),
+                    new SqlParameter("@country", registerViewModel.Country)
+                };
 
-            var parameters = new SqlParameter[] {
-                        new SqlParameter() {
-                            ParameterName = "@Username",
-                            SqlDbType =  System.Data.SqlDbType.VarChar,                            
-                            Direction = System.Data.ParameterDirection.Input,
-                            Value = registerViewModel.Username
-                        },
-                        new SqlParameter() {
-                            ParameterName = "@Password",
-                            SqlDbType =  System.Data.SqlDbType.VarChar,
-                            Direction = System.Data.ParameterDirection.Input,
-                            Value = registerViewModel.Password
-                        },
-                        new SqlParameter() {
-                            ParameterName = "@Email",
-                            SqlDbType =  System.Data.SqlDbType.VarChar,
-                            Direction = System.Data.ParameterDirection.Input,
-                            Value = registerViewModel.Email
-                        },
-                        new SqlParameter() {
-                            ParameterName = "@Phone",
-                            SqlDbType =  System.Data.SqlDbType.VarChar,
-                            Direction = System.Data.ParameterDirection.Input,
-                            Value = registerViewModel.Phone
-                        },
-                        new SqlParameter() {
-                            ParameterName = "@FullName",
-                            SqlDbType =  System.Data.SqlDbType.VarChar,
-                            Direction = System.Data.ParameterDirection.Input,
-                            Value = registerViewModel.FullName
-                        },
-                        new SqlParameter() {
-                            ParameterName = "@DateOfBirth",
-                            SqlDbType =  System.Data.SqlDbType.DateTime,
-                            Direction = System.Data.ParameterDirection.Input,
-                            Value = registerViewModel.DateOfBirth
-                        },
-                        new SqlParameter() {
-                            ParameterName = "@Country",
-                            SqlDbType =  System.Data.SqlDbType.VarChar,
-                            Direction = System.Data.ParameterDirection.Input,
-                            Value = registerViewModel.Country
-                        },
-            };
-            var sql = "EXEC RegisterUser @Username, @Password, @Email, @Phone, @FullName, @DateOfBirth, @Country";
-            await _context.Database.ExecuteSqlRawAsync(sql, parameters);
+            
+            var sql = "EXECUTE RegisterUser " +
+                            "@username, " +
+                            "@password, " +
+                            "@email, " +
+                            "@phone, " +
+                            "@full_name, " +
+                            "@date_of_birth, " +
+                            "@country";
+            IEnumerable<User> result = await _context.Users
+                    .FromSqlRaw(sql, parameters)
+                    .ToListAsync();
+            User? newUser = result.FirstOrDefault(); //User? = "nullable User"            
+            if (newUser != null)
+            {
+                return CreatedAtAction("GetUser", new { id = newUser.UserId }, newUser);
+            }
+            else {
+                return NotFound();
+            }                        
+        }
+        //[HttpGet("{id}")]
+        public async Task<ActionResult<User>> GetUser(int id)
+        {
+            var user = await _context.Users.FindAsync(id);
 
+            if (user == null)
+            {
+                return NotFound();
+            }
 
-            return CreatedAtAction("GetUser", new { id = user.UserId }, user);
+            return user;
         }
 
         // POST: api/Users/Login

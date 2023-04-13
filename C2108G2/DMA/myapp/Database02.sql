@@ -1,4 +1,32 @@
 USE UserManagementAPI;
+
+CREATE PROCEDURE GetAllProceduresAndFunctions
+    @ObjectName NVARCHAR(128)
+AS
+BEGIN
+    SELECT
+        o.[type_desc] AS ObjectType,
+        s.[name] AS SchemaName,
+        o.[name] AS ObjectName,
+        p.[ordinal_position] AS ParameterId,
+        p.[parameter_name] AS ParameterName,
+        p.[data_type] AS DataType,
+        p.[character_maximum_length] AS MaxLength,
+        p.[numeric_precision] AS Precision,
+        p.[numeric_scale] AS Scale,
+        p.[parameter_mode] AS ParameterMode
+    FROM sys.objects o
+    JOIN sys.schemas s ON o.schema_id = s.schema_id
+    LEFT JOIN INFORMATION_SCHEMA.PARAMETERS p ON s.[name] = p.SPECIFIC_SCHEMA AND o.[name] = p.SPECIFIC_NAME
+    WHERE o.[type] IN ('P', 'FN', 'IF', 'TF', 'FS', 'FT') AND o.[name] = @ObjectName
+    ORDER BY s.[name], o.[name], p.[ordinal_position];
+END;
+
+
+EXEC GetAllProceduresAndFunctions @ObjectName = 'YourProcedureOrFunctionName';
+--DROP PROCEDURE IF EXISTS GetAllProceduresAndFunctions;
+
+
 CREATE FUNCTION HashPassword (@password NVARCHAR(255))
 RETURNS NVARCHAR(255)
 AS
@@ -17,9 +45,26 @@ CREATE PROCEDURE RegisterUser
     @country NVARCHAR(255)
 AS
 BEGIN
+    DECLARE @InsertedRows AS TABLE (
+        user_id INT,
+        username NVARCHAR(50),
+        hashed_password NVARCHAR(255),
+        email NVARCHAR(255),
+        phone NVARCHAR(20),
+        full_name NVARCHAR(255),
+        date_of_birth DATE,
+        country NVARCHAR(255)
+    );
+
     INSERT INTO users (username, hashed_password, email, phone, full_name, date_of_birth, country)
+    OUTPUT INSERTED.user_id, INSERTED.username, INSERTED.hashed_password, INSERTED.email, INSERTED.phone, INSERTED.full_name, INSERTED.date_of_birth, INSERTED.country
+    INTO @InsertedRows
     VALUES (@username, dbo.HashPassword(@password), @email, @phone, @full_name, @date_of_birth, @country);
+
+    SELECT * FROM @InsertedRows;
 END;
+
+DROP PROCEDURE IF EXISTS RegisterUser;
 
 CREATE PROCEDURE LoginUser
     @login NVARCHAR(255),
