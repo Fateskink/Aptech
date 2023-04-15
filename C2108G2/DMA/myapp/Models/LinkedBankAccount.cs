@@ -1,0 +1,35 @@
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace myapp.Models
+{
+    [Table("linked_bank_accounts")]
+    public class LinkedBankAccount
+    {
+        [Key]
+        public int AccountId { get; set; }
+
+        [ForeignKey("User")]
+        public int UserId { get; set; }
+
+        [Required(ErrorMessage = "Bank name is required.")]
+        [Column("bank_name")]
+        public string BankName { get; set; }
+
+        [Required(ErrorMessage = "Account number is required.")]
+        [Column("account_number")]
+        public string AccountNumber { get; set; }
+
+        [Column("routing_number")]
+        public string RoutingNumber { get; set; }
+
+        [Column("account_type")]
+        public string AccountType { get; set; }
+
+        // Navigation property
+        public User User { get; set; }
+    }
+
+}
+

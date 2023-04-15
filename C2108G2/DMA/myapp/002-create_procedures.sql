@@ -21,14 +21,18 @@ BEGIN
     VALUES (@username, dbo.HashPassword(@password), @email, @phone, @full_name, @date_of_birth, @country);
 END;
 
+DROP PROCEDURE LoginUser;
+
 CREATE PROCEDURE LoginUser
     @login NVARCHAR(255),
     @password NVARCHAR(255),
-    @device_id NVARCHAR(255) 
+    @device_id NVARCHAR(255),
+    @result BIT OUTPUT
 AS
 BEGIN
+    SET NOCOUNT ON;
+
     DECLARE @user_id INT;
-    DECLARE @token NVARCHAR(255);
     DECLARE @hashed_password NVARCHAR(255) = dbo.HashPassword(@password);
     DECLARE @device_count INT;
 
@@ -44,20 +48,22 @@ BEGIN
 
         IF @device_count < 3
         BEGIN
-            SET @token = NEWID();
-            INSERT INTO user_devices (user_id, device_id, token, token_expiration)
-            VALUES (@user_id, @device_id, @token, DATEADD(day, 30, GETDATE()));
-
-            SELECT @token AS token, DATEADD(day, 30, GETDATE()) AS token_expiration;
+            UPDATE TOP (1) user_devices
+            SET device_id = @device_id, token_expiration = DATEADD(day, 30, GETDATE())
+            WHERE user_id = @user_id;
+        
+            SET @result = 1;
         END
         ELSE
         BEGIN
             PRINT 'User has reached the maximum number of devices (3).';
+            SET @result = 0;
         END
     END
     ELSE
     BEGIN
         PRINT 'Invalid login or password.';
+        SET @result = 0;
     END
 END;
 

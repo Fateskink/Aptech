@@ -43,13 +43,13 @@ CREATE TABLE market_indices (
     name NVARCHAR(255) NOT NULL,
     symbol NVARCHAR(50) UNIQUE NOT NULL
 );
-
 --index_constituents: là danh sách các công ty đã được chọn để 
 --tính toán chỉ số của một chỉ số thị trường chứng khoán nhất định. 
 CREATE TABLE index_constituents (
     index_id INT FOREIGN KEY REFERENCES market_indices(index_id),
     stock_id INT FOREIGN KEY REFERENCES stocks(stock_id)
 );
+
 CREATE TABLE derivatives (
     derivative_id INT PRIMARY KEY IDENTITY, -- ID của chứng khoán phái sinh
     name NVARCHAR(255) NOT NULL, -- Tên của chứng khoán phái sinh
@@ -93,6 +93,8 @@ CREATE TABLE etf_holdings (
     weight DECIMAL(18, 4) 
     -- Trọng số của cổ phiếu đó trong tổng danh mục đầu tư của Quỹ Đầu Tư Chứng Khoán (ETF), thể hiện tỷ lệ phần trăm của cổ phiếu đó so với tổng giá trị danh mục.
 );
+
+
 -- Watchlists table (Bảng danh sách theo dõi)
 CREATE TABLE watchlists (
     user_id INT FOREIGN KEY REFERENCES users(user_id), -- ID người dùng
@@ -164,6 +166,7 @@ Mã số này gồm 9 chữ số và thường được sử dụng để thực
 chẳng hạn như chuyển khoản ngân hàng hoặc thanh toán bằng séc. Mỗi ngân hàng sẽ có một mã số định tuyến riêng, 
 giúp cho việc xác định và phân loại các giao dịch được thực hiện giữa các ngân hàng trở nên dễ dàng hơn.
 */
+
 CREATE TABLE linked_bank_accounts (
     account_id INT PRIMARY KEY IDENTITY(1,1), -- ID tài khoản
     user_id INT FOREIGN KEY REFERENCES users(user_id), -- ID người dùng

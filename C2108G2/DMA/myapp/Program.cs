@@ -16,7 +16,7 @@ namespace myapp
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             //builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerGen();            
             builder.Services.AddScoped<UserService>();
             var settings = builder.Configuration
                 .GetRequiredSection("ConnectionStrings"); //read data from appsettings.json

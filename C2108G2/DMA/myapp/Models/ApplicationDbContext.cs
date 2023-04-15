@@ -10,10 +10,21 @@ namespace myapp.Models
         }
 
         public DbSet<User> Users { get; set; }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<User>().ToTable("users");//mapping
-        }
+        public DbSet<CoveredWarrant> CoveredWarrants { get; set; }
+        public DbSet<Derivative> Derivatives { get; set; }
+        public DbSet<EducationalResource> EducationalResources { get; set; }
+        public DbSet<ETF> ETFs { get; set; }
+        public DbSet<EtfHolding> EtfHoldings { get; set; }
+        public DbSet<IndexConstituent> IndexConstituents { get; set; }
+        public DbSet<LinkedBankAccount> LinkedBankAccounts { get; set; }
+        public DbSet<MarketIndex> MarketIndexes { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<Portfolio> Portfolios { get; set; }
+        public DbSet<Stock> Stocks { get; set; }
+        public DbSet<Transaction> Transactions { get; set; }
+        public DbSet<UserDevice> UserDevices { get; set; }
+        public DbSet<Watchlist> Watchlists { get; set; }        
+        
     }
 }
