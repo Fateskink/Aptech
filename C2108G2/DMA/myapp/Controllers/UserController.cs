@@ -88,40 +88,7 @@ namespace myapp.Controllers
 
         // POST: api/Users/Login
         [HttpPost("Login")]
-        [AllowAnonymous]
-        /*
-        Viết hàm đăng nhập trong controller của asp .net core api:
-        -Đầu vào gồm email, password, deviceId
-        -Kiểm tra dữ liệu trong bảng _context.Users xem có trùng email và password ko, password đc mã hóa sha256
-        -Nếu trùng thì tạo JWT token(thời hạn 30 ngày) rồi update dữ liệu vào bảng UserDevice
-        public class UserDevice
-    {
-        public int Id { get; set; }
-
-        [Required]
-        public int UserId { get; set; }
-
-        [Required]
-        [MaxLength(255)]
-        [Column("device_id")]
-        public string? DeviceId { get; set; }
-
-        [Required]
-        [MaxLength(255)]
-        public string Token { get; set; }
-
-        [Required]
-        [Column("token_expiration")]
-        public DateTime TokenExpiration { get; set; }
-
-        [ForeignKey("UserId")]
-        public User User { get; set; }
-    }
-        Nếu số lượng device > 3, update bản ghi đầu tiên trong UserDevice, nếu ko, thêm bản ghi mới vào UserDevice
-        -Api trả về dữ liệu cho client gồm thông tin chi tiết của User kèm jwt token
-         */
-        [HttpPost("login")]
-        [AllowAnonymous]
+        [AllowAnonymous]        
         public async Task<IActionResult> Login(string email, string password, string deviceId)
         {
             // Kiểm tra xem email và password có hợp lệ không
