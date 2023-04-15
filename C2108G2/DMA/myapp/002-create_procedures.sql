@@ -1,32 +1,4 @@
-USE UserManagementAPI;
-
-CREATE PROCEDURE GetAllProceduresAndFunctions
-    @ObjectName NVARCHAR(128)
-AS
-BEGIN
-    SELECT
-        o.[type_desc] AS ObjectType,
-        s.[name] AS SchemaName,
-        o.[name] AS ObjectName,
-        p.[ordinal_position] AS ParameterId,
-        p.[parameter_name] AS ParameterName,
-        p.[data_type] AS DataType,
-        p.[character_maximum_length] AS MaxLength,
-        p.[numeric_precision] AS Precision,
-        p.[numeric_scale] AS Scale,
-        p.[parameter_mode] AS ParameterMode
-    FROM sys.objects o
-    JOIN sys.schemas s ON o.schema_id = s.schema_id
-    LEFT JOIN INFORMATION_SCHEMA.PARAMETERS p ON s.[name] = p.SPECIFIC_SCHEMA AND o.[name] = p.SPECIFIC_NAME
-    WHERE o.[type] IN ('P', 'FN', 'IF', 'TF', 'FS', 'FT') AND o.[name] = @ObjectName
-    ORDER BY s.[name], o.[name], p.[ordinal_position];
-END;
-
-
-EXEC GetAllProceduresAndFunctions @ObjectName = 'YourProcedureOrFunctionName';
---DROP PROCEDURE IF EXISTS GetAllProceduresAndFunctions;
-
-
+USE StockApp;
 CREATE FUNCTION HashPassword (@password NVARCHAR(255))
 RETURNS NVARCHAR(255)
 AS
@@ -45,31 +17,14 @@ CREATE PROCEDURE RegisterUser
     @country NVARCHAR(255)
 AS
 BEGIN
-    DECLARE @InsertedRows AS TABLE (
-        user_id INT,
-        username NVARCHAR(50),
-        hashed_password NVARCHAR(255),
-        email NVARCHAR(255),
-        phone NVARCHAR(20),
-        full_name NVARCHAR(255),
-        date_of_birth DATE,
-        country NVARCHAR(255)
-    );
-
     INSERT INTO users (username, hashed_password, email, phone, full_name, date_of_birth, country)
-    OUTPUT INSERTED.user_id, INSERTED.username, INSERTED.hashed_password, INSERTED.email, INSERTED.phone, INSERTED.full_name, INSERTED.date_of_birth, INSERTED.country
-    INTO @InsertedRows
     VALUES (@username, dbo.HashPassword(@password), @email, @phone, @full_name, @date_of_birth, @country);
-
-    SELECT * FROM @InsertedRows;
 END;
-
-DROP PROCEDURE IF EXISTS RegisterUser;
 
 CREATE PROCEDURE LoginUser
     @login NVARCHAR(255),
     @password NVARCHAR(255),
-    @device_id NVARCHAR(255)
+    @device_id NVARCHAR(255) 
 AS
 BEGIN
     DECLARE @user_id INT;
@@ -79,7 +34,7 @@ BEGIN
 
     SELECT @user_id = user_id
     FROM users
-    WHERE (username = @login OR email = @login) AND hashed_password = @hashed_password;
+    WHERE email = @login AND hashed_password = @hashed_password;
 
     IF @user_id IS NOT NULL
     BEGIN
@@ -122,4 +77,56 @@ BEGIN
     ELSE
         RETURN 0;
     RETURN 0;
+END;
+
+CREATE TRIGGER order_trigger
+ON orders
+AFTER INSERT
+AS
+BEGIN
+    DECLARE @stock_quantity INT
+    DECLARE @transaction_amount DECIMAL(10,2)
+
+    -- Get the stock quantity and transaction amount based on order type
+    IF EXISTS (SELECT * FROM inserted WHERE order_type = 'buy')
+    BEGIN
+        SELECT @stock_quantity = inserted.quantity,
+               @transaction_amount = inserted.quantity * inserted.price
+        FROM inserted
+    END
+    ELSE
+    BEGIN
+        SELECT @stock_quantity = -inserted.quantity,
+               @transaction_amount = -inserted.quantity * inserted.price
+        FROM inserted
+    END
+
+    -- Update the user's portfolio
+    UPDATE portfolios
+    SET quantity = quantity + @stock_quantity
+    WHERE user_id = (SELECT user_id FROM inserted) AND stock_id = (SELECT stock_id FROM inserted);
+
+    -- Create a new notification
+    INSERT INTO notifications (user_id, notification_type, content)
+    VALUES ((SELECT user_id FROM inserted), 'order', CONCAT('Order ', (SELECT order_id FROM inserted), ' has been ', (SELECT status FROM inserted)));
+
+    -- Add a new transaction record
+    INSERT INTO transactions (user_id, order_id, amount, transaction_type)
+    VALUES ((SELECT user_id FROM inserted), (SELECT order_id FROM inserted), @transaction_amount, (SELECT order_type FROM inserted));
+END
+
+
+-- Tính tổng số lượng cổ phiếu của một người dùng trong danh mục đầu tư
+CREATE FUNCTION fn_GetTotalSharesInPortfolio
+(
+@user_id INT
+)
+RETURNS INT
+AS
+BEGIN
+	DECLARE @totalShares INT;
+	SELECT @totalShares = SUM(quantity)
+	FROM portfolios
+	WHERE user_id = @user_id;
+	RETURN @totalShares;
 END;

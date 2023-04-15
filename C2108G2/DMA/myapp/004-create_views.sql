@@ -1,18 +1,3 @@
--- Tính tổng số lượng cổ phiếu của một người dùng trong danh mục đầu tư
-CREATE FUNCTION fn_GetTotalSharesInPortfolio
-(
-@user_id INT
-)
-RETURNS INT
-AS
-BEGIN
-	DECLARE @totalShares INT;
-	SELECT @totalShares = SUM(quantity)
-	FROM portfolios
-	WHERE user_id = @user_id;
-	RETURN @totalShares;
-END;
-
 CREATE VIEW vw_UserPortfolioSummary AS
 SELECT
 	p.user_id,

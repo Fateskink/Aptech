@@ -82,37 +82,27 @@ namespace myapp.Controllers
         [HttpPost("Login")]
         public async Task<ActionResult> Login(LoginViewModel loginViewModel)
         {
-            // Call the stored procedure to log in the user            
+            // Call the stored procedure to log in the user                                    
+            var parameters = new[]
+                {
+                    new SqlParameter("@email", loginViewModel.Email),
+                    new SqlParameter("@password", loginViewModel.Password),
+                    new SqlParameter("@device_id", loginViewModel.DeviceId),                    
+                };           
+            var sql = "EXEC LoginUser @email, @password, @device_id";
+            IEnumerable<User> result = await _context.Users
+                    .FromSqlRaw(sql, parameters)
+                    .ToListAsync();
+            User? user = result.FirstOrDefault(); //User? = "nullable User"            
+            if (user != null)
+            {
+                return Ok(user);
+            }
+            else
+            {
+                return NotFound();
+            }
 
-            var parameters = new SqlParameter[] {
-                        new SqlParameter() {
-                            ParameterName = "@Email",
-                            SqlDbType =  System.Data.SqlDbType.VarChar,
-                            Direction = System.Data.ParameterDirection.Input,
-                            Value = loginViewModel.Email
-                        },
-                        new SqlParameter() {
-                            ParameterName = "@Password",
-                            SqlDbType =  System.Data.SqlDbType.VarChar,
-                            Direction = System.Data.ParameterDirection.Input,
-                            Value = loginViewModel.Password
-                        },
-                        new SqlParameter() {
-                            ParameterName = "@DeviceId",
-                            SqlDbType =  System.Data.SqlDbType.VarChar,
-                            Direction = System.Data.ParameterDirection.Input,
-                            Value = loginViewModel.DeviceId
-                        },
-            };
-            var sql = "EXEC LoginUser @Email, @Password, @DeviceId";
-            var result = await _context.Database.ExecuteSqlRawAsync(sql, parameters);
-
-            // Process the result and return the token and expiration
-            // ...
-
-            return Ok();
         }
-
-
     }
 }
