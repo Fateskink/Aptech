@@ -24,7 +24,12 @@ namespace myapp.Models
         public DbSet<Stock> Stocks { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<UserDevice> UserDevices { get; set; }
-        public DbSet<Watchlist> Watchlists { get; set; }        
-        
+        public DbSet<Watchlist> Watchlists { get; set; }
+
+
+        public DbSet<Quote> Quotes { get; set; }
+        public DbSet<TopStock> TopStocks { get; set; }
+        public DbSet<ETFQuote> ETFQuotes { get; set; }        
+
     }
 }

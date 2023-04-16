@@ -24,4 +24,7 @@ namespace myapp.Models
     }
 
 }
+/**
+từ thực thể watchlist, viết controller có chứa hàm thêm vào danh sách  watch list một cổ phiếu nào đó
+*/
 

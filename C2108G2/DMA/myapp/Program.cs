@@ -1,6 +1,8 @@
 
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
+using myapp.Controllers.Filters;
+using myapp.Hubs;
 using myapp.Models;
 
 namespace myapp
@@ -18,11 +20,16 @@ namespace myapp
             //builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();            
             builder.Services.AddScoped<UserService>();
+
+            builder.Services.AddSignalR();
+
             var settings = builder.Configuration
                 .GetRequiredSection("ConnectionStrings"); //read data from appsettings.json
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(settings["DefaultConnection"]));            
-            var app = builder.Build();
+                options.UseSqlServer(settings["DefaultConnection"]));
+            builder.Services.AddScoped<TokenAuthorizationFilter>();
+
+            var app = builder.Build();            
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -37,6 +44,7 @@ namespace myapp
 
 
             app.MapControllers();
+            app.MapHub<QuoteHub>("/quotehub");
 
             app.Run();
         }

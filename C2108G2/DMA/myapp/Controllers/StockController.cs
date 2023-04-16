@@ -18,11 +18,17 @@ namespace myapp.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetStocks(
-            string? sector = null, string industry = null,
+        public async Task<IActionResult> GetStocks(
+            string sector = "",
+            string industry = "",
+            string searchText = "",
             int page = 1, int pageSize = 20)
         {
-            var stocks = _stockRepository.GetStocksBySectorAndIndustry(sector, industry, page, pageSize);
+            var stocks = await _stockRepository
+                            .GetStocksBySectorAndIndustry(
+                                sector, industry,
+                                searchText,
+                                page, pageSize);
 
             if (stocks == null || stocks.Count() == 0)
             {
@@ -31,6 +37,7 @@ namespace myapp.Controllers
 
             return Ok(stocks);
         }
+
     }
 }
 

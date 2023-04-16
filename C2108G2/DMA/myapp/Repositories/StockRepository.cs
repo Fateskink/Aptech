@@ -16,6 +16,7 @@ namespace myapp.Repositories
         public async Task<List<Stock>> GetStocksBySectorAndIndustry(
             string sector,
             string industry,
+            string searchText,
             int page = 1,
             int pageSize = 20)
         {
@@ -23,7 +24,8 @@ namespace myapp.Repositories
 
             query = query.Where(s => string.IsNullOrEmpty(sector) || s.Sector == sector);
             query = query.Where(s => string.IsNullOrEmpty(industry) || s.Industry == industry);
-
+            query = query.Where(s => string.IsNullOrEmpty(searchText) ||
+                s.CompanyName.Contains(searchText));
             // Phân trang
             int totalItems = await query.CountAsync();
             int totalPages = (int)Math.Ceiling((double)totalItems / pageSize);

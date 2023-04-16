@@ -24,8 +24,14 @@
 
   <ItemGroup>
     <None Remove="Repositories\" />
+    <None Remove="Controllers\Filters\" />
+    <None Remove="Controllers\Attributes\" />
+    <None Remove="Hubs\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Repositories\" />
+    <Folder Include="Controllers\Filters\" />
+    <Folder Include="Controllers\Attributes\" />
+    <Folder Include="Hubs\" />
   </ItemGroup>
 </Project>

@@ -38,6 +38,24 @@ CREATE TABLE stocks (
     stock_type NVARCHAR(50)
     --Common Stock (Cổ phiếu thường),Preferred Stock (Cổ phiếu ưu đãi),ETF (Quỹ Đầu Tư Chứng Khoán): 
 );
+
+CREATE TABLE top_stocks (
+    stock_id INT PRIMARY KEY REFERENCES stocks(stock_id), -- ID của cổ phiếu
+    rank INT NOT NULL, -- Thứ hạng trong danh sách top stocks
+    reason NVARCHAR(255) -- Nguyên nhân khiến cổ phiếu được đưa vào danh sách top stocks
+);
+
+--Bảng quotes chứa thông tin về giá cổ phiếu trong thời gian thực
+CREATE TABLE quotes (
+    quote_id INT PRIMARY KEY IDENTITY(1,1), -- ID của bản ghi
+    stock_id INT FOREIGN KEY REFERENCES stocks(stock_id), -- ID của cổ phiếu
+    price DECIMAL(18, 2) NOT NULL, -- Giá cổ phiếu
+    change DECIMAL(18, 2) NOT NULL, -- Biến động giá cổ phiếu so với ngày trước đó
+    percent_change DECIMAL(18, 2) NOT NULL, -- Tỷ lệ biến động giá cổ phiếu so với ngày trước đó
+    volume INT NOT NULL, -- Khối lượng giao dịch trong ngày
+    time_stamp DATETIME NOT NULL -- Thời điểm cập nhật giá cổ phiếu
+);
+
 CREATE TABLE market_indices (
     index_id INT PRIMARY KEY IDENTITY,
     name NVARCHAR(255) NOT NULL,
@@ -59,11 +77,30 @@ CREATE TABLE derivatives (
     --ví dụ như trong thị trường forex, contract size được tính theo số lượng lot, 
     --trong khi đó ở thị trường hàng hóa, contract size được tính theo khối lượng hoặc số lượng sản phẩm tài chính.
     expiration_date DATE, -- Ngày hết hạn của hợp đồng phái sinh
-    strike_price DECIMAL(18, 4) -- Giá thực hiện (giá mà người mua chứng khoán phái sinh có quyền mua/bán tài sản cơ bản)
+    strike_price DECIMAL(18, 4), -- Giá thực hiện (giá mà người mua chứng khoán phái sinh có quyền mua/bán tài sản cơ bản)
     -- Strike price thường được đặt ở một mức giá gần bằng với giá thị trường của tài sản cơ bản 
     -- để tăng khả năng tùy chọn sẽ được sử dụng.
+    last_price DECIMAL(18, 2) NOT NULL,
+    change DECIMAL(18, 2) NOT NULL,
+    percent_change DECIMAL(18, 2) NOT NULL,
+    open_price DECIMAL(18, 2) NOT NULL,
+    high_price DECIMAL(18, 2) NOT NULL,
+    low_price DECIMAL(18, 2) NOT NULL,
+    volume INT NOT NULL,
+    open_interest INT NOT NULL,
+    time_stamp DATETIME NOT NULL
 );
-
+/*
+last_price: Giá cuối cùng giao dịch thành công của chứng khoán phái sinh.
+change: Biến động giá so với giá cuối cùng của phiên trước đó.
+percent_change: Tỷ lệ biến động giá so với giá cuối cùng của phiên trước đó.
+open_price: Giá mở cửa của phiên giao dịch hiện tại.
+high_price: Giá cao nhất của phiên giao dịch hiện tại.
+low_price: Giá thấp nhất của phiên giao dịch hiện tại.
+volume: Khối lượng giao dịch trong phiên giao dịch hiện tại.
+open_interest: Số hợp đồng phái sinh còn đang mở.
+time_stamp: Thời điểm cập nhật giá chứng khoán phái sinh.
+*/
 -- covered warrants được bảo đảm bởi một bên thứ ba, 
 -- thường là một ngân hàng hoặc một công ty chuyên cung cấp dịch vụ này
 CREATE TABLE covered_warrants (
@@ -81,6 +118,16 @@ CREATE TABLE etfs (
     symbol NVARCHAR(50) UNIQUE NOT NULL, -- Ký hiệu của Quỹ Đầu Tư Chứng Khoán (ETF) trên thị trường
     management_company NVARCHAR(255), -- Tên công ty quản lý Quỹ Đầu Tư Chứng Khoán (ETF)
     inception_date DATE -- Ngày thành lập Quỹ Đầu Tư Chứng Khoán (ETF)
+);
+--Quan hệ giữa etf và etf_quotes là quan hệ 1-n (một quỹ đầu tư có thể có nhiều bản ghi quotes trong cùng một ngày).
+CREATE TABLE etf_quotes (
+    quote_id INT PRIMARY KEY IDENTITY(1,1), -- ID của bản ghi
+    etf_id INT FOREIGN KEY REFERENCES etfs(etf_id), -- ID của Quỹ Đầu Tư Chứng Khoán (ETF)
+    price DECIMAL(18, 2) NOT NULL, -- Giá của Quỹ Đầu Tư Chứng Khoán (ETF)
+    change DECIMAL(18, 2) NOT NULL, -- Biến động giá của Quỹ Đầu Tư Chứng Khoán (ETF) so với ngày trước đó
+    percent_change DECIMAL(18, 2) NOT NULL, -- Tỷ lệ biến động giá của Quỹ Đầu Tư Chứng Khoán (ETF) so với ngày trước đó
+    total_volume INT NOT NULL, -- Tổng khối lượng giao dịch trong ngày
+    time_stamp DATETIME NOT NULL -- Thời điểm cập nhật giá của Quỹ Đầu Tư Chứng Khoán (ETF)
 );
 
 CREATE TABLE etf_holdings (
