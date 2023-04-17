@@ -28,3 +28,4 @@ volumes:
 
 #docker-compose --file ./docker-compose.yml up --detach
 #docker-compose ps
+#docker exec -it stock_app_db /bin/bash

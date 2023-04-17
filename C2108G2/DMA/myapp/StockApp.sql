@@ -1,4 +1,404 @@
+
+
+USE master
+DROP DATABASE StockApp;
+IF NOT EXISTS (SELECT name FROM sys.databases WHERE name = N'StockApp')
+    CREATE DATABASE StockApp;
+GO
 USE StockApp;
+-- Users table (Bảng người dùng)
+CREATE TABLE users (
+    user_id INT PRIMARY KEY IDENTITY(1,1), -- ID người dùng
+    username NVARCHAR(50) UNIQUE NOT NULL, -- Tên đăng nhập
+    hashed_password NVARCHAR(255) NOT NULL,
+    email NVARCHAR(255) UNIQUE NOT NULL, -- Email
+    phone NVARCHAR(20) NOT NULL, -- Số điện thoại
+    full_name NVARCHAR(255), -- Họ và tên
+    date_of_birth DATE, -- Ngày sinh
+    country NVARCHAR(255) -- Quốc gia
+);
+
+--EXEC sp_help 'users';
+
+CREATE TABLE user_devices (
+    id INT PRIMARY KEY IDENTITY,
+    user_id INT NOT NULL,
+    device_id NVARCHAR(255) NOT NULL,
+    token NVARCHAR(255) NOT NULL,
+    token_expiration DATETIME NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
+
+-- Stocks table (Bảng cổ phiếu)
+CREATE TABLE stocks (
+    stock_id INT PRIMARY KEY IDENTITY(1,1), -- ID cổ phiếu
+    symbol NVARCHAR(10) UNIQUE NOT NULL, -- Mã cổ phiếu
+    company_name NVARCHAR(255) NOT NULL, -- Tên công ty
+    market_cap DECIMAL(18, 2), -- Vốn hóa thị trường
+    sector NVARCHAR(100), -- Ngành
+    industry NVARCHAR(100), -- Lĩnh vực
+    stock_type NVARCHAR(50)
+    --Common Stock (Cổ phiếu thường),Preferred Stock (Cổ phiếu ưu đãi),ETF (Quỹ Đầu Tư Chứng Khoán): 
+);
+
+CREATE TABLE top_stocks (
+    stock_id INT PRIMARY KEY REFERENCES stocks(stock_id), -- ID của cổ phiếu
+    rank INT NOT NULL, -- Thứ hạng trong danh sách top stocks
+    reason NVARCHAR(255) -- Nguyên nhân khiến cổ phiếu được đưa vào danh sách top stocks
+);
+
+--Bảng quotes chứa thông tin về giá cổ phiếu trong thời gian thực
+CREATE TABLE quotes (
+    quote_id INT PRIMARY KEY IDENTITY(1,1), -- ID của bản ghi
+    stock_id INT FOREIGN KEY REFERENCES stocks(stock_id), -- ID của cổ phiếu
+    price DECIMAL(18, 2) NOT NULL, -- Giá cổ phiếu
+    change DECIMAL(18, 2) NOT NULL, -- Biến động giá cổ phiếu so với ngày trước đó
+    percent_change DECIMAL(18, 2) NOT NULL, -- Tỷ lệ biến động giá cổ phiếu so với ngày trước đó
+    volume INT NOT NULL, -- Khối lượng giao dịch trong ngày
+    time_stamp DATETIME NOT NULL -- Thời điểm cập nhật giá cổ phiếu
+);
+
+CREATE TABLE market_indices (
+    index_id INT PRIMARY KEY IDENTITY,
+    name NVARCHAR(255) NOT NULL,
+    symbol NVARCHAR(50) UNIQUE NOT NULL
+);
+--index_constituents: là danh sách các công ty đã được chọn để 
+--tính toán chỉ số của một chỉ số thị trường chứng khoán nhất định. 
+CREATE TABLE index_constituents (
+    index_id INT FOREIGN KEY REFERENCES market_indices(index_id),
+    stock_id INT FOREIGN KEY REFERENCES stocks(stock_id)
+);
+
+CREATE TABLE derivatives (
+    derivative_id INT PRIMARY KEY IDENTITY, -- ID của chứng khoán phái sinh
+    name NVARCHAR(255) NOT NULL, -- Tên của chứng khoán phái sinh
+    underlying_asset_id INT FOREIGN KEY REFERENCES stocks(stock_id), -- ID của tài sản cơ bản mà chứng khoán phái sinh được dựa trên
+    contract_size INT, -- Kích thước hợp đồng (số lượng tài sản cơ bản trong một hợp đồng phái sinh)
+    --Contract size khác nhau cho từng sản phẩm tài chính, 
+    --ví dụ như trong thị trường forex, contract size được tính theo số lượng lot, 
+    --trong khi đó ở thị trường hàng hóa, contract size được tính theo khối lượng hoặc số lượng sản phẩm tài chính.
+    expiration_date DATE, -- Ngày hết hạn của hợp đồng phái sinh
+    strike_price DECIMAL(18, 4), -- Giá thực hiện (giá mà người mua chứng khoán phái sinh có quyền mua/bán tài sản cơ bản)
+    -- Strike price thường được đặt ở một mức giá gần bằng với giá thị trường của tài sản cơ bản 
+    -- để tăng khả năng tùy chọn sẽ được sử dụng.
+    last_price DECIMAL(18, 2) NOT NULL,
+    change DECIMAL(18, 2) NOT NULL,
+    percent_change DECIMAL(18, 2) NOT NULL,
+    open_price DECIMAL(18, 2) NOT NULL,
+    high_price DECIMAL(18, 2) NOT NULL,
+    low_price DECIMAL(18, 2) NOT NULL,
+    volume INT NOT NULL,
+    open_interest INT NOT NULL,
+    time_stamp DATETIME NOT NULL
+);
+/*
+last_price: Giá cuối cùng giao dịch thành công của chứng khoán phái sinh.
+change: Biến động giá so với giá cuối cùng của phiên trước đó.
+percent_change: Tỷ lệ biến động giá so với giá cuối cùng của phiên trước đó.
+open_price: Giá mở cửa của phiên giao dịch hiện tại.
+high_price: Giá cao nhất của phiên giao dịch hiện tại.
+low_price: Giá thấp nhất của phiên giao dịch hiện tại.
+volume: Khối lượng giao dịch trong phiên giao dịch hiện tại.
+open_interest: Số hợp đồng phái sinh còn đang mở.
+time_stamp: Thời điểm cập nhật giá chứng khoán phái sinh.
+*/
+-- covered warrants được bảo đảm bởi một bên thứ ba, 
+-- thường là một ngân hàng hoặc một công ty chuyên cung cấp dịch vụ này
+CREATE TABLE covered_warrants (
+    warrant_id INT PRIMARY KEY IDENTITY, -- ID của chứng quyền có bảo đảm
+    name NVARCHAR(255) NOT NULL, -- Tên của chứng quyền có bảo đảm
+    underlying_asset_id INT FOREIGN KEY REFERENCES stocks(stock_id), -- ID của tài sản cơ bản liên quan (tham chiếu đến bảng cổ phiếu)
+    issue_date DATE, -- Ngày phát hành chứng quyền có bảo đảm
+    expiration_date DATE, -- Ngày hết hạn của chứng quyền có bảo đảm
+    strike_price DECIMAL(18, 4), -- Giá thực hiện (giá mà người mua của chứng quyền có bảo đảm có quyền mua/bán tài sản cơ bản)
+    warrant_type NVARCHAR(50) -- Loại chứng quyền có bảo đảm (ví dụ: mua (Call) hoặc bán (Put))
+);
+CREATE TABLE etfs (
+    etf_id INT PRIMARY KEY IDENTITY, -- ID của Quỹ Đầu Tư Chứng Khoán (ETF)
+    name NVARCHAR(255) NOT NULL, -- Tên của Quỹ Đầu Tư Chứng Khoán (ETF)
+    symbol NVARCHAR(50) UNIQUE NOT NULL, -- Ký hiệu của Quỹ Đầu Tư Chứng Khoán (ETF) trên thị trường
+    management_company NVARCHAR(255), -- Tên công ty quản lý Quỹ Đầu Tư Chứng Khoán (ETF)
+    inception_date DATE -- Ngày thành lập Quỹ Đầu Tư Chứng Khoán (ETF)
+);
+--Quan hệ giữa etf và etf_quotes là quan hệ 1-n (một quỹ đầu tư có thể có nhiều bản ghi quotes trong cùng một ngày).
+CREATE TABLE etf_quotes (
+    quote_id INT PRIMARY KEY IDENTITY(1,1), -- ID của bản ghi
+    etf_id INT FOREIGN KEY REFERENCES etfs(etf_id), -- ID của Quỹ Đầu Tư Chứng Khoán (ETF)
+    price DECIMAL(18, 2) NOT NULL, -- Giá của Quỹ Đầu Tư Chứng Khoán (ETF)
+    change DECIMAL(18, 2) NOT NULL, -- Biến động giá của Quỹ Đầu Tư Chứng Khoán (ETF) so với ngày trước đó
+    percent_change DECIMAL(18, 2) NOT NULL, -- Tỷ lệ biến động giá của Quỹ Đầu Tư Chứng Khoán (ETF) so với ngày trước đó
+    total_volume INT NOT NULL, -- Tổng khối lượng giao dịch trong ngày
+    time_stamp DATETIME NOT NULL -- Thời điểm cập nhật giá của Quỹ Đầu Tư Chứng Khoán (ETF)
+);
+
+CREATE TABLE etf_holdings (
+    -- ID của Quỹ Đầu Tư Chứng Khoán (ETF) liên quan đến mã cổ phiếu được giữ (tham chiếu đến bảng etfs).
+    etf_id INT FOREIGN KEY REFERENCES etfs(etf_id), 
+    -- ID của cổ phiếu mà Quỹ Đầu Tư Chứng Khoán (ETF) đang giữ (tham chiếu đến bảng stocks).
+    stock_id INT FOREIGN KEY REFERENCES stocks(stock_id), 
+    shares_held DECIMAL(18, 4), 
+    -- Số lượng cổ phiếu của mã cổ phiếu đó mà Quỹ Đầu Tư Chứng Khoán (ETF) đang nắm giữ.
+    weight DECIMAL(18, 4) 
+    -- Trọng số của cổ phiếu đó trong tổng danh mục đầu tư của Quỹ Đầu Tư Chứng Khoán (ETF), thể hiện tỷ lệ phần trăm của cổ phiếu đó so với tổng giá trị danh mục.
+);
+
+
+-- Watchlists table (Bảng danh sách theo dõi)
+CREATE TABLE watchlists (
+    user_id INT FOREIGN KEY REFERENCES users(user_id), -- ID người dùng
+    stock_id INT FOREIGN KEY REFERENCES stocks(stock_id) -- ID cổ phiếu
+);
+-- Orders table (Bảng đơn hàng)
+/*
+Market order: Lệnh mua/bán thực hiện ngay lập tức với giá thị trường hiện tại. 
+Trong trường hợp không có sẵn đủ số lượng cổ phiếu mà bạn yêu cầu, 
+thì lệnh sẽ được thực hiện với số lượng tối đa có thể đáp ứng được trên thị trường.
+
+Limit order: Lệnh mua/bán với giá giới hạn. Bạn chỉ muốn mua/bán chứng khoán với giá mà bạn muốn, 
+thay vì giá thị trường hiện tại. Lệnh mua sẽ được thực hiện với giá thấp hơn hoặc bằng giá giới hạn, 
+còn lệnh bán sẽ được thực hiện với giá cao hơn hoặc bằng giá giới hạn.
+
+Stop order: Lệnh mua/bán chỉ được thực hiện khi giá chứng khoán đạt đến mức giá xác định trước đó. 
+Lệnh mua sẽ được thực hiện khi giá chứng khoán vượt qua giá stop, 
+còn lệnh bán sẽ được thực hiện khi giá chứng khoán giảm dưới mức giá stop. 
+Lệnh stop order thường được sử dụng để giảm thiểu rủi ro khi giao dịch, 
+đặc biệt là trong các thị trường dao động mạnh.
+
+*/
+CREATE TABLE orders (
+    order_id INT PRIMARY KEY IDENTITY(1,1), -- ID đơn hàng
+    user_id INT FOREIGN KEY REFERENCES users(user_id), -- ID người dùng
+    stock_id INT FOREIGN KEY REFERENCES stocks(stock_id), -- ID cổ phiếu
+    order_type NVARCHAR(20), -- Loại đơn hàng (ví dụ: market, limit, stop)
+    direction NVARCHAR(20), -- Hướng (ví dụ: buy, sell)
+    quantity INT, -- Số lượng
+    price DECIMAL(18, 4), -- Giá
+    status NVARCHAR(20), -- Trạng thái (ví dụ: pending, executed, canceled)
+    order_date DATETIME -- Ngày đặt hàng
+);
+
+-- Portfolios table (Bảng danh mục đầu tư)
+CREATE TABLE portfolios (
+    user_id INT FOREIGN KEY REFERENCES users(user_id), -- ID người dùng
+    stock_id INT FOREIGN KEY REFERENCES stocks(stock_id), -- ID cổ phiếu
+    quantity INT, -- Số lượng
+    purchase_price DECIMAL(18, 4), -- Giá mua
+    purchase_date DATETIME -- Ngày mua
+);
+/*
+order_executed: Thông báo khi một đơn hàng mua hoặc bán chứng khoán đã được thực hiện thành công hoặc thất bại.
+price_alert: Thông báo khi giá của một cổ phiếu đạt đến một ngưỡng giá mà người dùng đã thiết lập trước đó.
+news_event: Thông báo về các sự kiện, tin tức mới liên quan đến các cổ phiếu trong danh mục đầu tư của người dùng.
+*/
+CREATE TABLE notifications (
+    notification_id INT PRIMARY KEY IDENTITY(1,1), -- ID thông báo
+    user_id INT FOREIGN KEY REFERENCES users(user_id), -- ID người dùng
+    notification_type NVARCHAR(50), -- Loại thông báo (ví dụ: order_executed, price_alert, news_event)
+    content TEXT NOT NULL, -- Nội dung thông báo
+    is_read BIT DEFAULT 0, -- Đánh dấu đã đọc hay chưa đọc (1: đã đọc, 0: chưa đọc)
+    created_at DATETIME -- Thời điểm tạo thông báo
+);
+
+CREATE TABLE educational_resources (
+    resource_id INT PRIMARY KEY IDENTITY(1,1), -- ID tài liệu
+    title NVARCHAR(255) NOT NULL, -- Tiêu đề
+    content TEXT NOT NULL, -- Nội dung
+    category NVARCHAR(100), -- Danh mục (ví dụ: đầu tư, chiến lược giao dịch, quản lý rủi ro)
+    date_published DATETIME -- Ngày xuất bản
+);
+
+-- Linked bank accounts table (Bảng tài khoản ngân hàng liên kết)
+/*
+Routing number (mã số định tuyến) là một mã số được sử dụng để xác định một ngân hàng tại Hoa Kỳ. 
+Mã số này gồm 9 chữ số và thường được sử dụng để thực hiện các giao dịch liên ngân hàng, 
+chẳng hạn như chuyển khoản ngân hàng hoặc thanh toán bằng séc. Mỗi ngân hàng sẽ có một mã số định tuyến riêng, 
+giúp cho việc xác định và phân loại các giao dịch được thực hiện giữa các ngân hàng trở nên dễ dàng hơn.
+*/
+
+CREATE TABLE linked_bank_accounts (
+    account_id INT PRIMARY KEY IDENTITY(1,1), -- ID tài khoản
+    user_id INT FOREIGN KEY REFERENCES users(user_id), -- ID người dùng
+    bank_name NVARCHAR(255) NOT NULL, -- Tên ngân hàng
+    account_number NVARCHAR(50) NOT NULL, -- Số tài khoản
+    routing_number NVARCHAR(50), -- Số định tuyến
+    account_type NVARCHAR(50) -- Loại tài khoản (ví dụ: checking, savings)
+);
+
+CREATE TABLE transactions (
+    transaction_id INT PRIMARY KEY IDENTITY(1,1), -- ID giao dịch
+    user_id INT FOREIGN KEY REFERENCES users(user_id), -- ID người dùng
+    linked_account_id INT FOREIGN KEY REFERENCES linked_bank_accounts(account_id), -- ID tài khoản liên kết
+    transaction_type NVARCHAR(50), -- Loại giao dịch (ví dụ: deposit, withdrawal)
+    amount DECIMAL(18, 2), -- Số tiền
+    transaction_date DATETIME -- Ngày giao dịch
+);
+GO
+/*
+Khi một order được tạo ra, các bảng sau sẽ bị thay đổi:
+
+Bảng orders: Sẽ thêm một bản ghi mới đại diện cho đơn hàng mới được tạo ra.
+Bảng portfolios: Nếu đơn hàng là loại mua (buy), số lượng cổ phiếu tương ứng sẽ được thêm vào 
+danh mục đầu tư của người dùng; 
+nếu đơn hàng là loại bán (sell), số lượng cổ phiếu tương ứng sẽ bị trừ đi từ danh mục đầu tư của người dùng.
+Bảng notifications: Một thông báo mới có thể được tạo ra để thông báo cho người dùng về việc 
+đơn hàng đã được thực hiện thành công hoặc thất bại.
+
+Bảng transactions: Nếu đơn hàng là loại mua (buy), 
+một giao dịch mới sẽ được thêm vào bảng này để đại diện cho số tiền 
+được rút ra từ tài khoản ngân hàng của người dùng và chuyển đến sàn giao dịch; 
+nếu đơn hàng là loại bán (sell), 
+một giao dịch mới sẽ được thêm vào bảng này để đại diện cho số tiền được 
+chuyển từ sàn giao dịch đến tài khoản ngân hàng của người dùng.
+*/
+
+--create procedures
+CREATE FUNCTION HashPassword (@password NVARCHAR(255))
+RETURNS NVARCHAR(255)
+AS
+BEGIN
+    -- Replace with the actual hashing function you want to use
+    RETURN CONVERT(NVARCHAR(255), HASHBYTES('SHA2_256', @password), 2);
+END;
+--tách câu lệnh này thành một batch truy vấn riêng biệt.
+GO
+
+CREATE PROCEDURE RegisterUser
+    @username NVARCHAR(50),
+    @password NVARCHAR(255),
+    @email NVARCHAR(255),
+    @phone NVARCHAR(20),
+    @full_name NVARCHAR(255),
+    @date_of_birth DATE,
+    @country NVARCHAR(255)
+AS
+BEGIN
+    INSERT INTO users (username, hashed_password, email, phone, full_name, date_of_birth, country)
+    VALUES (@username, dbo.HashPassword(@password), @email, @phone, @full_name, @date_of_birth, @country);
+END;
+GO
+
+--DROP PROCEDURE LoginUser;
+CREATE PROCEDURE LoginUser
+    @login NVARCHAR(255),
+    @password NVARCHAR(255),
+    @device_id NVARCHAR(255),
+    @result BIT OUTPUT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DECLARE @user_id INT;
+    DECLARE @hashed_password NVARCHAR(255) = dbo.HashPassword(@password);
+    DECLARE @device_count INT;
+
+    SELECT @user_id = user_id
+    FROM users
+    WHERE email = @login AND hashed_password = @hashed_password;
+
+    IF @user_id IS NOT NULL
+    BEGIN
+        SELECT @device_count = COUNT(*)
+        FROM user_devices
+        WHERE user_id = @user_id;
+
+        IF @device_count < 3
+        BEGIN
+            UPDATE TOP (1) user_devices
+            SET device_id = @device_id, token_expiration = DATEADD(day, 30, GETDATE())
+            WHERE user_id = @user_id;
+        
+            SET @result = 1;
+        END
+        ELSE
+        BEGIN
+            PRINT 'User has reached the maximum number of devices (3).';
+            SET @result = 0;
+        END
+    END
+    ELSE
+    BEGIN
+        PRINT 'Invalid login or password.';
+        SET @result = 0;
+    END
+END;
+GO
+
+CREATE FUNCTION IsTokenExpired
+    (@user_id INT, @token NVARCHAR(255))
+RETURNS BIT
+AS
+BEGIN
+    DECLARE @token_expiration DATETIME;
+
+    SELECT @token_expiration = token_expiration
+    FROM user_devices
+    WHERE user_id = @user_id AND token = @token;
+
+    IF @token_expiration IS NULL OR @token_expiration < GETDATE()
+        RETURN 1;
+    ELSE
+        RETURN 0;
+    RETURN 0;
+END;
+GO
+
+CREATE TRIGGER order_trigger
+ON orders
+AFTER INSERT
+AS
+BEGIN
+    DECLARE @stock_quantity INT
+    DECLARE @transaction_amount DECIMAL(10,2)
+    DECLARE @user_id INT
+    DECLARE @order_id INT
+    DECLARE @status NVARCHAR(50)
+    DECLARE @order_type NVARCHAR(50)
+
+    -- Get the stock quantity and transaction amount based on order type
+    SELECT @stock_quantity = CASE WHEN order_type = 'buy' THEN inserted.quantity ELSE -inserted.quantity END,
+           @transaction_amount = CASE WHEN order_type = 'buy' THEN inserted.quantity * inserted.price ELSE -inserted.quantity * inserted.price END,
+           @user_id = inserted.user_id,
+           @order_id = inserted.order_id,
+           @status = inserted.status,
+           @order_type = inserted.order_type
+    FROM inserted
+
+    -- Update the user's portfolio
+    UPDATE portfolios
+    SET quantity = quantity + @stock_quantity
+    WHERE user_id = @user_id AND stock_id IN (SELECT stock_id FROM inserted);
+
+    -- Create a new notification
+    INSERT INTO notifications (user_id, notification_type, content)
+    VALUES (@user_id, 'order', CONCAT('Order ', @order_id, ' has been ', @status));
+
+    -- Add a new transaction record
+    INSERT INTO transactions (user_id, amount, transaction_type)
+    VALUES (@user_id, @transaction_amount, @order_type);
+END;
+GO
+
+
+-- Tính tổng số lượng cổ phiếu của một người dùng trong danh mục đầu tư
+CREATE FUNCTION fn_GetTotalSharesInPortfolio
+(
+@user_id INT
+)
+RETURNS INT
+AS
+BEGIN
+	DECLARE @totalShares INT;
+	SELECT @totalShares = SUM(quantity)
+	FROM portfolios
+	WHERE user_id = @user_id;
+	RETURN @totalShares;
+END;
+GO
+
+--insert data
+USE StockApp;
+GO
 EXEC RegisterUser 'nguyenhuy', 'password_1', 'nguyenhuy@example.com', '0123456789', 'Nguyễn Văn Huy', '1990-01-01', 'Việt Nam';
 EXEC RegisterUser 'tranphuong', 'password_2', 'tranphuong@example.com', '0987654321', 'Trần Thị Phương', '1992-02-15', 'Việt Nam';
 EXEC RegisterUser 'leminh', 'password_3', 'leminh@example.com', '0123412345', 'Lê Văn Minh', '1985-05-30', 'Việt Nam';
@@ -9,6 +409,7 @@ EXEC RegisterUser 'vuthilinh', 'password_7', 'vuthilinh@example.com', '012365432
 EXEC RegisterUser 'doquang', 'password_8', 'doquang@example.com', '0987212345', 'Đỗ Văn Quang', '1997-06-24', 'Việt Nam';
 EXEC RegisterUser 'phamthanh', 'password_9', 'phamthanh@example.com', '0123898765', 'Phạm Thị Thanh', '1994-12-31', 'Việt Nam';
 EXEC RegisterUser 'nguyenbao', 'password_10', 'nguyenbao@example.com', '0987456789', 'Nguyễn Thị Bảo', '1996-08-05', 'Việt Nam';
+GO
 
 INSERT INTO stocks (symbol, company_name, market_cap, sector, industry, stock_type)
 VALUES
@@ -43,6 +444,7 @@ VALUES
 ('GSCP2', 'GreenSolar Preferred 2', 200000000, 'Năng lượng', 'Năng lượng tái tạo', 'Preferred Stock'),
 ('GSCP3', 'GreenSolar Preferred 3', 100000000, 'Năng lượng', 'Năng lượng tái tạo', 'Preferred Stock'),
 ('GSCP4', 'GreenSolar Preferred 4', 50000000, 'Năng lượng', 'Năng lượng tái tạo', 'Preferred Stock');
+GO
 
 -- Thêm dữ liệu fake vào bảng quotes
 INSERT INTO quotes (stock_id, price, change, percent_change, volume, time_stamp)
@@ -57,7 +459,7 @@ VALUES
 (3, 301.50, 0.75, 0.25, 11000, '2022-04-10 11:00:00'),
 (4, 150.50, 1.25, 0.84, 8000, '2022-04-10 11:00:00'),
 (5, 74.75, -0.75, -0.99, 6000, '2022-04-10 11:00:00');
-
+GO
 
 INSERT INTO market_indices (name, symbol)
 VALUES
@@ -93,7 +495,7 @@ VALUES
 ('TradeMart Consumer Goods Index', 'TMCGI'),
 ('TradeMart Consumer Services Index', 'TMCSI'),
 ('TradeMart Utilities Index', 'TMUI');
-
+GO
 
 INSERT INTO index_constituents (index_id, stock_id)
 VALUES
@@ -127,7 +529,7 @@ VALUES
 (5, 28),
 (5, 29),
 (5, 30);
-
+GO
 
 INSERT INTO derivatives (name, underlying_asset_id, contract_size, expiration_date,
 strike_price, last_price, change, percent_change, open_price, high_price, low_price, volume, open_interest, time_stamp)
@@ -146,8 +548,8 @@ VALUES
 ('Derivative 6', 6, 125, '2023-10-01', 62.50, 70.00, 7.50, 12.00, 62.50, 80.00, 45.00, 12500, 6250, GETDATE()),
 ('Derivative 7', 7, 300, '2023-11-01', 150.00, 160.00, 10.00, 6.67, 150.00, 170.00, 130.00, 30000, 15000, GETDATE()),
 ('Derivative 8', 8, 225, '2023-12-01', 112.50, 115.00, 2.50, 2.22, 112.50, 130.00, 95.00, 22500, 11250, GETDATE()),
-('Derivative 9', 9, 175, '2024-01-01', 87.50, 85.00, -2.50, -2.86, 87.50, 100.00, 75.00, 17500, 8750, GETDATE()),
-
+('Derivative 9', 9, 175, '2024-01-01', 87.50, 85.00, -2.50, -2.86, 87.50, 100.00, 75.00, 17500, 8750, GETDATE());
+GO
 
 INSERT INTO covered_warrants (name, underlying_asset_id, issue_date, expiration_date, strike_price, warrant_type)
 VALUES
@@ -181,7 +583,7 @@ VALUES
 ('CW B5 Call', 15, '2021-08-01', '2021-10-31', 150.00, 'Call'),
 ('CW B5 Put', 15, '2021-08-01', '2021-10-31', 150.00, 'Put'),
 ('CW B6 Call', 16, '2021-08-15', '2021-09-30', 200.00, 'Call');
-
+GO
 
 INSERT INTO etfs (name, symbol, management_company, inception_date)
 VALUES
@@ -223,8 +625,8 @@ VALUES
 ('VN Small Cap Inverse ETF', 'VNSCI', 'BaoViet', '2015-08-01'),
 ('VN Mid Cap Inverse ETF', 'VNMI', 'SSI', '2016-01-15'),
 ('VN Large Cap Inverse ETF', 'VNLI', 'Techcombank', '2016-05-30'),
-('VN Financials Inverse ETF', 'VNFI3', 'VPBank', '2017-10-15')
-
+('VN Financials Inverse ETF', 'VNFI3', 'VPBank', '2017-10-15');
+GO
 
 INSERT INTO etf_holdings (etf_id, stock_id, shares_held, weight)
 VALUES
@@ -258,7 +660,7 @@ VALUES
 (6, 28, 23000.4567, 0.056),
 (6, 29, 9000.2345, 0.024),
 (6, 30, 1000.7890, 0.012);
-
+GO
 
 INSERT INTO watchlists (user_id, stock_id)
 VALUES
@@ -292,7 +694,7 @@ VALUES
 (6, 28),
 (6, 29),
 (6, 30);
-
+GO
 
 INSERT INTO orders (user_id, stock_id, order_type, direction, quantity, price, status, order_date)
 VALUES
@@ -326,7 +728,7 @@ VALUES
 (7, 28, 'market', 'sell', 150, 14500.1234, 'executed', '2023-03-28 14:00:00'),
 (8, 29, 'limit', 'buy', 300, 15000.1234, 'pending', '2023-03-29 15:00:00'),
 (9, 30, 'stop', 'sell', 100, 15500.1234, 'canceled', '2023-03-30 16:00:00');
-
+GO
 
 INSERT INTO portfolios (user_id, stock_id, quantity, purchase_price, purchase_date)
 VALUES
@@ -356,7 +758,7 @@ VALUES
 (2, 21, 50, 35.90, '2022-08-19 14:15:00'),
 (3, 3, 200, 11.80, '2022-12-06 09:40:00'),
 (4, 18, 75, 39.20, '2023-02-05 11:25:00');
-
+GO
 
 INSERT INTO educational_resources (title, content, category, date_published) VALUES 
 ('Phân tích kỹ thuật cơ bản', 'Bài viết này trình bày những khái niệm cơ bản của phân tích kỹ thuật, nhưng cũng cung cấp một số kiến thức nâng cao. Nếu bạn mới bắt đầu học phân tích kỹ thuật, đây là một bài viết tuyệt vời để bắt đầu.', 'Phân tích kỹ thuật', '2022-01-01'),
@@ -367,6 +769,7 @@ INSERT INTO educational_resources (title, content, category, date_published) VAL
 ('10 điều cần lưu ý khi đầu tư cổ phiếu', '1. Tìm hiểu kỹ về công ty trước khi đầu tư. 2. Đặt mục tiêu đầu tư rõ ràng. 3. Phân bổ tài sản đúng cách. 4. Tránh mua cổ phiếu quá đắt. 5. Tránh đầu tư vào những công ty lỗ. 6. Theo dõi tình hình kinh doanh của công ty thường xuyên. 7. Không nên quá tập trung vào một số cổ phiếu. 8. Nắm rõ thông tin về thị trường và các yếu tố ảnh hưởng đến giá cổ phiếu. 9. Cân nhắc giữ cổ phiếu trong thời gian dài. 10. Sử dụng kỹ thuật stop loss để giảm thiểu rủi ro.', 'Đầu tư', '2022-05-11 09:45:00'),
 ('Làm thế nào để phân bổ tài sản đúng cách', 'Phân bổ tài sản đúng cách là một trong những yếu tố quan trọng nhất trong việc quản lý đầu tư. Theo các chuyên gia, việc phân bổ tài sản nên dựa trên độ tuổi, mục đích đầu tư, trình độ kiến thức và mức độ chấp nhận rủi ro của mỗi người. Để phân bổ tài sản đúng cách, bạn nên chia tài sản thành các khoản đầu tư khác nhau như tiền mặt, cổ phiếu, trái phiếu và vàng. Ngoài ra, việc chia tài sản thành nhiều khoản nhỏ hơn cũng giúp giảm thiểu rủi ro.', 'Quản lý rủi ro', '2022-05-13 14:20:00'),
 ('5 chiến lược giao dịch hiệu quả', '1. Giao dịch theo xu hướng. 2. Giao dịch theo tin tức. 3. Giao dịch theo động lực giá. 4. Giao dịch theo mô hình kỹ thuật. 5. Sử dụng chỉ báo kỹ thuật. Việc sử dụng các chiến lược giao dịch này giúp bạn giảm thiểu rủi ro và tăng tỷ lệ thành công trong giao dịch.', 'Chiến lược giao dịch', '2022-05-15 10:00:00');
+GO
 
 INSERT INTO linked_bank_accounts (user_id, bank_name, account_number, routing_number, account_type) VALUES
 (1, 'Vietcombank', '1234567890', '12345678', 'checking'),
@@ -389,6 +792,7 @@ INSERT INTO linked_bank_accounts (user_id, bank_name, account_number, routing_nu
 (9, 'KEB Hana Bank', '0123456789', '01234567', 'savings'),
 (10, 'Bank of America', '2345678901', '23456789', 'checking'),
 (10, 'JPMorgan Chase', '3456789012', '34567890', 'savings');
+GO
 
 --SELECT * FROM linked_bank_accounts;
 INSERT INTO transactions (user_id, linked_account_id, transaction_type, amount, transaction_date) VALUES
@@ -412,3 +816,6 @@ INSERT INTO transactions (user_id, linked_account_id, transaction_type, amount, 
 (9, 9, 'withdrawal', 4000.00, '2022-04-25 14:19:47'),
 (10, 10, 'deposit', 4000.00, '2022-04-28 10:17:35'),
 (10, 10, 'withdrawal', 2500.00, '2022-05-01 15:37:58');
+GO
+
+
