@@ -1,7 +1,9 @@
 
-
-USE master
+USE master;
+GO
 DROP DATABASE StockApp;
+GO
+
 IF NOT EXISTS (SELECT name FROM sys.databases WHERE name = N'StockApp')
     CREATE DATABASE StockApp;
 GO
@@ -253,14 +255,27 @@ chuyển từ sàn giao dịch đến tài khoản ngân hàng của người d�
 */
 
 --create procedures
+DROP FUNCTION HashPassword;
+GO
 CREATE FUNCTION HashPassword (@password NVARCHAR(255))
 RETURNS NVARCHAR(255)
 AS
 BEGIN
     -- Replace with the actual hashing function you want to use
-    RETURN CONVERT(NVARCHAR(255), HASHBYTES('SHA2_256', @password), 2);
+    DECLARE @hash VARBINARY(64) = HASHBYTES('SHA2_256', @password)
+    DECLARE @hex NVARCHAR(64) = ''
+    DECLARE @i INT = 1, @j INT = 0
+
+    WHILE (@i <= 32)
+    BEGIN
+        SET @j = CONVERT(INT, SUBSTRING(@hash, @i, 1))
+        SET @hex = @hex + NCHAR((@j / 16) + CASE WHEN (@j / 16) < 10 THEN 48 ELSE 55 END)
+                       + NCHAR((@j % 16) + CASE WHEN (@j % 16) < 10 THEN 48 ELSE 55 END)
+        SET @i = @i + 1
+    END
+
+    RETURN @hex;
 END;
---tách câu lệnh này thành một batch truy vấn riêng biệt.
 GO
 
 CREATE PROCEDURE RegisterUser
@@ -278,70 +293,6 @@ BEGIN
 END;
 GO
 
---DROP PROCEDURE LoginUser;
-CREATE PROCEDURE LoginUser
-    @login NVARCHAR(255),
-    @password NVARCHAR(255),
-    @device_id NVARCHAR(255),
-    @result BIT OUTPUT
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    DECLARE @user_id INT;
-    DECLARE @hashed_password NVARCHAR(255) = dbo.HashPassword(@password);
-    DECLARE @device_count INT;
-
-    SELECT @user_id = user_id
-    FROM users
-    WHERE email = @login AND hashed_password = @hashed_password;
-
-    IF @user_id IS NOT NULL
-    BEGIN
-        SELECT @device_count = COUNT(*)
-        FROM user_devices
-        WHERE user_id = @user_id;
-
-        IF @device_count < 3
-        BEGIN
-            UPDATE TOP (1) user_devices
-            SET device_id = @device_id, token_expiration = DATEADD(day, 30, GETDATE())
-            WHERE user_id = @user_id;
-        
-            SET @result = 1;
-        END
-        ELSE
-        BEGIN
-            PRINT 'User has reached the maximum number of devices (3).';
-            SET @result = 0;
-        END
-    END
-    ELSE
-    BEGIN
-        PRINT 'Invalid login or password.';
-        SET @result = 0;
-    END
-END;
-GO
-
-CREATE FUNCTION IsTokenExpired
-    (@user_id INT, @token NVARCHAR(255))
-RETURNS BIT
-AS
-BEGIN
-    DECLARE @token_expiration DATETIME;
-
-    SELECT @token_expiration = token_expiration
-    FROM user_devices
-    WHERE user_id = @user_id AND token = @token;
-
-    IF @token_expiration IS NULL OR @token_expiration < GETDATE()
-        RETURN 1;
-    ELSE
-        RETURN 0;
-    RETURN 0;
-END;
-GO
 
 CREATE TRIGGER order_trigger
 ON orders
@@ -388,11 +339,11 @@ CREATE FUNCTION fn_GetTotalSharesInPortfolio
 RETURNS INT
 AS
 BEGIN
-	DECLARE @totalShares INT;
-	SELECT @totalShares = SUM(quantity)
-	FROM portfolios
-	WHERE user_id = @user_id;
-	RETURN @totalShares;
+    DECLARE @totalShares INT;
+    SELECT @totalShares = SUM(quantity)
+    FROM portfolios
+    WHERE user_id = @user_id;
+    RETURN @totalShares;
 END;
 GO
 
@@ -831,45 +782,45 @@ GO
 
 CREATE VIEW vw_UserPortfolioSummary AS
 SELECT
-	p.user_id,
-	s.symbol,
-	s.company_name,
-	p.quantity,
-	p.purchase_price,
-	p.purchase_date
+    p.user_id,
+    s.symbol,
+    s.company_name,
+    p.quantity,
+    p.purchase_price,
+    p.purchase_date
 FROM
-	portfolios p
+    portfolios p
 JOIN
-	stocks s ON p.stock_id = s.stock_id;
+    stocks s ON p.stock_id = s.stock_id;
 GO
 
 -- Tổng quan danh mục đầu tư của người dùng
 -- Thêm giao dịch vào tài khoản ngân hàng liên kết
 CREATE PROCEDURE sp_AddTransaction
 (
-	@user_id INT,
-	@linked_account_id INT,
-	@transaction_type NVARCHAR(50),
-	@amount DECIMAL(18, 2)
+    @user_id INT,
+    @linked_account_id INT,
+    @transaction_type NVARCHAR(50),
+    @amount DECIMAL(18, 2)
 )
 AS
 BEGIN
-	INSERT INTO transactions (user_id, linked_account_id, transaction_type, amount, transaction_date)
-	VALUES (@user_id, @linked_account_id, @transaction_type, @amount, GETDATE());
+    INSERT INTO transactions (user_id, linked_account_id, transaction_type, amount, transaction_date)
+    VALUES (@user_id, @linked_account_id, @transaction_type, @amount, GETDATE());
 END;
 GO
 
 -- Tổng quan về các chỉ số thị trường
 CREATE VIEW vw_MarketIndicesSummary AS
 SELECT
-	mi.index_id,
-	mi.name,
-	mi.symbol,
-	COUNT(ic.stock_id) AS number_of_constituents
+    mi.index_id,
+    mi.name,
+    mi.symbol,
+    COUNT(ic.stock_id) AS number_of_constituents
 FROM
 market_indices mi
 JOIN
-	index_constituents ic ON mi.index_id = ic.index_id
+    index_constituents ic ON mi.index_id = ic.index_id
 GROUP BY
 mi.index_id, mi.name, mi.symbol;
 GO
@@ -877,16 +828,16 @@ GO
 -- Tổng quan về các Quỹ Đầu Tư Chứng Khoán (ETF)
 CREATE VIEW vw_ETFsSummary AS
 SELECT
-	e.etf_id,
-	e.name,
-	e.symbol,
-	e.management_company,
-	e.inception_date,
-	COUNT(eh.stock_id) AS number_of_holdings
+    e.etf_id,
+    e.name,
+    e.symbol,
+    e.management_company,
+    e.inception_date,
+    COUNT(eh.stock_id) AS number_of_holdings
 FROM
-	etfs e
+    etfs e
 JOIN
-	etf_holdings eh ON e.etf_id = eh.etf_id
+    etf_holdings eh ON e.etf_id = eh.etf_id
 GROUP BY
-	e.etf_id, e.name, e.symbol, e.management_company, e.inception_date;
+    e.etf_id, e.name, e.symbol, e.management_company, e.inception_date;
 GO

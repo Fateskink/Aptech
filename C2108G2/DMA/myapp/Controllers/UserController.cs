@@ -64,6 +64,7 @@ namespace myapp.Controllers
             IEnumerable<User> result = await _context.Users
                     .FromSqlRaw(sql, parameters)
                     .ToListAsync();
+            
             User? newUser = result.FirstOrDefault(); //User? = "nullable User"            
             if (newUser != null)
             {
@@ -89,11 +90,12 @@ namespace myapp.Controllers
         // POST: api/Users/Login
         [HttpPost("Login")]
         [AllowAnonymous]        
-        public async Task<IActionResult> Login(string email, string password, string deviceId)
+        public async Task<IActionResult> Login(LoginViewModel loginViewModel)
         {
             // Kiểm tra xem email và password có hợp lệ không
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email
-                            && u.HashedPassword == GetSHA256(password));
+            var user = await _context.Users.FirstOrDefaultAsync(
+                    u => u.Email == loginViewModel.Email
+                            && u.HashedPassword == GetSHA256(loginViewModel.Password));
 
             if (user == null)
             {
@@ -107,7 +109,8 @@ namespace myapp.Controllers
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim("userId", user.UserId.ToString())
+                    new Claim("userId", user.UserId.ToString()),
+                    //new Claim("Email", user.UserId.ToString()),
                 }),
                 Expires = DateTime.UtcNow.AddDays(30),
                 SigningCredentials = new SigningCredentials(
@@ -125,7 +128,7 @@ namespace myapp.Controllers
             {
                 // Cập nhật bản ghi đầu tiên
                 var firstDevice = await _context.UserDevices.FirstAsync(d => d.UserId == user.UserId);
-                firstDevice.DeviceId = deviceId;
+                firstDevice.DeviceId = loginViewModel.DeviceId;
                 firstDevice.Token = tokenString;
                 firstDevice.TokenExpiration = tokenDescriptor.Expires.Value;
 
@@ -137,7 +140,7 @@ namespace myapp.Controllers
                 var userDevice = new UserDevice
                 {
                     UserId = user.UserId,
-                    DeviceId = deviceId,
+                    DeviceId = loginViewModel.DeviceId,
                     Token = tokenString,
                     TokenExpiration = tokenDescriptor.Expires.Value
                 };
@@ -157,9 +160,15 @@ namespace myapp.Controllers
             {
                 var bytes = Encoding.UTF8.GetBytes(input);
                 var hash = sha256.ComputeHash(bytes);
-                return Convert.ToBase64String(hash);
+                var hex = new StringBuilder(hash.Length * 2);
+
+                for (int i = 0; i < hash.Length; i++)
+                {
+                    hex.AppendFormat("{0:x2}", hash[i]);
+                }
+
+                return hex.ToString();
             }
-        }        
-        
+        }
     }
 }

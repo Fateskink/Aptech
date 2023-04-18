@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-
 namespace myapp.Models
 {
     public class ApplicationDbContext : DbContext
@@ -29,7 +28,18 @@ namespace myapp.Models
 
         public DbSet<Quote> Quotes { get; set; }
         public DbSet<TopStock> TopStocks { get; set; }
-        public DbSet<ETFQuote> ETFQuotes { get; set; }        
-
+        public DbSet<ETFQuote> ETFQuotes { get; set; }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<EtfHolding>()
+                .HasKey(e => new { e.EtfId, e.StockId });
+            modelBuilder.Entity<IndexConstituent>()
+                .HasKey(e => new { e.IndexId, e.StockId });
+            modelBuilder.Entity<Watchlist>()
+                .HasKey(e => new { e.StockId, e.UserId });
+            modelBuilder.Entity<Portfolio>()
+                .HasKey(e => new { e.StockId, e.UserId });
+            base.OnModelCreating(modelBuilder);
+        }
     }
 }
