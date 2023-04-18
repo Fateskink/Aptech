@@ -94,9 +94,7 @@ namespace myapp.Controllers
         public async Task<IActionResult> Login(LoginViewModel loginViewModel)
         {
             // Kiểm tra xem email và password có hợp lệ không
-            var user = await _context.Users.FirstOrDefaultAsync(
-                    u => u.Email == loginViewModel.Email);
-                            //&& u.HashedPassword == GetSHA256(loginViewModel.Password));
+            var user = CheckLogin(loginViewModel.Email, loginViewModel.Password);
 
             if (user == null)
             {
@@ -153,17 +151,14 @@ namespace myapp.Controllers
             // Trả về thông tin chi tiết của User kèm jwt token
             return Ok(new { user, token = tokenString });
         }
-
-        // Hàm mã hóa SHA256
-        private static string GetSHA256(string input)
-        {
-            using (SHA256 sha256 = SHA256.Create())
-            {
-                byte[] inputBytes = Encoding.Unicode.GetBytes(input);
-                byte[] hashBytes = sha256.ComputeHash(inputBytes);
-                return BitConverter.ToString(hashBytes).Replace("-", "").ToLower();
-                //0x2DBE5AE91A6C40160FB4B66B173C4844FA06FFD98EC4ACB1C4BC3EBB4DFBE9A5
-            }
+        private User? CheckLogin(string email, string password)
+        {            
+            var sql = @"EXEC dbo.CheckLogin @Email, @Password;";
+            return _context.Users.FromSqlRaw(sql,
+                    new SqlParameter("@Email", email),
+                    new SqlParameter("@Password", password)
+                ).AsEnumerable()?.FirstOrDefault();
         }
+
     }
 }

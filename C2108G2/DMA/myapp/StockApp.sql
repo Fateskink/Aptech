@@ -256,23 +256,6 @@ chuyển từ sàn giao dịch đến tài khoản ngân hàng của người d�
 
 --create procedures
 
---DROP FUNCTION HashPassword;
-
-CREATE FUNCTION dbo.HashPassword
-(
-    @Input NVARCHAR(MAX)
-)
-RETURNS NVARCHAR(64)
-AS
-BEGIN
-    DECLARE @hash VARBINARY(32);
-    SET @hash = HASHBYTES('SHA2_256', CAST(@Input AS VARBINARY(MAX)));
-    RETURN STUFF(CONVERT(NVARCHAR(64), @hash, 2), 1, 2, '');
-END;
-GO
-
---SELECT dbo.HashPassword('password_1');
-
 CREATE PROCEDURE RegisterUser
     @username NVARCHAR(50),
     @password NVARCHAR(255),
@@ -284,10 +267,26 @@ CREATE PROCEDURE RegisterUser
 AS
 BEGIN
     INSERT INTO users (username, hashed_password, email, phone, full_name, date_of_birth, country)
-    VALUES (@username, dbo.HashPassword(@password), @email, @phone, @full_name, @date_of_birth, @country);
+    VALUES (@username, HASHBYTES('SHA2_256', @password), @email, @phone, @full_name, @date_of_birth, @country);
+END;
+GO
+--DROP PROCEDURE dbo.CheckLogin;
+CREATE PROCEDURE dbo.CheckLogin
+    @Email NVARCHAR(50),
+    @Password NVARCHAR(50)
+AS
+BEGIN
+    SET NOCOUNT ON;
+    DECLARE @HashedPassword VARBINARY(32)
+    SET @HashedPassword = HASHBYTES('SHA2_256', @Password);    
+    BEGIN
+        SELECT * FROM users WHERE Email IN
+        (SELECT email FROM users WHERE email = @Email AND hashed_password = @HashedPassword);
+    END    
 END;
 GO
 
+--EXEC dbo.CheckLogin N'nguyenhuy@example.com', 'password_1';
 
 CREATE TRIGGER order_trigger
 ON orders
