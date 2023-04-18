@@ -94,8 +94,7 @@ namespace myapp.Controllers
         public async Task<IActionResult> Login(LoginViewModel loginViewModel)
         {
             // Kiểm tra xem email và password có hợp lệ không
-            var user = CheckLogin(loginViewModel.Email, loginViewModel.Password);
-
+            User? user = CheckLogin(loginViewModel.Email, loginViewModel.Password);
             if (user == null)
             {
                 return BadRequest(new { message = "Email hoặc mật khẩu không chính xác" });
@@ -122,7 +121,7 @@ namespace myapp.Controllers
             // Kiểm tra số lượng device
             var deviceCount = await _context.UserDevices.CountAsync(
                     userDevice => userDevice.UserId == user.UserId);
-
+            
             if (deviceCount >= 3)
             {
                 // Cập nhật bản ghi đầu tiên

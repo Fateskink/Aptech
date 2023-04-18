@@ -10,6 +10,7 @@ namespace myapp.Models
         public int Id { get; set; }
 
         [Required]
+        [Column("user_id")]
         public int UserId { get; set; }
 
         [Required]
