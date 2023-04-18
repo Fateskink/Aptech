@@ -16,6 +16,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Cryptography;
 
 namespace myapp.Controllers
 {
@@ -156,18 +157,12 @@ namespace myapp.Controllers
         // Hàm mã hóa SHA256
         private static string GetSHA256(string input)
         {
-            using (var sha256 = System.Security.Cryptography.SHA256.Create())
+            using (SHA256 sha256 = SHA256.Create())
             {
-                var bytes = Encoding.UTF8.GetBytes(input);
-                var hash = sha256.ComputeHash(bytes);
-                var hex = new StringBuilder(hash.Length * 2);
-
-                for (int i = 0; i < hash.Length; i++)
-                {
-                    hex.AppendFormat("{0:x2}", hash[i]);
-                }
-
-                return hex.ToString();
+                byte[] inputBytes = Encoding.Unicode.GetBytes(input);
+                byte[] hashBytes = sha256.ComputeHash(inputBytes);
+                return BitConverter.ToString(hashBytes).Replace("-", "").ToLower();
+                //0x2DBE5AE91A6C40160FB4B66B173C4844FA06FFD98EC4ACB1C4BC3EBB4DFBE9A5
             }
         }
     }

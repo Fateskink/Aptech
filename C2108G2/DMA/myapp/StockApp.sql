@@ -255,28 +255,21 @@ chuyển từ sàn giao dịch đến tài khoản ngân hàng của người d�
 */
 
 --create procedures
-DROP FUNCTION HashPassword;
+
+--DROP FUNCTION HashPassword;
 GO
-CREATE FUNCTION HashPassword (@password NVARCHAR(255))
-RETURNS NVARCHAR(255)
+
+CREATE FUNCTION dbo.HashPassword
+(
+    @Input NVARCHAR(MAX)
+)
+RETURNS VARBINARY(32)
 AS
 BEGIN
-    -- Replace with the actual hashing function you want to use
-    DECLARE @hash VARBINARY(64) = HASHBYTES('SHA2_256', @password)
-    DECLARE @hex NVARCHAR(64) = ''
-    DECLARE @i INT = 1, @j INT = 0
-
-    WHILE (@i <= 32)
-    BEGIN
-        SET @j = CONVERT(INT, SUBSTRING(@hash, @i, 1))
-        SET @hex = @hex + NCHAR((@j / 16) + CASE WHEN (@j / 16) < 10 THEN 48 ELSE 55 END)
-                       + NCHAR((@j % 16) + CASE WHEN (@j % 16) < 10 THEN 48 ELSE 55 END)
-        SET @i = @i + 1
-    END
-
-    RETURN @hex;
+    RETURN HASHBYTES('SHA2_256', @Input);
 END;
 GO
+--SELECT dbo.HashPassword('hoang123');
 
 CREATE PROCEDURE RegisterUser
     @username NVARCHAR(50),
@@ -350,51 +343,48 @@ GO
 --insert data
 USE StockApp;
 GO
-EXEC RegisterUser 'nguyenhuy', 'password_1', 'nguyenhuy@example.com', '0123456789', 'Nguyễn Văn Huy', '1990-01-01', 'Việt Nam';
-EXEC RegisterUser 'tranphuong', 'password_2', 'tranphuong@example.com', '0987654321', 'Trần Thị Phương', '1992-02-15', 'Việt Nam';
-EXEC RegisterUser 'leminh', 'password_3', 'leminh@example.com', '0123412345', 'Lê Văn Minh', '1985-05-30', 'Việt Nam';
-EXEC RegisterUser 'phamtuan', 'password_4', 'phamtuan@example.com', '0987123456', 'Phạm Đức Tuấn', '1995-07-18', 'Việt Nam';
-EXEC RegisterUser 'hoangle', 'password_5', 'hoangle@example.com', '0123987654', 'Hoàng Thị Lệ', '1993-03-29', 'Việt Nam';
-EXEC RegisterUser 'nguyentung', 'password_6', 'nguyentung@example.com', '0987345678', 'Nguyễn Văn Tùng', '1988-09-12', 'Việt Nam';
-EXEC RegisterUser 'vuthilinh', 'password_7', 'vuthilinh@example.com', '0123654321', 'Vũ Thị Linh', '1991-11-06', 'Việt Nam';
-EXEC RegisterUser 'doquang', 'password_8', 'doquang@example.com', '0987212345', 'Đỗ Văn Quang', '1997-06-24', 'Việt Nam';
-EXEC RegisterUser 'phamthanh', 'password_9', 'phamthanh@example.com', '0123898765', 'Phạm Thị Thanh', '1994-12-31', 'Việt Nam';
-EXEC RegisterUser 'nguyenbao', 'password_10', 'nguyenbao@example.com', '0987456789', 'Nguyễn Thị Bảo', '1996-08-05', 'Việt Nam';
+EXEC RegisterUser N'nguyenhuy', N'password_1', N'nguyenhuy@example.com', N'0123456789', N'Nguyễn Văn Huy', '1990-01-01', N'Việt Nam';
+EXEC RegisterUser N'tranphuong', N'password_2', N'tranphuong@example.com', N'0987654321', N'Trần Thị Phương', '1992-02-15', N'Việt Nam';
+EXEC RegisterUser N'leminh', N'password_3', N'leminh@example.com', N'0123412345', N'Lê Văn Minh', '1985-05-30', N'Việt Nam';
+EXEC RegisterUser N'phamtuan', N'password_4', N'phamtuan@example.com', N'0987123456', N'Phạm Đức Tuấn', '1995-07-18', N'Việt Nam';
+EXEC RegisterUser N'hoangle', N'password_5', N'hoangle@example.com', N'0123987654', N'Hoàng Thị Lệ', '1993-03-29', N'Việt Nam';
+EXEC RegisterUser N'nguyentung', N'password_6', N'nguyentung@example.com', N'0987345678', N'Nguyễn Văn Tùng', '1988-09-12', N'Việt Nam';
+EXEC RegisterUser N'vuthilinh', N'password_7', N'vuthilinh@example.com', N'0123654321', N'Vũ Thị Linh', '1991-11-06', N'Việt Nam';
+EXEC RegisterUser N'doquang', N'password_8', N'doquang@example.com', N'0987212345', N'Đỗ Văn Quang', '1997-06-24', N'Việt Nam';
+EXEC RegisterUser N'phamthanh', N'password_9', N'phamthanh@example.com', N'0123898765', N'Phạm Thị Thanh', '1994-12-31', N'Việt Nam';
+EXEC RegisterUser N'nguyenbao', N'password_10', N'nguyenbao@example.com', N'0987456789', N'Nguyễn Thị Bảo', '1996-08-05', N'Việt Nam';
 GO
 
 INSERT INTO stocks (symbol, company_name, market_cap, sector, industry, stock_type)
 VALUES
-('VNM', 'Vinamilk', 200000000000, 'Thực phẩm', 'Sữa và sản phẩm sữa', 'Common Stock'),
-('VIC', 'Vingroup', 180000000000, 'Bất động sản', 'Phát triển bất động sản', 'Common Stock'),
-('VHM', 'Vinhomes', 170000000000, 'Bất động sản', 'Phát triển bất động sản', 'Common Stock'),
-('VCB', 'Vietcombank', 160000000000, 'Ngân hàng', 'Ngân hàng thương mại', 'Common Stock'),
-('BID', 'BIDV', 150000000000, 'Ngân hàng', 'Ngân hàng thương mại', 'Common Stock'),
-('CTG', 'VietinBank', 140000000000, 'Ngân hàng', 'Ngân hàng thương mại', 'Common Stock'),
-('MSN', 'Masan Group', 130000000000, 'Thực phẩm', 'Chế biến thực phẩm', 'Common Stock'),
-('MWG', 'Mobile World', 120000000000, 'Bán lẻ', 'Bán lẻ điện tử', 'Common Stock'),
-('FPT', 'FPT Corporation', 110000000000, 'Công nghệ', 'Phần mềm và dịch vụ', 'Common Stock'),
-('GAS', 'PetroVietnam Gas', 100000000000, 'Năng lượng', 'Khí và dịch vụ liên quan', 'Common Stock'),
-
-('VPB', 'VPBank', 90000000000, 'Ngân hàng', 'Ngân hàng thương mại', 'Common Stock'),
-('REE', 'REE Corporation', 80000000000, 'Cơ khí', 'Sản xuất thiết bị điện', 'Common Stock'),
-('HDB', 'HDBank', 70000000000, 'Ngân hàng', 'Ngân hàng thương mại', 'Common Stock'),
-('SSI', 'SSI Securities', 60000000000, 'Chứng khoán', 'Dịch vụ chứng khoán', 'Common Stock'),
-('EIB', 'Eximbank', 50000000000, 'Ngân hàng', 'Ngân hàng thương mại', 'Common Stock'),
-('VRE', 'Vincom Retail', 45000000000, 'Bất động sản', 'Phát triển bất động sản', 'Common Stock'),
-('VJC', 'Vietjet Air', 40000000000, 'Hàng không', 'Hãng hàng không', 'Common Stock'),
-('STB', 'Sacombank', 35000000000, 'Ngân hàng', 'Ngân hàng thương mại', 'Common Stock'),
-('VIB', 'Vietnam International Bank', 30000000000, 'Ngân hàng', 'Ngân hàng thương mại', 'Common Stock'),
-('FMETF1', 'FinMart ETF 1', 25000000000, 'Quỹ đầu tư', 'Quỹ đầu tư chứng khoán', 'ETF'),
-('FMETF3', 'FinMart ETF 3', 15000000000, 'Quỹ đầu tư', 'Quỹ đầu tư chứng khoán', 'ETF'),
-('FMETF4', 'FinMart ETF 4', 10000000000, 'Quỹ đầu tư', 'Quỹ đầu tư chứng khoán', 'ETF'),
-('FMETF5', 'FinMart ETF 5', 5000000000, 'Quỹ đầu tư', 'Quỹ đầu tư chứng khoán', 'ETF'),
-('SMCP1', 'SmartCorp Preferred 1', 1000000000, 'Công nghệ', 'Phần mềm và dịch vụ', 'Preferred Stock'),
-('SMCP2', 'SmartCorp Preferred 2', 800000000, 'Công nghệ', 'Phần mềm và dịch vụ', 'Preferred Stock'),
-('SMCP3', 'SmartCorp Preferred 3', 600000000, 'Công nghệ', 'Phần mềm và dịch vụ', 'Preferred Stock'),
-('GSCP1', 'GreenSolar Preferred 1', 400000000, 'Năng lượng', 'Năng lượng tái tạo', 'Preferred Stock'),
-('GSCP2', 'GreenSolar Preferred 2', 200000000, 'Năng lượng', 'Năng lượng tái tạo', 'Preferred Stock'),
-('GSCP3', 'GreenSolar Preferred 3', 100000000, 'Năng lượng', 'Năng lượng tái tạo', 'Preferred Stock'),
-('GSCP4', 'GreenSolar Preferred 4', 50000000, 'Năng lượng', 'Năng lượng tái tạo', 'Preferred Stock');
+('VNM', N'Vinamilk', 200000000000, N'Thực phẩm', N'Sữa và sản phẩm sữa', 'Common Stock'),
+('VIC', N'Vingroup', 180000000000, N'Bất động sản', N'Phát triển bất động sản', 'Common Stock'),
+('VHM', N'Vinhomes', 170000000000, N'Bất động sản', N'Phát triển bất động sản', 'Common Stock'),
+('BID', N'BIDV', 150000000000, N'Ngân hàng', N'Ngân hàng thương mại', 'Common Stock'),
+('CTG', N'VietinBank', 140000000000, N'Ngân hàng', N'Ngân hàng thương mại', 'Common Stock'),
+('MSN', N'Masan Group', 130000000000, N'Thực phẩm', N'Chế biến thực phẩm', 'Common Stock'),
+('MWG', N'Mobile World', 120000000000, N'Bán lẻ', N'Bán lẻ điện tử', 'Common Stock'),
+('FPT', N'FPT Corporation', 110000000000, N'Công nghệ', N'Phần mềm và dịch vụ', 'Common Stock'),
+('GAS', N'PetroVietnam Gas', 100000000000, N'Năng lượng', N'Khí và dịch vụ liên quan', 'Common Stock'),
+('VPB', N'VPBank', 90000000000, N'Ngân hàng', N'Ngân hàng thương mại', 'Common Stock'),
+('REE', N'REE Corporation', 80000000000, N'Cơ khí', N'Sản xuất thiết bị điện', 'Common Stock'),
+('HDB', N'HDBank', 70000000000, N'Ngân hàng', N'Ngân hàng thương mại', 'Common Stock'),
+('SSI', N'SSI Securities', 60000000000, N'Chứng khoán', N'Dịch vụ chứng khoán', 'Common Stock'),
+('EIB', N'Eximbank', 50000000000, N'Ngân hàng', N'Ngân hàng thương mại', 'Common Stock'),
+('VRE', N'Vincom Retail', 45000000000, N'Bất động sản', N'Phát triển bất động sản', 'Common Stock'),
+('VJC', N'Vietjet Air', 40000000000, N'Hàng không', N'Hãng hàng không', 'Common Stock'),
+('VCB', N'Vietcombank', 160000000000, N'Ngân hàng', N'Ngân hàng thương mại', 'Common Stock'),
+('STB', N'Sacombank', 35000000000, N'Ngân hàng', N'Ngân hàng thương mại', 'Common Stock'),
+('VIB', N'Vietnam International Bank', 30000000000, N'Ngân hàng', N'Ngân hàng thương mại', 'Common Stock'),
+('FMETF1', N'FinMart ETF 1', 25000000000, N'Quỹ đầu tư', N'Quỹ đầu tư chứng khoán', 'ETF'),
+('FMETF3', N'FinMart ETF 3', 15000000000, N'Quỹ đầu tư', N'Quỹ đầu tư chứng khoán', 'ETF'),
+('SMCP1', 'SmartCorp Preferred 1', 1000000000, N'Công nghệ', N'Phần mềm và dịch vụ', 'Preferred Stock'),
+('SMCP2', 'SmartCorp Preferred 2', 800000000, N'Công nghệ', N'Phần mềm và dịch vụ', 'Preferred Stock'),
+('SMCP3', 'SmartCorp Preferred 3', 600000000, N'Công nghệ', N'Phần mềm và dịch vụ', 'Preferred Stock'),
+('GSCP1', 'GreenSolar Preferred 1', 400000000, N'Năng lượng', N'Năng lượng tái tạo', 'Preferred Stock'),
+('GSCP2', 'GreenSolar Preferred 2', 200000000, N'Năng lượng', N'Năng lượng tái tạo', 'Preferred Stock'),
+('GSCP3', 'GreenSolar Preferred 3', 100000000, N'Năng lượng', N'Năng lượng tái tạo', 'Preferred Stock'),
+('GSCP4', 'GreenSolar Preferred 4', 50000000, N'Năng lượng', N'Năng lượng tái tạo', 'Preferred Stock');
 GO
 
 -- Thêm dữ liệu fake vào bảng quotes
@@ -477,9 +467,7 @@ VALUES
 (5, 25),
 (5, 26),
 (5, 27),
-(5, 28),
-(5, 29),
-(5, 30);
+(5, 28);
 GO
 
 INSERT INTO derivatives (name, underlying_asset_id, contract_size, expiration_date,
@@ -579,12 +567,13 @@ VALUES
 ('VN Financials Inverse ETF', 'VNFI3', 'VPBank', '2017-10-15');
 GO
 
-INSERT INTO top_stocks (stock_id, rank, reason) VALUES
-(1, 1, 'Doanh thu tăng trưởng mạnh'),
-(3, 2, 'Cổ tức cao'),
-(5, 3, 'Sản phẩm mới tiềm năng'),
-(7, 4, 'Điều chỉnh chiến lược kinh doanh'),
-(9, 5, 'Định giá hấp dẫn');
+INSERT INTO top_stocks (stock_id, rank, reason)
+VALUES
+(1, 1, N'Doanh thu tăng trưởng mạnh'),
+(3, 2, N'Cổ tức cao'),
+(5, 3, N'Sản phẩm mới tiềm năng'),
+(7, 4, N'Điều chỉnh chiến lược kinh doanh'),
+(9, 5, N'Định giá hấp dẫn');
 GO
 
 INSERT INTO etf_holdings (etf_id, stock_id, shares_held, weight)
@@ -616,9 +605,7 @@ VALUES
 (5, 25, 2000.7890, 0.013),
 (6, 26, 13000.1234, 0.044),
 (6, 27, 18000.6789, 0.066),
-(6, 28, 23000.4567, 0.056),
-(6, 29, 9000.2345, 0.024),
-(6, 30, 1000.7890, 0.012);
+(6, 28, 23000.4567, 0.056);
 GO
 
 INSERT INTO watchlists (user_id, stock_id)
@@ -650,9 +637,7 @@ VALUES
 (5, 25),
 (6, 26),
 (6, 27),
-(6, 28),
-(6, 29),
-(6, 30);
+(6, 28);
 GO
 
 INSERT INTO orders (user_id, stock_id, order_type, direction, quantity, price, status, order_date)
@@ -684,9 +669,7 @@ VALUES
 (4, 25, 'market', 'buy', 300, 13000.1234, 'executed', '2023-03-25 11:00:00'),
 (5, 26, 'limit', 'sell', 100, 13500.1234, 'pending', '2023-03-26 12:00:00'),
 (6, 27, 'stop', 'buy', 200, 14000.1234, 'canceled', '2023-03-27 13:00:00'),
-(7, 28, 'market', 'sell', 150, 14500.1234, 'executed', '2023-03-28 14:00:00'),
-(8, 29, 'limit', 'buy', 300, 15000.1234, 'pending', '2023-03-29 15:00:00'),
-(9, 30, 'stop', 'sell', 100, 15500.1234, 'canceled', '2023-03-30 16:00:00');
+(7, 28, 'market', 'sell', 150, 14500.1234, 'executed', '2023-03-28 14:00:00');
 GO
 
 INSERT INTO portfolios (user_id, stock_id, quantity, purchase_price, purchase_date)
@@ -719,15 +702,12 @@ VALUES
 (4, 18, 75, 39.20, '2023-02-05 11:25:00');
 GO
 
-INSERT INTO educational_resources (title, content, category, date_published) VALUES 
-('Phân tích kỹ thuật cơ bản', 'Bài viết này trình bày những khái niệm cơ bản của phân tích kỹ thuật, nhưng cũng cung cấp một số kiến thức nâng cao. Nếu bạn mới bắt đầu học phân tích kỹ thuật, đây là một bài viết tuyệt vời để bắt đầu.', 'Phân tích kỹ thuật', '2022-01-01'),
-('Bảo vệ tài khoản giao dịch của bạn', 'Bài viết này cung cấp một số lời khuyên để giúp bạn bảo vệ tài khoản giao dịch của mình, đảm bảo rằng bạn không bao giờ mất hết số tiền đầu tư của mình trong một lần.', 'Quản lý rủi ro', '2022-02-15'),
-('Hướng dẫn đầu tư vào thị trường chứng khoán', 'Bài viết này cung cấp một số lời khuyên cơ bản để bắt đầu đầu tư vào thị trường chứng khoán, bao gồm việc lựa chọn cổ phiếu, phân tích cơ bản và kỹ thuật, và quản lý rủi ro.', 'Đầu tư', '2022-03-10'),
-('Kỹ năng quản lý rủi ro cho nhà đầu tư', 'Bài viết này trình bày những kỹ năng cơ bản để quản lý rủi ro khi đầu tư vào thị trường chứng khoán, bao gồm cách đánh giá rủi ro và quản lý tỷ lệ rủi ro / lợi nhuận.', 'Quản lý rủi ro', '2022-04-22'),
-('Phương pháp đầu tư giá trị', 'Bài viết này giải thích phương pháp đầu tư giá trị và cách sử dụng nó để tìm kiếm các cổ phiếu định giá thấp nhưng có tiềm năng tăng trưởng dài hạn. Bạn sẽ học được các công cụ và chỉ số đầu vào để tìm kiếm cổ phiếu giá trị.', 'Đầu tư', '2022-05-11'),
-('10 điều cần lưu ý khi đầu tư cổ phiếu', '1. Tìm hiểu kỹ về công ty trước khi đầu tư. 2. Đặt mục tiêu đầu tư rõ ràng. 3. Phân bổ tài sản đúng cách. 4. Tránh mua cổ phiếu quá đắt. 5. Tránh đầu tư vào những công ty lỗ. 6. Theo dõi tình hình kinh doanh của công ty thường xuyên. 7. Không nên quá tập trung vào một số cổ phiếu. 8. Nắm rõ thông tin về thị trường và các yếu tố ảnh hưởng đến giá cổ phiếu. 9. Cân nhắc giữ cổ phiếu trong thời gian dài. 10. Sử dụng kỹ thuật stop loss để giảm thiểu rủi ro.', 'Đầu tư', '2022-05-11 09:45:00'),
-('Làm thế nào để phân bổ tài sản đúng cách', 'Phân bổ tài sản đúng cách là một trong những yếu tố quan trọng nhất trong việc quản lý đầu tư. Theo các chuyên gia, việc phân bổ tài sản nên dựa trên độ tuổi, mục đích đầu tư, trình độ kiến thức và mức độ chấp nhận rủi ro của mỗi người. Để phân bổ tài sản đúng cách, bạn nên chia tài sản thành các khoản đầu tư khác nhau như tiền mặt, cổ phiếu, trái phiếu và vàng. Ngoài ra, việc chia tài sản thành nhiều khoản nhỏ hơn cũng giúp giảm thiểu rủi ro.', 'Quản lý rủi ro', '2022-05-13 14:20:00'),
-('5 chiến lược giao dịch hiệu quả', '1. Giao dịch theo xu hướng. 2. Giao dịch theo tin tức. 3. Giao dịch theo động lực giá. 4. Giao dịch theo mô hình kỹ thuật. 5. Sử dụng chỉ báo kỹ thuật. Việc sử dụng các chiến lược giao dịch này giúp bạn giảm thiểu rủi ro và tăng tỷ lệ thành công trong giao dịch.', 'Chiến lược giao dịch', '2022-05-15 10:00:00');
+INSERT INTO educational_resources (title, content, category, date_published) VALUES
+(N'Phân tích kỹ thuật cơ bản', N'Bài viết này trình bày những khái niệm cơ bản của phân tích kỹ thuật, nhưng cũng cung cấp một số kiến thức nâng cao. Nếu bạn mới bắt đầu học phân tích kỹ thuật, đây là một bài viết tuyệt vời để bắt đầu.', N'Phân tích kỹ thuật', '2022-01-01'),
+(N'Bảo vệ tài khoản giao dịch của bạn', N'Bài viết này cung cấp một số lời khuyên để giúp bạn bảo vệ tài khoản giao dịch của mình, đảm bảo rằng bạn không bao giờ mất hết số tiền đầu tư của mình trong một lần.', N'Quản lý rủi ro', '2022-02-15'),
+(N'Hướng dẫn đầu tư vào thị trường chứng khoán', N'Bài viết này cung cấp một số lời khuyên cơ bản để bắt đầu đầu tư vào thị trường chứng khoán, bao gồm việc lựa chọn cổ phiếu, phân tích cơ bản và kỹ thuật, và quản lý rủi ro.', N'Đầu tư', '2022-03-10'),
+(N'Kỹ năng quản lý rủi ro cho nhà đầu tư', N'Bài viết này trình bày những kỹ năng cơ bản để quản lý rủi ro khi đầu tư vào thị trường chứng khoán, bao gồm cách đánh giá rủi ro và quản lý tỷ lệ rủi ro / lợi nhuận.', N'Quản lý rủi ro', '2022-04-22'),
+(N'Phương pháp đầu tư giá trị', N'Bài viết này giải thích phương pháp đầu tư giá trị và cách sử dụng nó để tìm kiếm các cổ phiếu định giá thấp nhưng có tiềm năng tăng trưởng dài hạn. Bạn sẽ học được các công cụ và chỉ số đầu vào để tìm kiếm cổ phiếu giá trị.', N'Đầu tư', '2022-05-11');
 GO
 
 INSERT INTO linked_bank_accounts (user_id, bank_name, account_number, routing_number, account_type) VALUES
