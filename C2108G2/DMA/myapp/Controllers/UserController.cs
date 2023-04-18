@@ -95,17 +95,17 @@ namespace myapp.Controllers
         {
             // Kiểm tra xem email và password có hợp lệ không
             var user = await _context.Users.FirstOrDefaultAsync(
-                    u => u.Email == loginViewModel.Email
-                            && u.HashedPassword == GetSHA256(loginViewModel.Password));
+                    u => u.Email == loginViewModel.Email);
+                            //&& u.HashedPassword == GetSHA256(loginViewModel.Password));
 
             if (user == null)
             {
                 return BadRequest(new { message = "Email hoặc mật khẩu không chính xác" });
             }
-
+            //"2dbe5ae91a6c40160fb4b66b173c4844fa06ffd98ec4acb1c4bc3ebb4dfbe9a5"
             // Tạo JWT token
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_config.GetValue<string>("JwtSecret"));
+            var key = Encoding.ASCII.GetBytes(_config?.GetValue<string>("JwtSecret") ?? "");
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new Claim[]

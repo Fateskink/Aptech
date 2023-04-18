@@ -12,7 +12,7 @@ USE StockApp;
 CREATE TABLE users (
     user_id INT PRIMARY KEY IDENTITY(1,1), -- ID người dùng
     username NVARCHAR(50) UNIQUE NOT NULL, -- Tên đăng nhập
-    hashed_password NVARCHAR(255) NOT NULL,
+    hashed_password NVARCHAR(255) COLLATE Latin1_General_BIN NOT NULL,
     email NVARCHAR(255) UNIQUE NOT NULL, -- Email
     phone NVARCHAR(20) NOT NULL, -- Số điện thoại
     full_name NVARCHAR(255), -- Họ và tên
@@ -257,19 +257,21 @@ chuyển từ sàn giao dịch đến tài khoản ngân hàng của người d�
 --create procedures
 
 --DROP FUNCTION HashPassword;
-GO
 
 CREATE FUNCTION dbo.HashPassword
 (
     @Input NVARCHAR(MAX)
 )
-RETURNS VARBINARY(32)
+RETURNS NVARCHAR(64)
 AS
 BEGIN
-    RETURN HASHBYTES('SHA2_256', @Input);
+    DECLARE @hash VARBINARY(32);
+    SET @hash = HASHBYTES('SHA2_256', CAST(@Input AS VARBINARY(MAX)));
+    RETURN STUFF(CONVERT(NVARCHAR(64), @hash, 2), 1, 2, '');
 END;
 GO
---SELECT dbo.HashPassword('hoang123');
+
+--SELECT dbo.HashPassword('password_1');
 
 CREATE PROCEDURE RegisterUser
     @username NVARCHAR(50),
@@ -343,16 +345,16 @@ GO
 --insert data
 USE StockApp;
 GO
-EXEC RegisterUser N'nguyenhuy', N'password_1', N'nguyenhuy@example.com', N'0123456789', N'Nguyễn Văn Huy', '1990-01-01', N'Việt Nam';
-EXEC RegisterUser N'tranphuong', N'password_2', N'tranphuong@example.com', N'0987654321', N'Trần Thị Phương', '1992-02-15', N'Việt Nam';
-EXEC RegisterUser N'leminh', N'password_3', N'leminh@example.com', N'0123412345', N'Lê Văn Minh', '1985-05-30', N'Việt Nam';
-EXEC RegisterUser N'phamtuan', N'password_4', N'phamtuan@example.com', N'0987123456', N'Phạm Đức Tuấn', '1995-07-18', N'Việt Nam';
-EXEC RegisterUser N'hoangle', N'password_5', N'hoangle@example.com', N'0123987654', N'Hoàng Thị Lệ', '1993-03-29', N'Việt Nam';
-EXEC RegisterUser N'nguyentung', N'password_6', N'nguyentung@example.com', N'0987345678', N'Nguyễn Văn Tùng', '1988-09-12', N'Việt Nam';
-EXEC RegisterUser N'vuthilinh', N'password_7', N'vuthilinh@example.com', N'0123654321', N'Vũ Thị Linh', '1991-11-06', N'Việt Nam';
-EXEC RegisterUser N'doquang', N'password_8', N'doquang@example.com', N'0987212345', N'Đỗ Văn Quang', '1997-06-24', N'Việt Nam';
-EXEC RegisterUser N'phamthanh', N'password_9', N'phamthanh@example.com', N'0123898765', N'Phạm Thị Thanh', '1994-12-31', N'Việt Nam';
-EXEC RegisterUser N'nguyenbao', N'password_10', N'nguyenbao@example.com', N'0987456789', N'Nguyễn Thị Bảo', '1996-08-05', N'Việt Nam';
+EXEC RegisterUser 'nguyenhuy', 'password_1', N'nguyenhuy@example.com', N'0123456789', N'Nguyễn Văn Huy', '1990-01-01', N'Việt Nam';
+EXEC RegisterUser 'tranphuong', 'password_2', N'tranphuong@example.com', N'0987654321', N'Trần Thị Phương', '1992-02-15', N'Việt Nam';
+EXEC RegisterUser 'leminh', 'password_3', N'leminh@example.com', N'0123412345', N'Lê Văn Minh', '1985-05-30', N'Việt Nam';
+EXEC RegisterUser 'phamtuan', 'password_4', N'phamtuan@example.com', N'0987123456', N'Phạm Đức Tuấn', '1995-07-18', N'Việt Nam';
+EXEC RegisterUser 'hoangle', 'password_5', N'hoangle@example.com', N'0123987654', N'Hoàng Thị Lệ', '1993-03-29', N'Việt Nam';
+EXEC RegisterUser 'nguyentung', 'password_6', N'nguyentung@example.com', N'0987345678', N'Nguyễn Văn Tùng', '1988-09-12', N'Việt Nam';
+EXEC RegisterUser 'vuthilinh', 'password_7', N'vuthilinh@example.com', N'0123654321', N'Vũ Thị Linh', '1991-11-06', N'Việt Nam';
+EXEC RegisterUser 'doquang', 'password_8', N'doquang@example.com', N'0987212345', N'Đỗ Văn Quang', '1997-06-24', N'Việt Nam';
+EXEC RegisterUser 'phamthanh', 'password_9', N'phamthanh@example.com', N'0123898765', N'Phạm Thị Thanh', '1994-12-31', N'Việt Nam';
+EXEC RegisterUser 'nguyenbao', 'password_10', N'nguyenbao@example.com', N'0987456789', N'Nguyễn Thị Bảo', '1996-08-05', N'Việt Nam';
 GO
 
 INSERT INTO stocks (symbol, company_name, market_cap, sector, industry, stock_type)
