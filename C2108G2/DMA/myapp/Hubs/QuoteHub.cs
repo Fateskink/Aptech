@@ -2,20 +2,38 @@
 using Microsoft.AspNetCore.SignalR;
 using System.Threading.Tasks;
 using myapp.Models;
+using myapp.Repositories.Quote;
 
 namespace myapp.Hubs
 {
     public class QuoteHub : Hub
     {
-        public async Task UpdateQuote(Quote quote)
+        private readonly IQuoteService _quoteService;
+
+        public QuoteHub(IQuoteService quoteService)
         {
-            /*
-             * chúng ta định nghĩa một phương thức UpdateQuote để nhận dữ liệu mới nhất về giá cổ phiếu từ client. 
-             * Sau đó, chúng ta sử dụng phương thức SendAsync 
-             * của SignalR để gửi lại thông tin cho tất cả các client đã kết nối thông qua phương thức ReceiveQuotes.
-             */
-            await Clients.All.SendAsync("ReceiveQuotes", quote);
+            _quoteService = quoteService;
         }
+        //Từ client sẽ invoke đến SubscribeToStocksRealTime 1 lần
+        public async Task SubscribeToStocksRealTime(int page, int pageSize,
+            string sector = "", string industry = "")
+        {
+            while (true)
+            {
+                var stocks = await _quoteService.GetQuotes(
+                    page: page,
+                    pageSize: pageSize,
+                    sector: sector,
+                    industry: industry
+                );
+                //Gửi danh sách cổ phiếu đến client đang kết nối
+                //client sẽ "lắng nghe" ReceiveQuotesRealTime
+                await Clients.Caller.SendAsync("ReceiveQuotesRealTime", stocks); 
+
+                // Chờ 2 giây để tiếp tục kiểm tra lại dữ liệu
+                await Task.Delay(2000);
+            }
+        }        
     }
 }
 

@@ -8,6 +8,7 @@ namespace myapp.Models
     public class ETF
     {
         [Key]
+        [Column("etf_id")]
         public int EtfId { get; set; }
 
         [Required(ErrorMessage = "ETF name is required")]

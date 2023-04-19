@@ -15,7 +15,6 @@ namespace myapp.Models
         [ForeignKey("ETF")]
         [Column("etf_id")]
         public int ETFId { get; set; }
-
         public virtual ETF ETF { get; set; }
 
         [Required]

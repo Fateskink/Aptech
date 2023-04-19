@@ -5,10 +5,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace myapp.Models
 {
-    [Table("etf_holding")]
+    [Table("etf_holdings")]
     public class EtfHolding
     {
-        [Key, Column(Order = 0)]        
+        [Key, Column(Order = 0)]
         public int EtfId { get; set; }
 
         [Key, Column(Order = 1)]        

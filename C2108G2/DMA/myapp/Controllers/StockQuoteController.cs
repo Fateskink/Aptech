@@ -9,12 +9,12 @@ namespace myapp.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class QuoteController : ControllerBase
+    public class StockQuoteController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
         private readonly IHubContext<QuoteHub> _hubContext;
 
-        public QuoteController(ApplicationDbContext context, IHubContext<QuoteHub> hubContext)
+        public StockQuoteController(ApplicationDbContext context, IHubContext<QuoteHub> hubContext)
         {
             _context = context;
             _hubContext = hubContext;

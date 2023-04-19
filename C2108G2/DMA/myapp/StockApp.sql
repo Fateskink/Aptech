@@ -577,6 +577,7 @@ VALUES
 (9, 5, N'Định giá hấp dẫn');
 GO
 
+--ETF holding là các cổ phiếu, trái phiếu hoặc tài sản khác mà một ETF nắm giữ trong danh mục đầu tư của mình.
 INSERT INTO etf_holdings (etf_id, stock_id, shares_held, weight)
 VALUES
 (1, 1, 15000.1234, 0.065),

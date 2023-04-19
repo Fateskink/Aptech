@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using myapp.Controllers.Filters;
 using myapp.Hubs;
 using myapp.Models;
+using myapp.Repositories.Quote;
+using myapp.Services.Quote;
 
 namespace myapp
 {
@@ -27,6 +29,10 @@ namespace myapp
                 .GetRequiredSection("ConnectionStrings"); //read data from appsettings.json
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(settings["DefaultConnection"]));
+
+            builder.Services.AddScoped<IQuoteService, QuoteService>();
+            builder.Services.AddSignalR();
+
             builder.Services.AddScoped<TokenAuthorizationFilter>();
 
             var app = builder.Build();            
@@ -43,8 +49,8 @@ namespace myapp
             app.UseAuthorization();
 
 
-            app.MapControllers();
-            app.MapHub<QuoteHub>("/quotehub");
+            app.MapControllers();            
+            app.MapHub<QuoteHub>("/quoteHub");
 
             app.Run();
         }

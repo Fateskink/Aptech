@@ -43,6 +43,8 @@ namespace myapp.Models
         [Column("stock_type")]
         [Display(Name = "Loại cổ phiếu")]
         public string? StockType { get; set; }
+
+        public ICollection<Quote> Quotes { get; set; }
     }
 }
 

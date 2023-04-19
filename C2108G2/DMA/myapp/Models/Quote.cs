@@ -39,6 +39,7 @@ namespace myapp.Models
         public DateTime TimeStamp { get; set; }
 
         public Stock Stock { get; set; }
+
     }
 }
 

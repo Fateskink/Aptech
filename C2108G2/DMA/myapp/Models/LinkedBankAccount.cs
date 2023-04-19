@@ -8,10 +8,13 @@ namespace myapp.Models
     public class LinkedBankAccount
     {
         [Key]
+        [Column("account_id")]
         public int AccountId { get; set; }
 
         [ForeignKey("User")]
+        [Column("user_id")]
         public int UserId { get; set; }
+        public User User { get; set; } // Navigation property
 
         [Required(ErrorMessage = "Bank name is required.")]
         [Column("bank_name")]
@@ -27,8 +30,8 @@ namespace myapp.Models
         [Column("account_type")]
         public string AccountType { get; set; }
 
-        // Navigation property
-        public User User { get; set; }
+        
+        
     }
 
 }

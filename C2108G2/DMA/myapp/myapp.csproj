@@ -27,11 +27,17 @@
     <None Remove="Controllers\Filters\" />
     <None Remove="Controllers\Attributes\" />
     <None Remove="Hubs\" />
+    <None Remove="Repositories\Stock\" />
+    <None Remove="Services\" />
+    <None Remove="Services\Quote\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Repositories\" />
     <Folder Include="Controllers\Filters\" />
     <Folder Include="Controllers\Attributes\" />
     <Folder Include="Hubs\" />
+    <Folder Include="Repositories\Stock\" />
+    <Folder Include="Services\" />
+    <Folder Include="Services\Quote\" />
   </ItemGroup>
 </Project>

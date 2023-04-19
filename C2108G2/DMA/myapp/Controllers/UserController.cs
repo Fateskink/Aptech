@@ -98,8 +98,7 @@ namespace myapp.Controllers
             if (user == null)
             {
                 return BadRequest(new { message = "Email hoặc mật khẩu không chính xác" });
-            }
-            //"2dbe5ae91a6c40160fb4b66b173c4844fa06ffd98ec4acb1c4bc3ebb4dfbe9a5"
+            }            
             // Tạo JWT token
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_config?.GetValue<string>("JwtSecret") ?? "");
@@ -148,7 +147,7 @@ namespace myapp.Controllers
             }
 
             // Trả về thông tin chi tiết của User kèm jwt token
-            return Ok(new { user, token = tokenString });
+            return Ok(new { user, token = tokenString, HashedPassword = "hidden" });
         }
         private User? CheckLogin(string email, string password)
         {            

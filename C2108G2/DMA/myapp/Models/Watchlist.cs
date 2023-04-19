@@ -4,22 +4,19 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace myapp.Models
 {
-    [Table("watch_lists")]
+    [Table("watchlists")]
     public class Watchlist
-    {
-        [Key]
-        public int Id { get; set; }
-
+    {        
         [Column("user_id")]
         public int UserId { get; set; }
 
         [Column("stock_id")]
         public int StockId { get; set; }
-
-        [ForeignKey(nameof(UserId))]
+        
+        [ForeignKey("UserId")]
         public User User { get; set; }
-
-        [ForeignKey(nameof(StockId))]
+        
+        [ForeignKey("StockId")]
         public Stock Stock { get; set; }
     }
 

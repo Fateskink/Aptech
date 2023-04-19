@@ -33,8 +33,15 @@ namespace myapp.Models
         {
             modelBuilder.Entity<EtfHolding>()
                 .HasKey(e => new { e.EtfId, e.StockId });
+            modelBuilder.Entity<EtfHolding>()
+                        .Property(e => e.EtfId)
+                        .HasColumnName("etf_id");
+            modelBuilder.Entity<EtfHolding>()
+                        .Property(e => e.StockId)
+                        .HasColumnName("stock_id");
+
             modelBuilder.Entity<IndexConstituent>()
-                .HasKey(e => new { e.IndexId, e.StockId });
+                .HasKey(e => new { e.IndexId, e.StockId });            
             modelBuilder.Entity<Watchlist>()
                 .HasKey(e => new { e.StockId, e.UserId });
             modelBuilder.Entity<Portfolio>()

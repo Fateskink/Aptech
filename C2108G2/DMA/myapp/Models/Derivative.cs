@@ -8,6 +8,7 @@ namespace myapp.Models
     public class Derivative
     {
         [Key]
+        [Column("derivative_id")]
         public int DerivativeId { get; set; }
 
         [Required(ErrorMessage = "Name is required")]
