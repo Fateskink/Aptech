@@ -25,13 +25,18 @@ def insert_100k_records():
         change = round(random.uniform(-10, 10), 2)
         percent_change = round(change / price * 100, 2)
         volume = random.randint(1000, 1000000)
-        time_stamp = start_date + timedelta(days=random.randint(0, delta.days))
+        # Tạo ngày giờ ngẫu nhiên
+        day = random.randint(1, delta.days)
+        seconds = random.randint(0, 24*60*60)
+        microseconds = random.randint(0, 1000000)
+        time_stamp = start_date + timedelta(days=day, seconds=seconds, microseconds=microseconds)
+
         sql = "INSERT INTO quotes (stock_id, price, change, percent_change, volume, time_stamp) VALUES (?, ?, ?, ?, ?, ?)"
         values = (stock_id, price, change, percent_change, volume, time_stamp)
+        #time.sleep(1)
         print("Inserting: ", values)
         cursor.execute(sql, values)
-
-    conn.commit()
+        conn.commit()    
     print('Thêm dữ liệu thành công.')
 
 def insert_random_quotes():

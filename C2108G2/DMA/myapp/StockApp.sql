@@ -43,6 +43,7 @@ CREATE TABLE stocks (
     --Common Stock (Cổ phiếu thường),Preferred Stock (Cổ phiếu ưu đãi),ETF (Quỹ Đầu Tư Chứng Khoán): 
 );
 
+
 CREATE TABLE top_stocks (
     stock_id INT PRIMARY KEY REFERENCES stocks(stock_id), -- ID của cổ phiếu
     rank INT NOT NULL, -- Thứ hạng trong danh sách top stocks
@@ -59,6 +60,27 @@ CREATE TABLE quotes (
     volume INT NOT NULL, -- Khối lượng giao dịch trong ngày
     time_stamp DATETIME NOT NULL -- Thời điểm cập nhật giá cổ phiếu
 );
+
+CREATE VIEW view_quotes_realtime AS
+SELECT DISTINCT
+    q.quote_id,
+    s.symbol,
+    s.company_name,
+    s.market_cap,
+    s.sector,
+    s.industry,
+    s.stock_type,
+    q.price,
+    q.change,
+    q.percent_change,
+    q.volume,
+    q.time_stamp
+FROM quotes q
+INNER JOIN stocks s
+ON q.stock_id = s.stock_id
+WHERE q.time_stamp >= (SELECT MAX(time_stamp) FROM quotes WHERE stock_id = q.stock_id)
+ORDER BY s.symbol;
+
 
 CREATE TABLE market_indices (
     index_id INT PRIMARY KEY IDENTITY,

@@ -17,7 +17,7 @@ namespace myapp.Controllers
             _stockRepository = stockRepository;
         }
 
-        [HttpGet]
+        [HttpGet]        
         public async Task<IActionResult> GetStocks(
             string sector = "",
             string industry = "",

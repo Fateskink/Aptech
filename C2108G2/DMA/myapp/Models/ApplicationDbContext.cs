@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using myapp.Models.SQLViews;
+
 namespace myapp.Models
 {
     public class ApplicationDbContext : DbContext
@@ -29,6 +31,8 @@ namespace myapp.Models
         public DbSet<Quote> Quotes { get; set; }
         public DbSet<TopStock> TopStocks { get; set; }
         public DbSet<ETFQuote> ETFQuotes { get; set; }
+        //SQL Views
+        public DbSet<QuoteRealtime> QuotesRealtimes { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<EtfHolding>()
@@ -47,6 +51,12 @@ namespace myapp.Models
             modelBuilder.Entity<Portfolio>()
                 .HasKey(e => new { e.StockId, e.UserId });
             base.OnModelCreating(modelBuilder);
+
+            //SQL views
+            modelBuilder.Entity<QuoteRealtime>()
+                //QuotesRealtime là một view và không có khóa chính nào được xác định cho nó
+                .HasNoKey().ToView("view_quotes_realtime");
+
         }
     }
 }

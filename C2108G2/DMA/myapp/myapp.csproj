@@ -30,6 +30,7 @@
     <None Remove="Repositories\Stock\" />
     <None Remove="Services\" />
     <None Remove="Services\Quote\" />
+    <None Remove="Models\SQLViews\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Repositories\" />
@@ -39,5 +40,6 @@
     <Folder Include="Repositories\Stock\" />
     <Folder Include="Services\" />
     <Folder Include="Services\Quote\" />
+    <Folder Include="Models\SQLViews\" />
   </ItemGroup>
 </Project>

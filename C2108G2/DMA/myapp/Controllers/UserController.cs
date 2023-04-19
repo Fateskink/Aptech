@@ -133,21 +133,32 @@ namespace myapp.Controllers
             }
             else
             {
-                // Thêm bản ghi mới
-                var userDevice = new UserDevice
+                if (_context.UserDevices
+                    .Where(userDevice => userDevice.DeviceId
+                        == loginViewModel.DeviceId).FirstOrDefault() != null)
                 {
-                    UserId = user.UserId,
-                    DeviceId = loginViewModel.DeviceId,
-                    Token = tokenString,
-                    TokenExpiration = tokenDescriptor.Expires.Value
-                };
-
-                _context.UserDevices.Add(userDevice);
-                await _context.SaveChangesAsync();
+                    UserDevice existingUserDevice = _context.UserDevices
+                                                .Where(userDevice => userDevice.DeviceId
+                                                    == loginViewModel.DeviceId).FirstOrDefault()!;
+                    existingUserDevice.Token = tokenString;
+                    existingUserDevice.TokenExpiration = tokenDescriptor.Expires.Value;
+                    await _context.SaveChangesAsync();
+                }
+                else {
+                    // Thêm bản ghi mới
+                    var userDevice = new UserDevice
+                    {
+                        UserId = user.UserId,
+                        DeviceId = loginViewModel.DeviceId,
+                        Token = tokenString,
+                        TokenExpiration = tokenDescriptor.Expires.Value
+                    };
+                    _context.UserDevices.Add(userDevice);
+                    await _context.SaveChangesAsync();
+                }                
             }
-
             // Trả về thông tin chi tiết của User kèm jwt token
-            return Ok(new { user, token = tokenString, HashedPassword = "hidden" });
+            return Ok(new { token = tokenString });
         }
         private User? CheckLogin(string email, string password)
         {            

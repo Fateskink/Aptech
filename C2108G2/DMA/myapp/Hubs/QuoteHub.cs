@@ -20,7 +20,7 @@ namespace myapp.Hubs
         {
             while (true)
             {
-                var stocks = await _quoteService.GetQuotes(
+                var quotes = await _quoteService.GetQuotes(
                     page: page,
                     pageSize: pageSize,
                     sector: sector,
@@ -28,7 +28,7 @@ namespace myapp.Hubs
                 );
                 //Gửi danh sách cổ phiếu đến client đang kết nối
                 //client sẽ "lắng nghe" ReceiveQuotesRealTime
-                await Clients.Caller.SendAsync("ReceiveQuotesRealTime", stocks); 
+                await Clients.Caller.SendAsync("ReceiveQuotesRealTime", quotes); 
 
                 // Chờ 2 giây để tiếp tục kiểm tra lại dữ liệu
                 await Task.Delay(2000);
