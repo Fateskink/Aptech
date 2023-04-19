@@ -5,6 +5,6 @@ def create_connection():
     database = 'StockApp'
     username = 'sa'
     password = 'Abc123456789@'
-    driver= '{SQL Server}'
-    connection = pyodbc.connect(f'DRIVER=SQL Server;SERVER={server};DATABASE={database};UID={username};PWD={password}')
+    driver= '{ODBC Driver 18 for SQL Server}'
+    connection = pyodbc.connect(f'DRIVER={driver};SERVER={server};DATABASE={database};UID={username};PWD={password};TrustServerCertificate=Yes')
     return connection

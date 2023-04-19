@@ -28,6 +28,8 @@ namespace myapp.Models
         [Required(ErrorMessage = "ETF inception date is required")]
         [Column("inception_date")]
         public DateTime InceptionDate { get; set; }
+
+        public ICollection<ETFQuote>? ETFQuotes { get; set; }
     }
 
 }

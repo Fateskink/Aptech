@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 import random
+import time
 import db
 
 def insert_100k_records():
@@ -27,15 +28,15 @@ def insert_100k_records():
         time_stamp = start_date + timedelta(days=random.randint(0, delta.days))
         sql = "INSERT INTO quotes (stock_id, price, change, percent_change, volume, time_stamp) VALUES (?, ?, ?, ?, ?, ?)"
         values = (stock_id, price, change, percent_change, volume, time_stamp)
+        print("Inserting: ", values)
         cursor.execute(sql, values)
 
     conn.commit()
     print('Thêm dữ liệu thành công.')
 
-def insert_random_quotes(conn_str):
+def insert_random_quotes():
     conn = db.create_connection()
     cursor = conn.cursor()
-
     while True:
         stock_id = random.randint(1, 28)
         price = round(random.uniform(100, 1000), 2)
@@ -43,9 +44,9 @@ def insert_random_quotes(conn_str):
         percent_change = round(random.uniform(-5, 5), 2)
         volume = random.randint(1000, 10000)
         time_stamp = datetime.now()
-
-        query = f"INSERT INTO quotes(stock_id, price, change, percent_change, volume, time_stamp) VALUES ({stock_id}, {price}, {change}, {percent_change}, {volume}, '{time_stamp}')"
-        cursor.execute(query)
+        values = (stock_id, price, change, percent_change, volume, time_stamp)
+        print("Inserting: ", values)        
+        query = "INSERT INTO quotes(stock_id, price, change, percent_change, volume, time_stamp) VALUES (?, ?, ?, ?, ?, ?)"
+        cursor.execute(query, values)
         conn.commit()
-
         time.sleep(5)

@@ -30,8 +30,9 @@ namespace myapp.Models
         [Column("account_type")]
         public string AccountType { get; set; }
 
+        public ICollection<Transaction>? Transactions { get; set; }
         
-        
+
     }
 
 }

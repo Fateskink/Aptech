@@ -21,6 +21,8 @@ namespace myapp.Models
         [Column("symbol")]
         [MaxLength(50, ErrorMessage = "Symbol cannot exceed 50 characters")]
         public string Symbol { get; set; }
+
+        public ICollection<IndexConstituent>? IndexConstituents { get; set; }
     }
 }
 

@@ -44,7 +44,15 @@ namespace myapp.Models
         [Display(Name = "Loại cổ phiếu")]
         public string? StockType { get; set; }
 
-        public ICollection<Quote> Quotes { get; set; }
+        public ICollection<Quote>? Quotes { get; set; }
+        public ICollection<CoveredWarrant>? CoveredWarrants { get; set; }
+        public ICollection<Derivative>? Derivatives { get; set; }
+        public ICollection<EtfHolding>? EtfHoldings { get; set; }
+        public ICollection<IndexConstituent>? IndexConstituents { get; set; }
+        public ICollection<Order>? Orders { get; set; }
+        public ICollection<Portfolio>? Portfolios { get; set; }
+        public ICollection<Watchlist>? Watchlists { get; set; }
+
     }
 }
 

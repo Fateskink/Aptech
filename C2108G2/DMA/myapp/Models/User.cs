@@ -39,5 +39,13 @@ namespace myapp.Models
 
         [MaxLength(255)]
         public string Country { get; set; }
+
+        public ICollection<LinkedBankAccount>? LinkedBankAccounts { get; set; }
+        public ICollection<Notification>? Notifications { get; set; }
+        public ICollection<Order>? Orders { get; set; }
+        public ICollection<Portfolio>? Portfolios { get; set; }
+        public ICollection<Transaction>? Transactions { get; set; }
+        public ICollection<UserDevice>? UserDevices { get; set; }
+        public ICollection<Watchlist>? Watchlists { get; set; }
     }
 }
