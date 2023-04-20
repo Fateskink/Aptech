@@ -32,7 +32,7 @@ namespace myapp.Models
         public DbSet<TopStock> TopStocks { get; set; }
         public DbSet<ETFQuote> ETFQuotes { get; set; }
         //SQL Views
-        public DbSet<QuoteRealtime> QuotesRealtimes { get; set; }
+        public DbSet<QuotesRealtime> QuotesRealtimes { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<EtfHolding>()
@@ -53,7 +53,7 @@ namespace myapp.Models
             base.OnModelCreating(modelBuilder);
 
             //SQL views
-            modelBuilder.Entity<QuoteRealtime>()
+            modelBuilder.Entity<QuotesRealtime>()
                 //QuotesRealtime là một view và không có khóa chính nào được xác định cho nó
                 .HasNoKey().ToView("view_quotes_realtime");
 
