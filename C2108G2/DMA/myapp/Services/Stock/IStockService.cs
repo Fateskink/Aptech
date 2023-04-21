@@ -1,8 +1,8 @@
 ﻿using System;
 using myapp.Models;
-namespace myapp.Repositories
+namespace myapp.Services
 {
-    public interface IStockRepository
+    public interface IStockService
     {
         Task<List<Stock>> GetStocksBySectorAndIndustry(
             string sector, string industry,

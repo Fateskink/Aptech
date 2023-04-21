@@ -37,8 +37,10 @@ CREATE TABLE stocks (
     symbol NVARCHAR(10) UNIQUE NOT NULL, -- Mã cổ phiếu
     company_name NVARCHAR(255) NOT NULL, -- Tên công ty
     market_cap DECIMAL(18, 2), -- Vốn hóa thị trường
-    sector NVARCHAR(100), -- Ngành
-    industry NVARCHAR(100), -- Lĩnh vực
+    sector NVARCHAR(200), -- Ngành
+    industry NVARCHAR(200), -- Lĩnh vực
+    sector_en NVARCHAR(200),
+    industry_en NVARCHAR(200),
     stock_type NVARCHAR(50)
     --Common Stock (Cổ phiếu thường),Preferred Stock (Cổ phiếu ưu đãi),ETF (Quỹ Đầu Tư Chứng Khoán): 
 );
@@ -60,33 +62,17 @@ CREATE TABLE quotes (
     volume INT NOT NULL, -- Khối lượng giao dịch trong ngày
     time_stamp DATETIME NOT NULL -- Thời điểm cập nhật giá cổ phiếu
 );
+GO
 
-CREATE VIEW view_quotes_realtime AS
-SELECT DISTINCT
-    q.quote_id,
-    s.symbol,
-    s.company_name,
-    s.market_cap,
-    s.sector,
-    s.industry,
-    s.stock_type,
-    q.price,
-    q.change,
-    q.percent_change,
-    q.volume,
-    q.time_stamp
-FROM quotes q
-INNER JOIN stocks s
-ON q.stock_id = s.stock_id
-WHERE q.time_stamp >= (SELECT MAX(time_stamp) FROM quotes WHERE stock_id = q.stock_id)
-ORDER BY s.symbol;
-
+--SELECT * FROM view_quotes_realtime;
+--SELECT * FROM stocks;
 
 CREATE TABLE market_indices (
     index_id INT PRIMARY KEY IDENTITY,
     name NVARCHAR(255) NOT NULL,
     symbol NVARCHAR(50) UNIQUE NOT NULL
 );
+
 --index_constituents: là danh sách các công ty đã được chọn để 
 --tính toán chỉ số của một chỉ số thị trường chứng khoán nhất định. 
 CREATE TABLE index_constituents (
@@ -363,6 +349,32 @@ BEGIN
 END;
 GO
 
+--DROP VIEW view_quotes_realtime;
+
+CREATE VIEW view_quotes_realtime AS
+SELECT DISTINCT
+    q.quote_id,
+    s.symbol,
+    s.company_name,
+    m.name as index_name,
+    m.symbol as index_symbol,
+    s.market_cap,
+    s.sector_en,
+    s.industry_en,
+    s.sector,
+    s.industry,
+    s.stock_type,
+    q.price,
+    q.change,
+    q.percent_change,
+    q.volume,
+    q.time_stamp    
+FROM quotes q
+INNER JOIN stocks s ON q.stock_id = s.stock_id
+INNER JOIN index_constituents i ON s.stock_id = i.stock_id
+INNER JOIN market_indices m ON i.index_id = m.index_id
+WHERE q.time_stamp >= (SELECT MAX(time_stamp) FROM quotes WHERE stock_id = q.stock_id);
+GO
 --insert data
 USE StockApp;
 GO
@@ -378,36 +390,36 @@ EXEC RegisterUser 'phamthanh', 'password_9', N'phamthanh@example.com', N'0123898
 EXEC RegisterUser 'nguyenbao', 'password_10', N'nguyenbao@example.com', N'0987456789', N'Nguyễn Thị Bảo', '1996-08-05', N'Việt Nam';
 GO
 
-INSERT INTO stocks (symbol, company_name, market_cap, sector, industry, stock_type)
+INSERT INTO stocks (symbol, company_name, market_cap, sector, industry, stock_type, sector_en, industry_en)
 VALUES
-('VNM', N'Vinamilk', 200000000000, N'Thực phẩm', N'Sữa và sản phẩm sữa', 'Common Stock'),
-('VIC', N'Vingroup', 180000000000, N'Bất động sản', N'Phát triển bất động sản', 'Common Stock'),
-('VHM', N'Vinhomes', 170000000000, N'Bất động sản', N'Phát triển bất động sản', 'Common Stock'),
-('BID', N'BIDV', 150000000000, N'Ngân hàng', N'Ngân hàng thương mại', 'Common Stock'),
-('CTG', N'VietinBank', 140000000000, N'Ngân hàng', N'Ngân hàng thương mại', 'Common Stock'),
-('MSN', N'Masan Group', 130000000000, N'Thực phẩm', N'Chế biến thực phẩm', 'Common Stock'),
-('MWG', N'Mobile World', 120000000000, N'Bán lẻ', N'Bán lẻ điện tử', 'Common Stock'),
-('FPT', N'FPT Corporation', 110000000000, N'Công nghệ', N'Phần mềm và dịch vụ', 'Common Stock'),
-('GAS', N'PetroVietnam Gas', 100000000000, N'Năng lượng', N'Khí và dịch vụ liên quan', 'Common Stock'),
-('VPB', N'VPBank', 90000000000, N'Ngân hàng', N'Ngân hàng thương mại', 'Common Stock'),
-('REE', N'REE Corporation', 80000000000, N'Cơ khí', N'Sản xuất thiết bị điện', 'Common Stock'),
-('HDB', N'HDBank', 70000000000, N'Ngân hàng', N'Ngân hàng thương mại', 'Common Stock'),
-('SSI', N'SSI Securities', 60000000000, N'Chứng khoán', N'Dịch vụ chứng khoán', 'Common Stock'),
-('EIB', N'Eximbank', 50000000000, N'Ngân hàng', N'Ngân hàng thương mại', 'Common Stock'),
-('VRE', N'Vincom Retail', 45000000000, N'Bất động sản', N'Phát triển bất động sản', 'Common Stock'),
-('VJC', N'Vietjet Air', 40000000000, N'Hàng không', N'Hãng hàng không', 'Common Stock'),
-('VCB', N'Vietcombank', 160000000000, N'Ngân hàng', N'Ngân hàng thương mại', 'Common Stock'),
-('STB', N'Sacombank', 35000000000, N'Ngân hàng', N'Ngân hàng thương mại', 'Common Stock'),
-('VIB', N'Vietnam International Bank', 30000000000, N'Ngân hàng', N'Ngân hàng thương mại', 'Common Stock'),
-('FMETF1', N'FinMart ETF 1', 25000000000, N'Quỹ đầu tư', N'Quỹ đầu tư chứng khoán', 'ETF'),
-('FMETF3', N'FinMart ETF 3', 15000000000, N'Quỹ đầu tư', N'Quỹ đầu tư chứng khoán', 'ETF'),
-('SMCP1', 'SmartCorp Preferred 1', 1000000000, N'Công nghệ', N'Phần mềm và dịch vụ', 'Preferred Stock'),
-('SMCP2', 'SmartCorp Preferred 2', 800000000, N'Công nghệ', N'Phần mềm và dịch vụ', 'Preferred Stock'),
-('SMCP3', 'SmartCorp Preferred 3', 600000000, N'Công nghệ', N'Phần mềm và dịch vụ', 'Preferred Stock'),
-('GSCP1', 'GreenSolar Preferred 1', 400000000, N'Năng lượng', N'Năng lượng tái tạo', 'Preferred Stock'),
-('GSCP2', 'GreenSolar Preferred 2', 200000000, N'Năng lượng', N'Năng lượng tái tạo', 'Preferred Stock'),
-('GSCP3', 'GreenSolar Preferred 3', 100000000, N'Năng lượng', N'Năng lượng tái tạo', 'Preferred Stock'),
-('GSCP4', 'GreenSolar Preferred 4', 50000000, N'Năng lượng', N'Năng lượng tái tạo', 'Preferred Stock');
+('VNM', N'Vinamilk', 200000000000, N'Thực phẩm', N'Sữa và sản phẩm sữa', 'Common Stock', 'Food', 'Dairy Products'),
+('VIC', N'Vingroup', 180000000000, N'Bất động sản', N'Phát triển bất động sản', 'Common Stock', 'Real Estate', 'Real Estate Development'),
+('VHM', N'Vinhomes', 170000000000, N'Bất động sản', N'Phát triển bất động sản', 'Common Stock', 'Real Estate', 'Real Estate Development'),
+('BID', N'BIDV', 150000000000, N'Ngân hàng', N'Ngân hàng thương mại', 'Common Stock', 'Banking', 'Commercial Banks'),
+('CTG', N'VietinBank', 140000000000, N'Ngân hàng', N'Ngân hàng thương mại', 'Common Stock', 'Banking', 'Commercial Banks'),
+('MSN', N'Masan Group', 130000000000, N'Thực phẩm', N'Chế biến thực phẩm', 'Common Stock', 'Food', 'Food Processing'),
+('MWG', N'Mobile World', 120000000000, N'Bán lẻ', N'Bán lẻ điện tử', 'Common Stock', 'Retail', 'Electronics Retailing'),
+('FPT', N'FPT Corporation', 110000000000, N'Công nghệ', N'Phần mềm và dịch vụ', 'Common Stock', 'Technology', 'Software and Services'),
+('GAS', N'PetroVietnam Gas', 100000000000, N'Năng lượng', N'Khí và dịch vụ liên quan', 'Common Stock', 'Energy', 'Gas and Related Services'),
+('VPB', N'VPBank', 90000000000, N'Ngân hàng', N'Ngân hàng thương mại', 'Common Stock', 'Banking', 'Commercial Banks'),
+('REE', N'REE Corporation', 80000000000, N'Cơ khí', N'Sản xuất thiết bị điện', 'Common Stock', 'Mechanical Engineering', 'Electrical Equipment Manufacturing'),
+('HDB', N'HDBank', 70000000000, N'Ngân hàng', N'Ngân hàng thương mại', 'Common Stock', 'Banking', 'Commercial Banks'),
+('SSI', N'SSI Securities', 60000000000, N'Chứng khoán', N'Dịch vụ chứng khoán', 'Common Stock', 'Securities', 'Securities Services'),
+('VRE', N'Vincom Retail', 45000000000, N'Bất động sản', N'Phát triển bất động sản', 'Common Stock', 'Real Estate', 'Real Estate Development'),
+('EIB', N'Eximbank', 50000000000, N'Ngân hàng', N'Ngân hàng thương mại', 'Banking', 'Commercial Banking', 'Common Stock'),
+('VJC', N'Vietjet Air', 40000000000, N'Hàng không', N'Hãng hàng không', 'Airline', 'Airline Services', 'Common Stock'),
+('VCB', N'Vietcombank', 160000000000, N'Ngân hàng', N'Ngân hàng thương mại', 'Banking', 'Commercial Banking', 'Common Stock'),
+('STB', N'Sacombank', 35000000000, N'Ngân hàng', N'Ngân hàng thương mại', 'Banking', 'Commercial Banking', 'Common Stock'),
+('VIB', N'Vietnam International Bank', 30000000000, N'Ngân hàng', N'Ngân hàng thương mại', 'Banking', 'Commercial Banking', 'Common Stock'),
+('FMETF1', N'FinMart ETF 1', 25000000000, N'Quỹ đầu tư', N'Quỹ đầu tư chứng khoán', 'ETF', 'Investment Fund', 'ETF'),
+('FMETF3', N'FinMart ETF 3', 15000000000, N'Quỹ đầu tư', N'Quỹ đầu tư chứng khoán', 'ETF', 'Investment Fund', 'ETF'),
+('SMCP1', N'SmartCorp Preferred 1', 1000000000, N'Công nghệ', N'Phần mềm và dịch vụ', 'Preferred Stock', 'Preferred Stock', 'Preferred Stock'),
+('SMCP2', N'SmartCorp Preferred 2', 800000000, N'Công nghệ', N'Phần mềm và dịch vụ', 'Preferred Stock', 'Preferred Stock', 'Preferred Stock'),
+('SMCP3', N'SmartCorp Preferred 3', 600000000, N'Công nghệ', N'Phần mềm và dịch vụ', 'Preferred Stock', 'Preferred Stock', 'Preferred Stock'),
+('GSCP1', N'GreenSolar Preferred 1', 400000000, N'Năng lượng', N'Năng lượng tái tạo', 'Preferred Stock', 'Preferred Stock', 'Preferred Stock'),
+('GSCP2', N'GreenSolar Preferred 2', 200000000, N'Năng lượng', N'Năng lượng tái tạo', 'Preferred Stock', 'Preferred Stock', 'Preferred Stock'),
+('GSCP3', N'GreenSolar Preferred 3', 100000000, N'Năng lượng', N'Năng lượng tái tạo', 'Preferred Stock', 'Preferred Stock', 'Preferred Stock'),
+('GSCP4', N'GreenSolar Preferred 4', 50000000, N'Năng lượng', N'Năng lượng tái tạo', 'Preferred Stock', 'Preferred Stock', 'Preferred Stock');
 GO
 
 -- Thêm dữ liệu fake vào bảng quotes
@@ -845,3 +857,5 @@ JOIN
 GROUP BY
     e.etf_id, e.name, e.symbol, e.management_company, e.inception_date;
 GO
+
+SELECT * FROM view_quotes_realtime;

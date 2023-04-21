@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.SignalR;
 using System.Threading.Tasks;
 using myapp.Models;
-using myapp.Repositories.Quote;
+using myapp.Services;
 
 namespace myapp.Hubs
 {
@@ -15,8 +15,11 @@ namespace myapp.Hubs
             _quoteService = quoteService;
         }
         //Từ client sẽ invoke đến SubscribeToStocksRealTime 1 lần
-        public async Task SubscribeToStocksRealTime(int page, int pageSize,
-            string sector = "", string industry = "")
+        public async Task SubscribeToStocksRealTime(
+            int page, int pageSize,
+            string sector = "",
+            string industry = ""
+            )
         {
             while (true)
             {
@@ -24,7 +27,9 @@ namespace myapp.Hubs
                     page: page,
                     pageSize: pageSize,
                     sector: sector,
-                    industry: industry
+                    industry: industry,
+                    searchText: "",
+                    indexSymbol: ""                    
                 );
                 //Gửi danh sách cổ phiếu đến client đang kết nối
                 //client sẽ "lắng nghe" ReceiveQuotesRealTime

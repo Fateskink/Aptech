@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace myapp.Models.SQLViews
@@ -14,6 +15,12 @@ namespace myapp.Models.SQLViews
         [Column("company_name")]
         public string CompanyName { get; set; }
 
+        [Column("index_name")]        
+        public string IndexName { get; set; }
+
+        [Column("index_symbol")]
+        public string IndexSymbol { get; set; }
+
         [Column("market_cap")]
         public decimal? MarketCap { get; set; }
 
@@ -23,8 +30,16 @@ namespace myapp.Models.SQLViews
         [Column("industry")]
         public string Industry { get; set; }
 
+        [MaxLength(100)]
+        [Column("sector_en")]        
+        public string SectorEn { get; set; } = "";
+
+        [MaxLength(100)]
+        [Column("industry_en")]        
+        public string IndustryEn { get; set; } = "";
+
         [Column("stock_type")]
-        public string StockType { get; set; }
+        public string StockType { get; set; } = "";
 
         [Column("price")]
         public decimal Price { get; set; }

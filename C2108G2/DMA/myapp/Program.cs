@@ -4,8 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using myapp.Controllers.Filters;
 using myapp.Hubs;
 using myapp.Models;
-using myapp.Repositories.Quote;
-using myapp.Services.Quote;
+using myapp.Services;
 
 namespace myapp
 {
@@ -20,8 +19,8 @@ namespace myapp
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             //builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();            
-            builder.Services.AddScoped<UserService>();
+            builder.Services.AddSwaggerGen();                        
+            
 
             builder.Services.AddSignalR();
 
@@ -31,6 +30,10 @@ namespace myapp
                 options.UseSqlServer(settings["DefaultConnection"]));
 
             builder.Services.AddScoped<IQuoteService, QuoteService>();
+            builder.Services.AddScoped<IStockService, StockService>();
+            builder.Services.AddScoped<IWatchlistService, WatchlistService>();
+            builder.Services.AddScoped<IMarketIndexService, MarketIndexService>();            
+
             builder.Services.AddSignalR();
 
             builder.Services.AddScoped<TokenAuthorizationFilter>();

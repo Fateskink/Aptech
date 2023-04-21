@@ -29,15 +29,26 @@ namespace myapp.Models
         [Display(Name = "Vốn hóa thị trường")]
         public decimal? MarketCap { get; set; }
 
-        [MaxLength(100)]
+        [MaxLength(200)]
         [Column("sector")]
         [Display(Name = "Ngành")]
         public string? Sector { get; set; }
 
-        [MaxLength(100)]
+        [MaxLength(200)]
         [Column("industry")]
         [Display(Name = "Lĩnh vực")]
         public string? Industry { get; set; }
+
+        [MaxLength(200)]
+        [Column("sector_en")]
+        [Display(Name = "Ngành (Tiếng Anh)")]
+        public string? SectorEn { get; set; }
+
+        [MaxLength(200)]
+        [Column("industry_en")]
+        [Display(Name = "Lĩnh vực (Tiếng Anh)")]
+        public string? IndustryEn { get; set; }
+
 
         [MaxLength(50)]
         [Column("stock_type")]

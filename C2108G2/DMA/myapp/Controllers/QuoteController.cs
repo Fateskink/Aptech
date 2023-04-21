@@ -5,7 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using myapp.Controllers.Attributes;
 using myapp.Hubs;
 using myapp.Models;
-using myapp.Repositories.Quote;
+using myapp.Services;
+using myapp.ViewModels;
 
 namespace myapp.Controllers
 {
@@ -44,18 +45,16 @@ namespace myapp.Controllers
             return quote;
         }
         [HttpGet("GetQuotes")]
-        public async Task<IActionResult> GetQuotes(
-            string sector = "",
-            string industry = "",
-            string searchText = "",
-            int page = 1, int pageSize = 20)
-        {                        
+        public async Task<IActionResult> GetQuotes(QuotesViewModel model)
+        {
             var quotes = await _quoteService.GetQuotes(
-                    page: page,
-                    pageSize: pageSize,
-                    sector: sector,
-                    industry: industry
-                );
+                page: model.Page,
+                pageSize: model.PageSize,
+                sector: model.Sector,
+                industry: model.Industry,
+                searchText: model.SearchText,
+                indexSymbol: model.IndexSymbol
+            );
 
             if (quotes == null || quotes.Count() == 0)
             {
@@ -65,6 +64,5 @@ namespace myapp.Controllers
             return Ok(quotes);
         }
     }
-
 }
 

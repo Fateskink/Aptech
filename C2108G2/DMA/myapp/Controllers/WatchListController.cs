@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using myapp.Models;
 using myapp.Controllers.Attributes;
+using myapp.Services;
+using myapp.Extensions;
+using System.Runtime.InteropServices;
 
 namespace myapp.Controllers
 {
@@ -14,62 +17,65 @@ namespace myapp.Controllers
     public class WatchListController : ControllerBase
     {
         private readonly ApplicationDbContext _context;        
+        private readonly IWatchlistService _watchlistService;
 
-        public WatchListController(ApplicationDbContext context)
+        public WatchListController(ApplicationDbContext context,
+            IWatchlistService watchlistService)
         {
-            _context = context;            
+            _context = context;
+            _watchlistService = watchlistService;
         }
 
         [HttpPost]
         [AuthorizeToken]
-        [Route("watchlist/add")]
+        [Route("add")]
         public async Task<IActionResult> AddToWatchlist(int stockId)
         {
             // Kiểm tra token
-            var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (userIdString == null)
-            {
-                return Unauthorized();
-            }
-            if (!int.TryParse(userIdString, out int userId))
-            {
-                return BadRequest("Invalid user id");
-            }
+            //context.HttpContext.Items["UserId"]            
+            int userId = HttpContext.GetUserId();
             // Check if user exists
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.UserId == userId);
+            var user = await _context.Users
+                        .FirstOrDefaultAsync(u => u.UserId == userId);
             if (user == null)
             {
                 return Unauthorized();
             }
 
-            // Check if stock exists
-            var stock = await _context.Stocks.FirstOrDefaultAsync(s => s.StockId == stockId);
-            if (stock == null)
-            {
-                return NotFound($"Stock with ID {stockId} not found");
-            }
+            await _watchlistService.AddStockToWatchlistAsync(userId: user.UserId, stockId: stockId);
 
-            // Check if the stock is already in the user's watchlist
-            var existingWatchlist = await _context.Watchlists
-                            .FirstOrDefaultAsync(w => w.UserId == userId
-                                && w.StockId == stockId);
-            if (existingWatchlist != null)
+            return Ok(new
             {
-                return BadRequest($"Stock with ID {stockId} is already in the watchlist of user with ID {userId}");
-            }
-
-            // Add the stock to the user's watchlist
-            var watchlistItem = new Watchlist
-            {
-                UserId = userId,
-                StockId = stockId
-            };
-            _context.Watchlists.Add(watchlistItem);
-            await _context.SaveChangesAsync();
-
-            return Ok($"Stock with ID {stockId} added to the watchlist of user with ID {userId}");
+                success = true,
+                message = "Stock has been added to watchlist"
+            });
         }
+        [HttpDelete]
+        [AuthorizeToken]
+        [Route("remove")]
+        public async Task<IActionResult> RemoveFromWatchlist(int stockId)
+        {
+            // Lấy user ID từ context
+            int userId = HttpContext.GetUserId();
 
+            // Kiểm tra xem user có tồn tại không
+            var user = await _context.Users
+                .FirstOrDefaultAsync(u => u.UserId == userId);
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            // Xóa stock từ danh sách theo dõi của user
+            await _watchlistService.RemoveStockFromWatchlistAsync(userId, stockId);
+
+            // Trả về kết quả thành công
+            return Ok(new
+            {
+                success = true,
+                message = "Stock has been removed from watchlist"
+            });
+        }        
     }
 }
 

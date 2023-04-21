@@ -2,14 +2,17 @@
 using myapp.Models;
 using myapp.Models.SQLViews;
 
-namespace myapp.Repositories.Quote
+namespace myapp.Services
 {
 	public interface IQuoteService
-	{        
-        public Task<IEnumerable<QuotesRealtime>>
-            GetQuotes( int page, int pageSize,
-            string sector = "",
-            string industry = "");
+	{
+        Task<IEnumerable<QuotesRealtime>> GetQuotes(
+            int page,
+            int pageSize,
+            string sector,
+            string searchText,
+            string industry,
+            string indexSymbol);
 
     }
 }

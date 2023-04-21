@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc;
 using myapp.Models;
-using myapp.Repositories;
+using myapp.Services;
 using System.Linq;
 
 namespace myapp.Controllers
@@ -10,9 +10,9 @@ namespace myapp.Controllers
     [Route("api/[controller]")]
     public class StockController : ControllerBase
     {
-        private readonly IStockRepository _stockRepository;
+        private readonly IStockService _stockRepository;
 
-        public StockController(IStockRepository stockRepository)
+        public StockController(IStockService stockRepository)
         {
             _stockRepository = stockRepository;
         }

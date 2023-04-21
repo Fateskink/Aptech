@@ -2,13 +2,13 @@
 using Microsoft.EntityFrameworkCore;
 using myapp.Models;
 
-namespace myapp.Repositories
+namespace myapp.Services
 {
-    public class StockRepository : IStockRepository
+    public class StockService : IStockService
     {
         private readonly ApplicationDbContext _context;
 
-        public StockRepository(ApplicationDbContext context)
+        public StockService(ApplicationDbContext context)
         {
             _context = context;
         }
