@@ -23,10 +23,10 @@ namespace myapp.Models
         public decimal Weight { get; set; }
 
         [ForeignKey("EtfId")]
-        public virtual ETF Etf { get; set; }
+        public virtual ETF? Etf { get; set; }
 
         [ForeignKey("StockId")]
-        public virtual Stock Stock { get; set; }
+        public virtual Stock? Stock { get; set; }
     }
 }
 

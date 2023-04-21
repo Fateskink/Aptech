@@ -13,32 +13,32 @@ namespace myapp.Models
         [Required]
         [MaxLength(50)]
         [Column("username")]
-        public string Username { get; set; }
+        public string Username { get; set; } = "";
 
         [Required]
         [MaxLength(255)]
         [Column("hashed_password")]
-        public string HashedPassword { get; set; }
+        public string HashedPassword { get; set; } = "";
 
         [Required]
         [MaxLength(255)]
         [Column("email")]
-        public string Email { get; set; }
+        public string Email { get; set; } = ""; 
 
         [Required]
         [MaxLength(20)]
         [Column("phone")]
-        public string Phone { get; set; }
+        public string Phone { get; set; } = "";
 
         [MaxLength(255)]
         [Column("full_name")]
-        public string FullName { get; set; }
+        public string FullName { get; set; } = "";
 
         [Column("date_of_birth")]
         public DateTime? DateOfBirth { get; set; }
 
         [MaxLength(255)]
-        public string Country { get; set; }
+        public string Country { get; set; } = "";
 
         public ICollection<LinkedBankAccount>? LinkedBankAccounts { get; set; }
         public ICollection<Notification>? Notifications { get; set; }

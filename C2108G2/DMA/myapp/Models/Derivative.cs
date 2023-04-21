@@ -13,7 +13,7 @@ namespace myapp.Models
 
         [Required(ErrorMessage = "Name is required")]
         [Column("name")]
-        public string Name { get; set; }
+        public string Name { get; set; } = "";
 
         [Required(ErrorMessage = "Underlying asset is required")]
         [ForeignKey(nameof(UnderlyingAsset))]

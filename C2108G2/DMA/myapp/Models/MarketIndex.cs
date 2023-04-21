@@ -15,12 +15,12 @@ namespace myapp.Models
         [Required(ErrorMessage = "Name is required")]
         [Column("name")]
         [MaxLength(255, ErrorMessage = "Name cannot exceed 255 characters")]
-        public string Name { get; set; }
+        public string Name { get; set; } = "";
 
         [Required(ErrorMessage = "Symbol is required")]
         [Column("symbol")]
         [MaxLength(50, ErrorMessage = "Symbol cannot exceed 50 characters")]
-        public string Symbol { get; set; }
+        public string Symbol { get; set; } = "";
 
         public ICollection<IndexConstituent>? IndexConstituents { get; set; }
     }

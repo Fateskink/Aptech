@@ -16,9 +16,9 @@ namespace myapp.Models
         public int Rank { get; set; }
 
         [Column("reason")]
-        public string Reason { get; set; }
+        public string Reason { get; set; } = "";
 
-        public Stock Stock { get; set; }
+        public Stock? Stock { get; set; }
     }
 }
 

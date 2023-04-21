@@ -15,15 +15,15 @@ namespace myapp.Models
         [ForeignKey(nameof(User))]
         [Column("user_id")]
         public int UserId { get; set; }
-        public virtual User User { get; set; }
+        public virtual User? User { get; set; }
 
         [Required]
         [Column("notification_type")]
-        public string NotificationType { get; set; }
+        public string NotificationType { get; set; } = "";
 
         [Required]
         [Column("content", TypeName = "TEXT")]
-        public string Content { get; set; }
+        public string Content { get; set; } = "";
 
         [Column("is_read")]
         public bool IsRead { get; set; }

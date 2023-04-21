@@ -17,13 +17,13 @@ namespace myapp.Models
         [MaxLength(10)]
         [Column("symbol")]
         [Display(Name = "Mã cổ phiếu")]
-        public string Symbol { get; set; }
+        public string Symbol { get; set; } = "";
 
         [Required]
         [MaxLength(255)]
         [Column("company_name")]
         [Display(Name = "Tên công ty")]
-        public string CompanyName { get; set; }
+        public string CompanyName { get; set; } = "";
 
         [Column("market_cap")]
         [Display(Name = "Vốn hóa thị trường")]

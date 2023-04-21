@@ -33,9 +33,9 @@ namespace myapp.Models
         public DateTime PurchaseDate { get; set; }
 
         [ForeignKey("UserId")]
-        public virtual User User { get; set; }
+        public virtual User? User { get; set; }
 
         [ForeignKey("StockId")]
-        public virtual Stock Stock { get; set; }
+        public virtual Stock? Stock { get; set; }
     }
 }

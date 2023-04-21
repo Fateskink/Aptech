@@ -14,10 +14,10 @@ namespace myapp.Models
         public int StockId { get; set; }
         
         [ForeignKey("UserId")]
-        public User User { get; set; }
+        public User? User { get; set; }
         
         [ForeignKey("StockId")]
-        public Stock Stock { get; set; }
+        public Stock? Stock { get; set; }
     }
 
 }

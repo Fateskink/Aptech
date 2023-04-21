@@ -14,16 +14,16 @@ namespace myapp.Models
         [Required(ErrorMessage = "ETF name is required")]
         [MaxLength(255)]
         [Column("name")]
-        public string Name { get; set; }
+        public string Name { get; set; } = "";
 
         [Required(ErrorMessage = "ETF symbol is required")]
         [MaxLength(50)]
         [Column("symbol")]
-        public string Symbol { get; set; }
+        public string Symbol { get; set; } = "";
 
         [MaxLength(255)]
         [Column("management_company")]
-        public string ManagementCompany { get; set; }
+        public string ManagementCompany { get; set; } = "";
 
         [Required(ErrorMessage = "ETF inception date is required")]
         [Column("inception_date")]

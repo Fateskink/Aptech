@@ -20,14 +20,14 @@ namespace myapp.Models
 
         [Required]
         [MaxLength(255)]
-        public string Token { get; set; }
+        public string Token { get; set; } = "";
 
         [Required]
         [Column("token_expiration")]
         public DateTime TokenExpiration { get; set; }
 
         [ForeignKey("UserId")]
-        public User User { get; set; }
+        public User? User { get; set; }
     }
 }
 

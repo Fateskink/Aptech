@@ -14,12 +14,12 @@ namespace myapp.Models
 
         [Required]
         [Column("name")]
-        public string Name { get; set; }
+        public string Name { get; set; } = "";
 
         [ForeignKey(nameof(UnderlyingAsset))]
         [Column("underlying_asset_id")]        
         public int UnderlyingAssetId { get; set; }
-        public virtual Stock UnderlyingAsset { get; set; }
+        public virtual Stock? UnderlyingAsset { get; set; }
 
         [Required]
         [Column("issue_date")]
@@ -35,7 +35,7 @@ namespace myapp.Models
 
         [Required]
         [Column("warrant_type")]
-        public string WarrantType { get; set; }
+        public string WarrantType { get; set; } = "";
     }
 
 }

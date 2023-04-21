@@ -13,14 +13,14 @@ namespace myapp.Models
         public int IndexId { get; set; }
 
         [ForeignKey("IndexId")]
-        public MarketIndex MarketIndex { get; set; }
+        public MarketIndex? MarketIndex { get; set; }
 
         [Key]
         [Column("stock_id", TypeName = "int")]
         public int StockId { get; set; }
 
         [ForeignKey("StockId")]
-        public Stock Stock { get; set; }
+        public Stock? Stock { get; set; }
     }
 }
 

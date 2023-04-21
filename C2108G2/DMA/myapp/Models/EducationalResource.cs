@@ -13,14 +13,14 @@ namespace myapp.Models
 
         [Required]
         [Column("title")]
-        public string Title { get; set; }
+        public string Title { get; set; } = "";
 
         [Required]
         [Column("content")]
-        public string Content { get; set; }
+        public string Content { get; set; } = "";
 
         [Column("category")]
-        public string Category { get; set; }
+        public string Category { get; set; } = "";
 
         [Column("date_published")]
         public DateTime DatePublished { get; set; }

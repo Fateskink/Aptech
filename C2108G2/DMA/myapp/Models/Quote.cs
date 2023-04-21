@@ -38,7 +38,7 @@ namespace myapp.Models
         [Required(ErrorMessage = "Time stamp is required.")]
         public DateTime TimeStamp { get; set; }
 
-        public Stock Stock { get; set; }
+        public Stock? Stock { get; set; }
 
     }
 }

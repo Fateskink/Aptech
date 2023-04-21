@@ -5,14 +5,8 @@ namespace myapp.Extensions
     {
         public static int GetUserId(this HttpContext httpContext)
         {
-            if (httpContext.Items.ContainsKey("UserId"))
-            {
-                return (int)httpContext.Items["UserId"];
-            }
-            else
-            {
-                throw new Exception("User ID not found in HttpContext.Items");
-            }
+            return httpContext.Items["UserId"] as int? ??
+                throw new Exception("User ID not found in HttpContext.Items");            
         }
     }
 }

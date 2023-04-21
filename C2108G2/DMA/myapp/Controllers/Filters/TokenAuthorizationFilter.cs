@@ -18,7 +18,8 @@ namespace myapp.Controllers.Filters
 
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            var token = context.HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
+            var token = context.HttpContext.Request.Headers["Authorization"]
+                .FirstOrDefault()?.Split(" ").Last();
 
             if (token == null)
             {
@@ -27,7 +28,7 @@ namespace myapp.Controllers.Filters
             }
 
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_config.GetValue<string>("JwtSecret"));
+            var key = Encoding.ASCII.GetBytes(_config.GetValue<string>("JwtSecret") ?? "");
 
             try
             {
