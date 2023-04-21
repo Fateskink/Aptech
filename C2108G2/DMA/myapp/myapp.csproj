@@ -33,6 +33,7 @@
     <None Remove="Services\WatchList\" />
     <None Remove="Extensions\" />
     <None Remove="Services\MarketIndex\" />
+    <None Remove="Services\User\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controllers\Filters\" />
@@ -45,5 +46,6 @@
     <Folder Include="Services\WatchList\" />
     <Folder Include="Extensions\" />
     <Folder Include="Services\MarketIndex\" />
+    <Folder Include="Services\User\" />
   </ItemGroup>
 </Project>
