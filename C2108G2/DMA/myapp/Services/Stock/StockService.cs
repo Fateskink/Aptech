@@ -13,6 +13,13 @@ namespace myapp.Services
             _context = context;
         }
 
+        public async Task<IEnumerable<string>> GetDistinctIndustryEn()
+        {
+            var result = await _context
+                                .Stocks.Select(s => s.IndustryEn)
+                                .Distinct().ToListAsync();
+            return result;
+        }
         public async Task<List<Stock>> GetStocksBySectorAndIndustry(
             string sector,
             string industry,

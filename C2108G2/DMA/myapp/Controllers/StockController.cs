@@ -10,11 +10,18 @@ namespace myapp.Controllers
     [Route("api/[controller]")]
     public class StockController : ControllerBase
     {
-        private readonly IStockService _stockRepository;
+        private readonly IStockService _stockService;
 
-        public StockController(IStockService stockRepository)
+        public StockController(IStockService stockService)
         {
-            _stockRepository = stockRepository;
+            _stockService = stockService;
+        }
+
+        [HttpGet("distinct-industry-en")]
+        public async Task<IActionResult> GetDistinctIndustryEn()
+        {
+            var result = await _stockService.GetDistinctIndustryEn();
+            return Ok(result);
         }
 
         [HttpGet]        
@@ -24,7 +31,7 @@ namespace myapp.Controllers
             string searchText = "",
             int page = 1, int pageSize = 20)
         {
-            var stocks = await _stockRepository
+            var stocks = await _stockService
                             .GetStocksBySectorAndIndustry(
                                 sector, industry,
                                 searchText,

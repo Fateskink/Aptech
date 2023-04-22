@@ -8,6 +8,7 @@ namespace myapp.Services
             string sector, string industry,
             string searchText,
             int page = 1, int pageSize = 20);
+        Task<IEnumerable<string>> GetDistinctIndustryEn();
     }
 
 }

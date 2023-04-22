@@ -72,7 +72,6 @@ namespace myapp.Controllers
             {
                 return BadRequest(new { message = ex.Message });
             }
-        }
-
+        }        
     }
 }
