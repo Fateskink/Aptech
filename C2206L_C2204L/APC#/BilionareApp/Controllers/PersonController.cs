@@ -65,10 +65,57 @@ namespace BilionareApp.Controllers
         }
         public void AnalyzePersons()
         {
+            Dictionary<string, int> result = new Dictionary<string, int>();
+            foreach(Person person in this.persons)
+            {
+                string nationality = person.Nationality ?? "";
+                result[nationality] = !result.ContainsKey(nationality) ? 0
+                                                : result[nationality]+1;
+            }
+            foreach (string nationality in result.Keys) {
+                int numberOfPersons = result[nationality];
+                string sPostfix = numberOfPersons > 1 ? "s" : "";
+                Console.WriteLine($"There are {numberOfPersons} person{sPostfix} from {nationality}");
+            }
+        }
+        public void FindPersons() {
+            Console.WriteLine("Enter nationality: ");
+            string nationality = Console.ReadLine() ?? "";
+            float min = float.Parse(Console.ReadLine() ?? "0");
+            List<Person> filteredList = this.persons.Where(
+                person => (person.Nationality ?? "").ToLower().Equals(nationality.ToLower())
+                && person.NetWorth > min
+            ).ToList();
 
         }
-        public void FindPersons() { }
-        public void SaveToFile() { }
-        public void ReadFromFile() { }
+        public void SaveToFile() {
+            // Write the list to a file
+            using (StreamWriter writer = new StreamWriter(this.fileName))
+            {
+                foreach (Person person in persons)
+                {
+                    writer.WriteLine($"{person.Name},{person.Nationality},{person.BirthYear},{person.NetWorth}");
+                }
+            }
+        }
+        public void ReadFromFile() {
+            using (StreamReader reader = new StreamReader(this.fileName))
+            {
+                string line;
+                persons.RemoveAll(person => true);
+                while ((line = reader.ReadLine()) != null)
+                {
+                    string[] fields = line.Split(',');
+                    persons.Add(new Person
+                    {
+                        Name = fields[0],
+                        Nationality = fields[1],
+                        BirthYear = int.Parse(fields[2]),
+                        NetWorth = float.Parse(fields[3])
+                    });
+                }
+            }
+            this.DisplayPersons();
+        }
     }
 }
