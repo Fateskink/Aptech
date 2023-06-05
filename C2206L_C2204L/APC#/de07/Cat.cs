@@ -39,5 +39,9 @@ namespace de07
             Console.WriteLine("Enter color: ");
             Color = Console.ReadLine();
         }
+        public override string ToString()
+        {
+            return $"name: {Name}, weight: {Weight}, color: {Color}";
+        }
     }
 }
