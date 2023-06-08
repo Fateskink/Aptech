@@ -1,7 +1,7 @@
 const express = require('express')
 const app = express();
 const cors = require('cors');
-const studentRoutes = require('./routes/student.js')
+const studentRoutes = require('./routes/employee.js')
 const bodyParser = require('body-parser');
 const path = require('path')
 
@@ -9,7 +9,8 @@ const path = require('path')
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use('/api/students', studentRoutes);
+app.use('/api/employees', studentRoutes);
+
 app.use('/', async (req, res) => {
     debugger
     res.sendFile(path.join(__dirname, 'index.html'));
