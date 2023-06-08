@@ -1,4 +1,4 @@
-
+const db = require('../db')
 // C - Create
 exports.createStudent = (req, res) => {
     let { name, age, address, javascore, csharpscore } = req.body;
@@ -14,7 +14,9 @@ exports.createStudent = (req, res) => {
 // R - Read
 exports.getAllStudents = (req, res) => {
     let sql = 'SELECT * FROM student';    
+    debugger
     db.query(sql, (error, results) => {
+        debugger
         if (error) throw error;
         res.json(results);
     });
@@ -34,6 +36,7 @@ exports.getStudentById = (req, res) => {
 exports.updateStudent = (req, res) => {
     let id = req.params.id;
     let { name, age, address, javascore, csharpscore } = req.body;
+    //remove SQL injection
     let sql = 'UPDATE student SET name = ?, age = ?, address = ?, javascore = ?, csharpscore = ? WHERE id = ?';
     let data = [name, age, address, javascore, csharpscore, id];
 

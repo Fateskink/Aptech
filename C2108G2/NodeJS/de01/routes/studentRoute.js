@@ -1,5 +1,4 @@
 const express = require('express');
-debugger
 const router = express.Router();
 
 const studentController = require('../controllers/studentController');
