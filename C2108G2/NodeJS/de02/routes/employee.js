@@ -4,7 +4,9 @@ const router = express.Router()
 const connection = require('../connection')
 
 router.get('/', async (req, res) => {
+  debugger
   connection.query('SELECT * FROM employees', (err, results, fields) => {
+    debugger
     if (err) throw err
     res.json({
       status: 'success',
@@ -30,6 +32,7 @@ router.get('/:id', async (req, res) => {
 })
 
 router.post('/', async (req, res) => {
+  debugger
   const {Name, Age, Address, Salary} = req.body
   debugger
   const sql = 'INSERT INTO employees(Name, Age, Address, Salary) VALUES (?,?,?, ?)'
@@ -57,6 +60,7 @@ router.post('/', async (req, res) => {
   
 })
 router.put('/:id', async (req, res) => {
+  debugger
   const {id} = req.params
   const {Name,Age,Address, Salary} = req.body
   const updates = {}

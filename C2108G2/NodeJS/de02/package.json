@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node --watch server.js",
     "debug": "node inspect server.js",
-    "test": "node logModule.js"    
+    "test": "node logModule.js"
   },
   "keywords": [],
   "author": "",
@@ -17,7 +17,7 @@
     "chalk": "4.1.2",
     "cors": "^2.8.5",
     "express": "^4.18.2",
-    "mysql2": "^3.2.0"  
+    "mysql2": "^3.2.0",
+    "path": "^0.12.7"
   }
 }
-

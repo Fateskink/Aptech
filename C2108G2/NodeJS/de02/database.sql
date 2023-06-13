@@ -1,5 +1,6 @@
-mysql -u root -P 3316 -p
-use c2103L;
+mysql -u root -P 3306 -p
+CREATE DATABASE c2108g2;
+use c2108g2;
 CREATE TABLE employees(
     Id INT PRIMARY KEY AUTO_INCREMENT,
     Name VARCHAR(100) NOT NULL,

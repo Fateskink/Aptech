@@ -1,3 +1,7 @@
+/**
+ * npm init
+ * npm install express cors body-parser path
+ */
 const express = require('express')
 const app = express();
 const cors = require('cors');
@@ -7,7 +11,7 @@ const path = require('path')
 
 //const __dirname = path.dirname(path.resolve());
 app.use(cors());
-app.use(bodyParser.json());
+app.use(bodyParser.json());//sử dụng middlewware json để đọc json object
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/api/employees', studentRoutes);
 
@@ -17,6 +21,6 @@ app.use('/', async (req, res) => {
 })
 
 
-app.listen(8081, () => {
-  console.log('Server listening on port 8081');
+app.listen(3000, () => {
+  console.log('Server listening on port 3000');
 });

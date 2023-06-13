@@ -1,12 +1,13 @@
 const mysql = require('mysql2');
 const connection = mysql.createConnection({
     host: 'localhost',
-    port: 3316,
+    port: 3306,
     user: 'root',
     password: '',
-    database: 'pms'
+    database: 'c2108g2'
   });
-  connection.connect((err) => {
+  connection.connect((err) => {    
+    debugger
     if (err) throw err;
     console.log('Connected to MySQL server!');
   });
