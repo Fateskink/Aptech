@@ -1,8 +1,9 @@
 const axios = require('axios');
 const {print, LOG_TYPE} = require('./LOG')
+require('dotenv').config();
 
-const SERVER_NAME = 'localhost'
-const SERVER_PORT = 8081
+const SERVER_NAME = process.env.SERVER || 'localhost'
+const SERVER_PORT = process.env.PORT || 3000
 const URL_EMPLOYEES = () => `http://${SERVER_NAME}:${SERVER_PORT}/api/employees`
 const URL_DETAIL_EMPLOYEE = (id) => `http://${SERVER_NAME}:${SERVER_PORT}/api/employees/${id}`
 const URL_INSERT_EMPLOYEE = () => `http://${SERVER_NAME}:${SERVER_PORT}/api/employees`
@@ -13,6 +14,9 @@ const URL_DELETE_EMPLOYEE = (id) => `http://${SERVER_NAME}:${SERVER_PORT}/api/em
 const getAllEmployees = async () => {  
   try {
       let response = await axios.get(URL_EMPLOYEES())
+      if(response.status != 200) {
+        throw new Exception('Can not receive response: ')
+      }
       debugger
       //print("Status: " + response.status, LOG_TYPE.INFO)
   }catch(error) {
