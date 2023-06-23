@@ -77,12 +77,11 @@ namespace de02
         public float CalculateTax() => (seat < 7) ? 
                                         rootPrice * 0.6f : rootPrice * 0.7f;
 
-        public float CalculatePrice(float? transportCost) {
-            float specialRate = 0.8f;            
-            return RootPrice + 
-                    CalculateTax() + 
-                    RootPrice * specialRate + 
-                    transportCost ?? 0;
+        
+        public virtual float CalculatePrice() {
+
+            return RootPrice + CalculateTax();
+                    
         } 
 
         /*

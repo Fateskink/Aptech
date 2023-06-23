@@ -8,5 +8,8 @@ namespace de02
 {
     internal interface ICar
     {
+        float CalculateTax();        
+        float CalculatePrice();
+        void GetInfor();
     }
 }
