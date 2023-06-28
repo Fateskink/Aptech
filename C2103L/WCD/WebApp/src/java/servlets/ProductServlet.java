@@ -14,7 +14,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
+import database.ProductDAO;
+import java.util.List;
+import models.*;
 
 @WebServlet(urlPatterns = {"/ProductServlet"})
 public class ProductServlet extends HttpServlet {        
@@ -30,9 +32,14 @@ public class ProductServlet extends HttpServlet {
     
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        
+            throws ServletException, IOException {        
+        System.out.println("haha");
+        //String id = request.getParameter("id");
+        String productName = request.getParameter("productName");
+        int quantity = Integer.parseInt(request.getParameter("quantity"));
+        double price = Double.parseDouble(request.getParameter("price"));        
+        ProductDAO productDAO = new ProductDAO();
+        productDAO.createProduct(new Product(quantity, productName, price, quantity));        
+        response.sendRedirect("productlist.jsp");
     }
-
-
 }

@@ -18,8 +18,8 @@ CREATE TABLE `User` (
 );
 
 CREATE TABLE `Category` (
-  `id` int PRIMARY KEY,
-  `name` varchar(100) NOT NULL
+  `id` int PRIMARY KEY AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL UNIQUE
 );
 
 CREATE TABLE `Product` (
@@ -53,14 +53,13 @@ CREATE TABLE `Feedback` (
 CREATE TABLE `Order` (
   `id` int PRIMARY KEY,
   `user_id` int,
-  `fullname` varchar(100) NOT NULL,
+  `fullname` varchar(100),
   `email` varchar(150) NOT NULL,
   `phone_number` varchar(20),
   `address` varchar(200) NOT NULL,
   `note` varchar(200) DEFAULT '',
-  `order_date` datetime DEFAULT CURRENT_TIMESTAMP,
-  `status` int,
-  --`status` ENUM('Pending', 'Processing', 'Completed', 'Cancelled') NOT NULL DEFAULT 'Pending',
+  `order_date` datetime DEFAULT CURRENT_TIMESTAMP,  
+  `status` ENUM('pending', 'processing', 'completed', 'cancelled') NOT NULL DEFAULT 'pending',
   `total_money` int DEFAULT 0
 );
 
