@@ -35,6 +35,7 @@ public class EmployeeServlet extends HttpServlet {
             List<Employee> employeeList = getAllEmployees();
             request.setAttribute("employees", employeeList);//ViewBag
             request.getRequestDispatcher("employees.jsp").forward(request, response);
+            //return View();
         } else if (action.equals("edit")) {
             String employeeNo = request.getParameter("employeeNo");
             Employee employee = findEmployee(employeeNo);
@@ -44,31 +45,38 @@ public class EmployeeServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, 
-            HttpServletResponse response) throws ServletException, IOException {
-        String action = request.getParameter("action");
-        if (action == null) {
-            // Thêm nhân viên mới
-            String employeeNo = request.getParameter("employeeNo");
-            String employeeName = request.getParameter("employeeName");
-            String placeOfWork = request.getParameter("placeOfWork");
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    String action = request.getParameter("action");
+    if (action == null) {
+        // Thêm nhân viên mới
+        String employeeNo = request.getParameter("employeeNo");
+        String employeeName = request.getParameter("employeeName");
+        String placeOfWork = request.getParameter("placeOfWork");
 
-            createEmployee(employeeNo, employeeName, placeOfWork);
-        } else if (action.equals("update")) {
-            // Cập nhật thông tin nhân viên
-            String employeeNo = request.getParameter("employeeNo");
-            String employeeName = request.getParameter("employeeName");
-            String placeOfWork = request.getParameter("placeOfWork");
+        createEmployee(employeeNo, employeeName, placeOfWork);
+    } else if (action.equals("update")) {
+        // Cập nhật thông tin nhân viên
+        String employeeNo = request.getParameter("employeeNo");
+        String employeeName = request.getParameter("employeeName");
+        String placeOfWork = request.getParameter("placeOfWork");
 
-            updateEmployee(employeeNo, employeeName, placeOfWork);
-        } else if (action.equals("delete")) {
-            // Xóa nhân viên
-            String employeeNo = request.getParameter("employeeNo");
-            deleteEmployee(employeeNo);
-        }
+        updateEmployee(employeeNo, employeeName, placeOfWork);
+    } else if (action.equals("delete")) {
+        // Xóa nhân viên
+        String employeeNo = request.getParameter("employeeNo");
+        deleteEmployee(employeeNo);
+    } else if (action.equals("add")) {
+        // Thêm nhân viên mới
+        String employeeNo = request.getParameter("employeeNo");
+        String employeeName = request.getParameter("employeeName");
+        String placeOfWork = request.getParameter("placeOfWork");
+        String phoneNo = request.getParameter("phoneNo");
 
-        response.sendRedirect(request.getContextPath() + "/EmployeeServlet");
+        createEmployee(employeeNo, employeeName, placeOfWork, phoneNo);
     }
+    response.sendRedirect(request.getContextPath() + "/EmployeeServlet");
+}
+
 
     @Override
     public void destroy() {
@@ -94,7 +102,10 @@ public class EmployeeServlet extends HttpServlet {
         }
     }
 
-    private void createEmployee(String employeeNo, String employeeName, String placeOfWork) {
+    private void createEmployee(String employeeNo, 
+            String employeeName, 
+            String placeOfWork,
+            String phoneNo) {
         EntityManager em = emf.createEntityManager();
         EntityTransaction tx = em.getTransaction();
 
@@ -102,6 +113,7 @@ public class EmployeeServlet extends HttpServlet {
             tx.begin();
 
             Employee employee = new Employee(employeeNo, employeeName, placeOfWork);
+            employee.setPhoneNo(phoneNo);
             em.persist(employee);
 
             tx.commit();
