@@ -16,10 +16,11 @@ const getAllProducts = async () => {
 
 // Hàm lấy một product theo id
 const getProductById = async (productId) => {
-  debugger
+  
   const db = await connectToDatabase(); // Kết nối đến database
+  debugger
   const result = await db.collection('products').findOne({_id: new ObjectId(productId)})  
-  return product;
+  return result;
 };
 
 // Hàm cập nhật một product

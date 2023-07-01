@@ -8,6 +8,14 @@
         <servlet-name>EmployeeServlet</servlet-name>
         <url-pattern>/EmployeeServlet</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>SaveInfoServlet</servlet-name>
+        <servlet-class>servlets.SaveInfoServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SaveInfoServlet</servlet-name>
+        <url-pattern>/SaveInfoServlet</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30

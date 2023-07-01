@@ -14,7 +14,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import javax.persistence.TypedQuery;
+import javax.servlet.RequestDispatcher;
 import models.Employee;
 
 public class EmployeeServlet extends HttpServlet {
@@ -52,8 +55,9 @@ public class EmployeeServlet extends HttpServlet {
         String employeeNo = request.getParameter("employeeNo");
         String employeeName = request.getParameter("employeeName");
         String placeOfWork = request.getParameter("placeOfWork");
+        String phoneNo = request.getParameter("placeOfWork");
 
-        createEmployee(employeeNo, employeeName, placeOfWork);
+        createEmployee(employeeNo, employeeName, placeOfWork, phoneNo);
     } else if (action.equals("update")) {
         // Cập nhật thông tin nhân viên
         String employeeNo = request.getParameter("employeeNo");
@@ -72,6 +76,33 @@ public class EmployeeServlet extends HttpServlet {
         String placeOfWork = request.getParameter("placeOfWork");
         String phoneNo = request.getParameter("phoneNo");
 
+        // Tạo đối tượng HashMap để lưu trữ thông báo lỗi
+        HashMap<String, String> errorMessages = new HashMap<>();
+        // Kiểm tra trường bỏ trống và thêm thông báo lỗi vào HashMap
+        if (employeeNo.isEmpty()) {
+            errorMessages.put("employeeNo", "Employee No is required");
+        }
+        if (employeeName.isEmpty()) {
+            errorMessages.put("employeeName", "Employee Name is required");
+        }
+        if (placeOfWork.isEmpty()) {
+            errorMessages.put("placeOfWork", "Place of Work is required");
+        }
+        if (phoneNo.isEmpty()) {
+            errorMessages.put("phoneNo", "Phone No is required");
+        }
+        // Kiểm tra trường Employee No trùng lặp
+        if (isDuplicateEmployeeName(employeeName)) {
+            errorMessages.put("duplicateName", "Employee Name already exists");
+        }
+        // Kiểm tra nếu có thông báo lỗi thì chuyển hướng trở lại trang JSP
+        if (!errorMessages.isEmpty()) {
+            request.setAttribute("errorMessages", errorMessages);
+            RequestDispatcher dispatcher = request
+                    .getRequestDispatcher("add_employee.jsp");
+            dispatcher.forward(request, response);
+            return;
+        }        
         createEmployee(employeeNo, employeeName, placeOfWork, phoneNo);
     }
     response.sendRedirect(request.getContextPath() + "/EmployeeServlet");
@@ -92,6 +123,28 @@ public class EmployeeServlet extends HttpServlet {
             em.close();
         }
     }
+    private boolean isDuplicateEmployeeName(String employeeName) {
+    // Gọi phương thức truy vấn tương ứng từ JPA EntityManager
+    EntityManagerFactory emf = Persistence.createEntityManagerFactory("de07PU");
+    EntityManager em = emf.createEntityManager();
+    
+    try {
+        // Sử dụng NamedQuery để truy vấn nhân viên dựa trên tên
+        TypedQuery<Employee> query = em
+                .createNamedQuery("Employee.findByEmployeeName", Employee.class);
+        query.setParameter("employeeName", employeeName);
+        
+        // Lấy danh sách nhân viên có cùng tên
+        List<Employee> employees = query.getResultList();
+        
+        // Kiểm tra xem có nhân viên nào trùng tên hay không
+        return !employees.isEmpty();
+        } finally {
+            em.close();
+            emf.close();
+        }
+    }
+
 
     private Employee findEmployee(String employeeNo) {
         EntityManager em = emf.createEntityManager();
