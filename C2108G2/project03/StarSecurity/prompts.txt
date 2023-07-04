@@ -81,3 +81,22 @@ content as per their role. E.g. the normal staff can see the
 personal details of the other staff, where all have posted etc.
 But they cannot access the areas like editing the services
 offered, staff details, vacancy posting etc.
+Testimonials
+8. Site map
+9. Contact us
+10. Following details of employees should be displayed :
+ Employee Name
+ Employee address
+ Employee contact number
+ Educational Qualification
+ Employee code
+ Department
+ Role
+ Grade
+ Client
+ Achievements(if any)
+11. Users with admin privileges can
+o Add/update/delete/edit the details of the employees.
+o Add/update/delete/edit vacancies
+o Add/update/delete/edit services offered
+o Add/update/delete/edit clients details
