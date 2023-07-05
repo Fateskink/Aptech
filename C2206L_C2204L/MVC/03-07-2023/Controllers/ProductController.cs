@@ -46,4 +46,12 @@ namespace _03_07_2023.Controllers
         }
         
     }
+    /*
+     Viết cho tôi 1 form đăng ký người dùng(.cshtml) có các trường email, fullname, password, retype password 
+    - Một UserController kèm theo action đăng ký
+    - Controller truyền model xuống cho view
+    Tôi sử dụng asp .net core mvc
+    
+
+     */
 }
