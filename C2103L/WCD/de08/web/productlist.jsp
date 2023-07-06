@@ -23,6 +23,7 @@
                     <th>Name</th>
                     <th>Price</th>
                     <th>Description</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -32,10 +33,14 @@
                         <td><%= product.getName() %></td>
                         <td><%= product.getPrice() %></td>
                         <td><%= product.getDescription() %></td>
+                        <td>
+                            <a href="ProductServlet?product_id=<%= product.getId() %>">Assign this product to another Category</a>
+                        </td>
                     </tr>
                 <% } %>
             </tbody>
         </table>
+
         <a href="CategoryServlet">Back to Categories</a>
     </div>
 
