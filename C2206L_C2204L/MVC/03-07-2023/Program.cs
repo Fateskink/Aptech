@@ -46,6 +46,8 @@ namespace _03_07_2023
 }
 
 /*
+ * hello chao ban 
+ * 
 CREATE DATABASE c2204l;
 USE c2204l;
 CREATE TABLE Department (
