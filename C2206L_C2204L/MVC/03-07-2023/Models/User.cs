@@ -1,13 +1,28 @@
 ﻿namespace _03_07_2023.Models
 {
+    using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
+
+    [Table("tblUser")]
     public class User
     {
-        public int Id { get; set; }
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int UserId { get; set; }
+
+        [MaxLength(255)]
         public string FullName { get; set; }
+
+        [Required]
+        [MaxLength(255)]
         public string Email { get; set; }
+
+        [Required]
+        [MaxLength(255, ErrorMessage = "Password must be at least 4 characters")]
+        [MinLength(4)]
         public string Password { get; set; }
-        //retype password ? NO!
     }
+
 }
 
 //Request từ client(fullname, email, pass, retype pass, ko có ID) => Controller => insert bản ghi vào DB

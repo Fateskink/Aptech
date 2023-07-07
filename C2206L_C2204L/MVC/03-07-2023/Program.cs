@@ -1,3 +1,8 @@
+﻿using _03_07_2023.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
+
 namespace _03_07_2023
 {
     public class Program
@@ -8,6 +13,11 @@ namespace _03_07_2023
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            //options.UseSqlServer(Configuration.GetConnectionString("MyConnectionString"))
+            string? connectionString = builder.Configuration?.GetConnectionString("MyConnectionString");
+
+            builder.Services.AddDbContext<MyDBContext>(options => options.UseSqlServer(connectionString));
+
 
             var app = builder.Build();
 
@@ -34,3 +44,32 @@ namespace _03_07_2023
         }
     }
 }
+
+/*
+CREATE DATABASE c2204l;
+USE c2204l;
+CREATE TABLE Department (
+    DepartmentId INT PRIMARY KEY IDENTITY(1, 1),
+    DepartmentName VARCHAR(255) NOT NULL 
+);
+
+CREATE TABLE Employee (
+    EmployeeId INT PRIMARY KEY IDENTITY(1, 1),
+    EmployeeName VARCHAR(100),
+    DepartmentId INT,
+    FOREIGN KEY (DepartmentId) REFERENCES Department(DepartmentId)
+);
+
+CREATE TABLE tblUser (
+    UserId INT PRIMARY KEY IDENTITY(1, 1),
+    FullName VARCHAR(255) DEFAULT '',
+    Email VARCHAR(255) NOT NULL,
+    Password VARCHAR(255) CHECK (LEN(Password) > 3)
+);
+
+Hãy viết hộ connection string để đưa vào appsettings.json
+với username: ALIENWARE\sunli, Windows Authentication
+server name: ALIENWARE\SQLEXPRESS
+
+
+ */

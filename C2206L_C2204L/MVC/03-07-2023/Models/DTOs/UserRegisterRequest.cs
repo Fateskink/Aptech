@@ -7,7 +7,7 @@ namespace _03_07_2023.Models.DTOs
         [Required(ErrorMessage = "Email is required")]
         [EmailAddress(ErrorMessage = "Invalid email format")]
         public string Email { get; set; }
-
+         
         [Required(ErrorMessage = "Full Name is required")]
         public string FullName { get; set; }
 
