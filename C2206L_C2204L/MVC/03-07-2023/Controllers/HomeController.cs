@@ -8,14 +8,22 @@ namespace _03_07_2023.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        //inject MyDBContext
+        private readonly MyDBContext _dbContext; //Inject 
+        public HomeController(ILogger<HomeController> logger, MyDBContext dbContext)
         {
             _logger = logger;
+            _dbContext = dbContext;
         }
 
         public IActionResult Index()
         {
             int xx = 0;
+            _dbContext.Departments.Add(new Department
+            {
+                DepartmentName = "Sales and ...",
+            });
+            _dbContext.SaveChanges();//commit
             Console.WriteLine("haha");//business
             return View();//thư mục Views/Home/Index.cshtml
         }

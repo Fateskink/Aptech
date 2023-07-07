@@ -41,6 +41,7 @@ namespace _03_07_2023
                 pattern: "{controller=Home}/{action=Index}/{id?}");
 
             app.Run();
+            
         }
     }
 }

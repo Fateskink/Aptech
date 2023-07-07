@@ -3,10 +3,11 @@ using System.ComponentModel.DataAnnotations;
 
 namespace _03_07_2023.Models
 {
+    [Table("Department")]
     public class Department
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]        
         public int DepartmentId { get; set; }
 
         [Required]

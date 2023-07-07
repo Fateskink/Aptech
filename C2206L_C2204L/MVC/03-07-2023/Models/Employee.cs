@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace _03_07_2023.Models
 {
+    [Table("Employee")]
     public class Employee
     {
         [Key]
