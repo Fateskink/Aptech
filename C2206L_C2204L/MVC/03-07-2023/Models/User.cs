@@ -9,12 +9,14 @@
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int UserId { get; set; }
-
-        [MaxLength(255)]
+        
+        [StringLength(100, MinimumLength = 3, ErrorMessage = "Full Name must be between 3 and 100 characters")]
+        [Required]
         public string FullName { get; set; }
 
         [Required]
         [MaxLength(255)]
+        [EmailAddress(ErrorMessage="Invalid email address")]        
         public string Email { get; set; }
 
         [Required]

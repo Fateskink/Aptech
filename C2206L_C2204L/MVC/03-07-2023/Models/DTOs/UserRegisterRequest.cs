@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using _03_07_2023.Validations;
+using System.ComponentModel.DataAnnotations;
 namespace _03_07_2023.Models.DTOs
 {    
     public class UserRegisterRequest
@@ -19,6 +20,7 @@ namespace _03_07_2023.Models.DTOs
         [Required(ErrorMessage = "ConfirmPassword is required")]
         [MinLength(3, ErrorMessage = "Mật khẩu tối thiểu 3 ký tự")]
         [Compare("Password", ErrorMessage = "ConfirmPassword does not match")]
+        [MatchPassword("Password", ErrorMessage = "Passwords do not match")]
         public string ConfirmPassword { get; set; }
     }
 

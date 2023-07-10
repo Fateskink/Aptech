@@ -18,7 +18,8 @@ namespace _03_07_2023.Controllers
 
         public IActionResult Index()
         {
-            int xx = 0;
+            var fakeDataGenerator = new FakeDataGenerator(_dbContext);
+            fakeDataGenerator.GenerateFakeProducts(1000);
             _dbContext.Departments.Add(new Department
             {
                 DepartmentName = "Sales and ...",
