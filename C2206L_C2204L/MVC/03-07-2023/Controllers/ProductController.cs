@@ -1,5 +1,8 @@
-﻿using _03_07_2023.Models;
+﻿using _03_07_2023.DTOs;
+using _03_07_2023.Models;
+using _03_07_2023.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 
 namespace _03_07_2023.Controllers
@@ -7,8 +10,19 @@ namespace _03_07_2023.Controllers
     public class ProductController : Controller
     {
         //http://localhost:port/Product/Index
+        private readonly IProductService _productService;
+        private readonly Utilities.Environments _environments;
+        public ProductController(
+            IProductService productService, 
+            IOptions<Utilities.Environments> environments) //fully qualified 
+        {
+            _productService = productService;
+            _environments = environments.Value;
+            //productService & productRepository tạo ra khi nào?
+        }
         public IActionResult Index()
         {
+            /*
             ViewBag.x = 123;
             ViewData["y"] = 345;            
             ViewBag.productA = new Product //Buider pattern
@@ -38,14 +52,39 @@ namespace _03_07_2023.Controllers
                         Count = 30
                     }
             };
+            */
             return View();//Views/Product/Index.cshtml
         }
         //https://localhost:port/Product/DoSomething
-        public IActionResult DoSomething(string x, string y) { 
+        public IActionResult DoSomething(string x, string y) {
             return View(); //Views/Product/DoSomething.cshtml
         }
-        
+        //lấy ra tất cả sản phẩm(sau này phải paging)
+        //[HttpGet("products")]
+        //https://localhost:port/Product/products
+        /*
+        public IActionResult GetProducts(int? page, int? limit) { 
+            IEnumerable<Product> products =  _productService.GetAllProducts(page ?? 1, limit ?? 10);
+            return View(products); //Views/Product/GetProducts
+        }
+        */
+        //Validate từ request(Data Transfer Object)
+        public IActionResult GetProducts(PageDTO pageDTO)
+        {
+            pageDTO.Page = pageDTO.Page == 0 ? _environments.Page : pageDTO.Page;
+            pageDTO.Limit = pageDTO.Limit == 0 ? _environments.Limit : pageDTO.Limit;
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            
+            IEnumerable<Product> products = _productService.GetAllProducts(pageDTO.Page, pageDTO.Limit);
+            return View(products); //Views/Product/GetProducts
+        }
+
     }
+
+
     /*
      Viết cho tôi 1 form đăng ký người dùng(.cshtml) có các trường email, fullname, password, retype password 
     - Một UserController kèm theo action đăng ký

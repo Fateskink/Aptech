@@ -1,14 +1,14 @@
 ﻿using _03_07_2023.Validations;
 using System.ComponentModel.DataAnnotations;
-namespace _03_07_2023.Models.DTOs
-{    
+namespace _03_07_2023.DTOs
+{
     public class UserRegisterRequest
     {
         //Model Validation
         [Required(ErrorMessage = "Email is required")]
         [EmailAddress(ErrorMessage = "Invalid email format")]
         public string Email { get; set; }
-         
+
         [Required(ErrorMessage = "Full Name is required")]
         public string FullName { get; set; }
 

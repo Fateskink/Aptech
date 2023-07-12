@@ -13,7 +13,9 @@ namespace _03_07_2023.Models
         public void GenerateFakeProducts(int count)
         {
             var faker = new Faker();
-
+            if (_dbContext.Products.Any()) {
+                return;
+            }
             for (int i = 0; i < count; i++)
             {
                 var product = new Product

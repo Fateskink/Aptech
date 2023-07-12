@@ -1,4 +1,4 @@
-﻿using _03_07_2023.Models.DTOs;
+﻿using _03_07_2023.DTOs;
 using Microsoft.AspNetCore.Mvc;
 
 namespace _03_07_2023.Controllers

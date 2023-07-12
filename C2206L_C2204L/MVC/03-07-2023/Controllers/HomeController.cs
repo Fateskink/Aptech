@@ -25,6 +25,7 @@ namespace _03_07_2023.Controllers
                 DepartmentName = "Sales and ...",
             });
             _dbContext.SaveChanges();//commit
+            
             Console.WriteLine("haha");//business
             return View();//thư mục Views/Home/Index.cshtml
         }

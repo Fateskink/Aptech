@@ -1,4 +1,7 @@
 ﻿using _03_07_2023.Models;
+using _03_07_2023.Repositories;
+using _03_07_2023.Services;
+using _03_07_2023.Utilities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
@@ -18,7 +21,13 @@ namespace _03_07_2023
 
             builder.Services.AddDbContext<MyDBContext>(options => options.UseSqlServer(connectionString));
 
-
+            // Đăng ký Repository
+            builder.Services.AddScoped<IProductRepository, ProductRepository>();
+            
+            // Đăng ký Service
+            builder.Services.AddScoped<IProductService, ProductService>();
+            //environment variable            
+            builder.Services.Configure<Utilities.Environments>(builder.Configuration?.GetSection("Environments"));
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -36,10 +45,18 @@ namespace _03_07_2023
 
             app.UseAuthorization();
 
+            _ = app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
+            });
+            //_ = dskjjdsd => khi biến trả về ko dùng đến => dùng biến dạng no name(_ = ) = Apple Swift
+            /*
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
-
+            */
             app.Run();
             
         }
