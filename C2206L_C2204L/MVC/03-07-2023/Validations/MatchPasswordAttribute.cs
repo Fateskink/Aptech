@@ -1,7 +1,6 @@
-﻿namespace _03_07_2023.Validations
-{
-    using System.ComponentModel.DataAnnotations;
-
+﻿using System.ComponentModel.DataAnnotations;
+namespace _03_07_2023.Validations
+{    
     public class MatchPasswordAttribute : ValidationAttribute
     {
         private readonly string _passwordPropertyName;

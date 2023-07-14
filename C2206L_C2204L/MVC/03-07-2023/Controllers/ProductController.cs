@@ -13,7 +13,7 @@ namespace _03_07_2023.Controllers
         private readonly IProductService _productService;
         private readonly Utilities.Environments _environments;
         public ProductController(
-            IProductService productService, 
+            IProductService productService,
             IOptions<Utilities.Environments> environments) //fully qualified 
         {
             _productService = productService;
@@ -77,11 +77,47 @@ namespace _03_07_2023.Controllers
             {
                 return BadRequest(ModelState);
             }
-            
+
             IEnumerable<Product> products = _productService.GetAllProducts(pageDTO.Page, pageDTO.Limit);
             return View(products); //Views/Product/GetProducts
         }
 
+        /* phần thêm sản phẩm mới:
+         * -Có 1 form nhập thông tin cần thêm(action request GET)
+         * -phần xử lý sau khi người dùng nhập xong thông tin và bấm nút "Insert"
+         * -nếu insert thành công => redirect sang trang "danh sách sản phẩm"
+         */
+        //-Có 1 form nhập thông tin cần thêm(action request GET)        
+        public IActionResult AddProduct(ProductDTO productDTO) {
+            //productDTO = new ProductDTO();
+            if (!ModelState.IsValid)
+            {                                
+                return View();//Views/Product/AddProduct.cshtml
+            }
+            //validate ok
+            _productService.CreateProduct(productDTO);
+            //thành công
+            return RedirectToAction(nameof(GetProducts));            
+        }
+        [HttpGet]
+        public IActionResult Edit(int id) {
+            Product? existingProduct = _productService.GetProductById(id);
+            if (existingProduct == null) {
+                return RedirectToAction(nameof(GetProducts));
+            }
+
+            return View("EditProduct", existingProduct);
+        }
+        [HttpPost]
+        public IActionResult EditProduct(Product product) {
+            if (!ModelState.IsValid)
+            {
+                return View();//Views/Product/EditProduct.cshtml
+            }
+            _productService.UpdateProduct(product);
+            //thành công
+            return RedirectToAction(nameof(GetProducts));
+        }
     }
 
 

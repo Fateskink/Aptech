@@ -1,15 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
-namespace _03_07_2023.Models
-{
-    
-    [Table("tblProduct")]
-    public class Product
+namespace _03_07_2023.DTOs
+{    
+    public class ProductDTO
     {
-        public int Id { get; set; }
-
-        public string? Name { get; set; }
+        [Required]
+        public string Name { get; set; }
 
         [Range(0, 100000000, ErrorMessage = "Price must be between 0 and 100,000,000")]
         public float Price { get; set; }
@@ -19,5 +15,4 @@ namespace _03_07_2023.Models
 
         public string? Description { get; set; }
     }
-
 }

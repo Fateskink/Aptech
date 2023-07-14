@@ -33,7 +33,9 @@ namespace _03_07_2023.Repositories
 
         public Product? GetById(int id)
         {
-            return _dbContext.Products.FirstOrDefault();
+            return _dbContext.Products
+                            .Where(product => product.Id == id)
+                            .FirstOrDefault();
         }
 
         public void Add(Product product)
