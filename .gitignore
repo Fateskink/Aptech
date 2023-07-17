@@ -12,6 +12,7 @@ C2203L/PHP/15-08-2022/de10/db
 db
 **/db_data/
 *.xxx
+*.ldf
 *.rsuser
 *.mdf
 *.suo
