@@ -7,6 +7,16 @@
 }
 
 <h2>Index</h2>
+<style>
+    .delete-link {
+        color: black; /* Màu mặc định */
+        text-decoration: none; /* Loại bỏ gạch chân mặc định */
+    }
+
+        .delete-link:hover {
+            color: red; /* Màu đỏ khi hover */
+        }
+</style>
 
 <p>
     @Html.ActionLink("Create New", "Create")
@@ -59,7 +69,9 @@
             <td>
                 @Html.ActionLink("Edit", "Edit", new { id = item.MovieId }) |
                 @Html.ActionLink("Details", "Details", new { id = item.MovieId }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.MovieId })
+                @Html.ActionLink("Delete", "Delete", new { id = item.MovieId },
+                new { @class = "delete-link" })
+
             </td>
         </tr>
     }
