@@ -75,7 +75,8 @@ namespace ProjectAppDotNetCore.Controllers
                 
                 projectEmployees = projectEmployees
                                     .Where(item => item.Employee.EmployeeName.Contains(searchString)
-                                    || item.Project.ProjectName.Contains(searchString));
+                                    || item.Project.ProjectName.Contains(searchString)
+                                    || item.Tasks.Contains(searchString));
             }
             switch (sortOrder)
             {
