@@ -19,11 +19,91 @@ namespace ProjectAppDotNetCore.Controllers
         }
 
         // GET: ProjectEmployees
-        public async Task<IActionResult> Index()
+        /*
+        public async Task<IActionResult> Index1()
         {
             var dataContext = _context.ProjectEmployees.Include(p => p.Employee).Include(p => p.Project);
             return View(await dataContext.ToListAsync());
         }
+        */
+        public async Task<IActionResult> Index(
+            string sortOrder,
+            string currentFilter,
+            string searchString,
+            int? pageNumber)
+        {
+            ViewData["CurrentSort"] = sortOrder;
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
+
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewData["CurrentFilter"] = searchString;
+            /*
+            var projectEmployees = from s in _context.ProjectEmployees
+                           select s;
+            */
+            /*
+            var projectEmployees = (IQueryable)_context.ProjectEmployees
+                                        .Include(p => p.Employee)
+                                        .Include(p => p.Project);
+            */
+
+            var projectEmployees = (from pe in _context.ProjectEmployees
+                                    join emp in _context.Employees on pe.EmployeeId equals emp.EmployeeId
+                                    join proj in _context.Projects on pe.ProjectId equals proj.ProjectId
+                                    select new ProjectEmployee // Kiểu dữ liệu là List<ProjectEmployee>
+                                    {
+                                        Id = pe.Id,
+                                        EmployeeId = pe.EmployeeId,
+                                        ProjectId = pe.ProjectId,
+                                        Tasks = pe.Tasks,
+                                        Employee = emp,
+                                        Project = proj
+                                    });
+
+            //kieu du lieu cua projectEmployees la gi ?
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                
+                projectEmployees = projectEmployees
+                                    .Where(item => item.Employee.EmployeeName.Contains(searchString)
+                                    || item.Project.ProjectName.Contains(searchString));
+            }
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    projectEmployees = projectEmployees
+                                .OrderByDescending(item => item.Project.ProjectName);
+                    break;
+                case "Date":
+                    projectEmployees = projectEmployees
+                                .OrderBy(item => item.Project.ProjectStartDate);
+                    break;
+                case "date_desc":
+                    projectEmployees = projectEmployees
+                                .OrderByDescending(item => item.Project.ProjectStartDate);
+                    break;
+                default:
+                    projectEmployees = projectEmployees
+                                .OrderBy(item => item.Project.ProjectStartDate);
+                    break;
+            }
+
+            int pageSize = 3;
+            //ViewData["pageNumber"] = pageNumber ?? 1;
+            return View(await PaginatedList<ProjectEmployee>
+                .CreateAsync(projectEmployees.AsNoTracking(), pageNumber ?? 1, pageSize));
+            
+        }
+        
 
         // GET: ProjectEmployees/Details/5
         public async Task<IActionResult> Details(int? id)
