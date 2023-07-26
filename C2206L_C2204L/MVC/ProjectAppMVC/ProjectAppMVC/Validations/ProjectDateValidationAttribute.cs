@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-namespace ProjectAppDotNetCore.Validations
+using System.Linq;
+using System.Web;
+
+namespace ProjectAppMVC.Validations
 {
-    
     public class ProjectDateValidationAttribute : ValidationAttribute
     {
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
@@ -18,5 +21,4 @@ namespace ProjectAppDotNetCore.Validations
             return ValidationResult.Success;
         }
     }
-
 }
