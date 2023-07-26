@@ -182,9 +182,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202307261248569_CreateTableAndData.cs" />
-    <Compile Include="Migrations\202307261248569_CreateTableAndData.designer.cs">
-      <DependentUpon>202307261248569_CreateTableAndData.cs</DependentUpon>
+    <Compile Include="Migrations\202307261417219_CreateTableAndData.cs" />
+    <Compile Include="Migrations\202307261417219_CreateTableAndData.Designer.cs">
+      <DependentUpon>202307261417219_CreateTableAndData.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -290,8 +290,8 @@
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202307261248569_CreateTableAndData.resx">
-      <DependentUpon>202307261248569_CreateTableAndData.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202307261417219_CreateTableAndData.resx">
+      <DependentUpon>202307261417219_CreateTableAndData.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

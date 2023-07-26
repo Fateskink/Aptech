@@ -8,8 +8,9 @@ namespace ProjectAppMVC.Models
 {
     public class DataInitializer: DropCreateDatabaseIfModelChanges<DataContext>
     {
+        //protected override void Seed(DataContext dataContext) {
         public static void Seed(DataContext dataContext) {
-            if (!dataContext.Projects.Any() && !dataContext.Employees.Any())
+            if (dataContext.Projects.Any() || dataContext.Employees.Any())
             {
                 return;
             }
