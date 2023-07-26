@@ -9,29 +9,34 @@ namespace ProjectAppMVC.Models
     public class DataInitializer: DropCreateDatabaseIfModelChanges<DataContext>
     {
         public static void Seed(DataContext dataContext) {
-            if (dataContext.Projects.Any()) {
+            if (!dataContext.Projects.Any() && !dataContext.Employees.Any())
+            {
                 return;
             }
-            dataContext.Projects.AddRange(new List<Project> {
+            
+            dataContext.Projects.AddRange( new List<Project> {
             new Project
                     {
                         //ProjectId = 1,
                         ProjectName = "Java project 001",
                         ProjectStartDate = DateTime.Now,
+                        ProjectEndDate = new DateTime(2023, 12, 12)
                     },
                     new Project
                     {
                         //ProjectId = 2,
                         ProjectName = "Java project 002",
                         ProjectStartDate = DateTime.Now,
+                        ProjectEndDate = new DateTime(2023, 12, 12)
                     },
                     new Project
                     {
                         //ProjectId = 3,
                         ProjectName = "Java project 003",
                         ProjectStartDate = DateTime.Now,
-                    }}
-                    );
+                        ProjectEndDate = new DateTime(2023, 12, 12)
+                    } }
+                    ); ;
             dataContext.SaveChanges();//commit
             dataContext.Employees.AddRange(
                 new List<Employee> {
