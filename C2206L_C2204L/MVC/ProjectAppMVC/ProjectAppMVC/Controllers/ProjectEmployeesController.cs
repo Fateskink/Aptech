@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using PagedList;
 using ProjectAppMVC.Models;
 
 namespace ProjectAppMVC.Controllers
@@ -15,10 +16,100 @@ namespace ProjectAppMVC.Controllers
         private DataContext db = new DataContext();
 
         // GET: ProjectEmployees
-        public ActionResult Index()
+        public ActionResult Index(
+            string sortOrder,
+            string currentFilter,
+            string searchString,
+            int? pageNumber
+            )
         {
+            /*
             var projectEmployees = db.ProjectEmployees.Include(p => p.Employee).Include(p => p.Project);
             return View(projectEmployees.ToList());
+            */
+            ViewData["CurrentSort"] = sortOrder;
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
+
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewData["CurrentFilter"] = searchString;
+            /*
+            var projectEmployees = (from pe in db.ProjectEmployees
+                                    join emp in db.Employees on pe.EmployeeId equals emp.EmployeeId
+                                    join proj in db.Projects on pe.ProjectId equals proj.ProjectId
+                                    select new ProjectEmployee // Kiểu dữ liệu là List<ProjectEmployee>
+                                    {
+                                        Id = pe.Id,
+                                        EmployeeId = pe.EmployeeId,
+                                        ProjectId = pe.ProjectId,
+                                        Tasks = pe.Tasks,
+                                        Employee = emp,
+                                        Project = proj
+                                    });
+            */
+            var projectEmployees = (from pe in db.ProjectEmployees
+                                    join emp in db.Employees on pe.EmployeeId equals emp.EmployeeId
+                                    join proj in db.Projects on pe.ProjectId equals proj.ProjectId
+                                    select new
+                                    {
+                                        Id = pe.Id,
+                                        EmployeeId = pe.EmployeeId,
+                                        ProjectId = pe.ProjectId,
+                                        Tasks = pe.Tasks,
+                                        Employee = emp,
+                                        Project = proj
+                                    })
+                        .ToList() // Chuyển hướng từ LINQ to Entities sang LINQ to Objects
+                        .Select(pe => new ProjectEmployee
+                        {
+                            Id = pe.Id,
+                            EmployeeId = pe.EmployeeId,
+                            ProjectId = pe.ProjectId,
+                            Tasks = pe.Tasks,
+                            Employee = pe.Employee,
+                            Project = pe.Project
+                        });
+            //kieu du lieu cua projectEmployees la gi ?
+            if (!String.IsNullOrEmpty(searchString))
+            {
+
+                projectEmployees = projectEmployees
+                                    .Where(item => item.Employee.EmployeeName.Contains(searchString)
+                                    || item.Project.ProjectName.Contains(searchString)
+                                    || item.Tasks.Contains(searchString));
+            }
+            int totalTasks = projectEmployees.Sum(item => item.NumberOfTasks);
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    projectEmployees = projectEmployees
+                                .OrderByDescending(item => item.Project.ProjectName);
+                    break;
+                case "Date":
+                    projectEmployees = projectEmployees
+                                .OrderBy(item => item.Project.ProjectStartDate);
+                    break;
+                case "date_desc":
+                    projectEmployees = projectEmployees
+                                .OrderByDescending(item => item.Project.ProjectStartDate);
+                    break;
+                default:
+                    projectEmployees = projectEmployees
+                                .OrderBy(item => item.Project.ProjectStartDate);
+                    break;
+            }
+
+            int pageSize = 3;
+            ViewBag.totalTasks = totalTasks;
+            return View(projectEmployees.ToPagedList(pageNumber ?? 1, pageSize));
         }
 
         // GET: ProjectEmployees/Details/5

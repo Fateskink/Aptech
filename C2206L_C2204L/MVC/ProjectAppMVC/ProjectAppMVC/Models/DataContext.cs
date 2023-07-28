@@ -11,7 +11,7 @@ namespace ProjectAppMVC.Models
 
         public DataContext() : base("DefaultConnection")
         {
-            DataInitializer.Seed(this);//seed at "Global.asax"
+            //DataInitializer.Seed(this);//seed at "Global.asax"
             
         }
 
