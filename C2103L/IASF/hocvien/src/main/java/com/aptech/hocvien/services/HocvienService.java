@@ -1,4 +1,4 @@
-package com.aptech.hocvien;
+package com.aptech.hocvien.services;
 
 import com.aptech.hocvien.models.Hocvien;
 import com.aptech.hocvien.repositories.HocvienRepository;
@@ -9,12 +9,20 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class HocvienService {
+public class HocvienService implements IHocVienService{
     private final HocvienRepository hocvienRepository;
-    List<Hocvien> findAll() {
+    @Override
+    public List<Hocvien> findAll() {
         return hocvienRepository.findAll();
     }
-    Hocvien findHocvienByName(String name) {
+    @Override
+    public Hocvien findHocvienByName(String name) {
         return hocvienRepository.findHocvienByName(name);
     }
+
+    @Override
+    public void addNew(Hocvien hocvien) {
+        hocvienRepository.addNew(hocvien);
+    }
+
 }

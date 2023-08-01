@@ -3,11 +3,12 @@ package com.aptech.hocvien.repositories;
 import com.aptech.hocvien.models.Hocvien;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
 public class HocvienRepository {
-    private List<Hocvien> hocvienList = List.of(
+    private List<Hocvien> hocvienList = new ArrayList<>(List.of(
             Hocvien.builder()
                     .id(1L)
                     .fullName("Nguyen Van A")
@@ -40,7 +41,7 @@ public class HocvienRepository {
                     .markC(3)
                     .markD(4)
                     .build()
-    );
+    ));
     public List<Hocvien> findAll() {
         return hocvienList;
     }
