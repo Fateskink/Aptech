@@ -6,14 +6,14 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update # S? d?ng 'update' ?? t? ??ng c?p nh?t schema c?a database. Hãy c?n th?n s? d?ng trong môi tr??ng production.
+      ddl-auto: update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
         format_sql: true
   mvc:
     view:
-      prefix: /templates
-      suffix: .jsp # ??t ?uôi m? r?ng cho các file JSP.
+      prefix: /views/
+      suffix: .jsp
 
 
