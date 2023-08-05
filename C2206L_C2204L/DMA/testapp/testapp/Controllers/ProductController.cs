@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using testapp.Models;
 using testapp.Requests;
@@ -9,6 +10,7 @@ namespace testapp.Controllers
     [Route("[controller]")]
     public class ProductController : ControllerBase
     {
+        private readonly IMapper _mapper;
 
         private List<Product> products = new List<Product> {
             new Product { Id = 1,Name = "n11", Description = "d111", Price=11.1, Count = 11},
@@ -47,10 +49,18 @@ namespace testapp.Controllers
             Product? existingProduct = this.products.Where(p => p.Id == id).FirstOrDefault();
             if (existingProduct != null)
             {
+                /*
                 existingProduct.Name = productRequest.Name;
                 existingProduct.Price = productRequest.Price;
                 existingProduct.Count = productRequest.Count;
                 existingProduct.Description = productRequest.Description;                
+                */
+                /*
+                CreateMap<ProductRequest, Product>()
+                    .ForMember(dest => dest.Id, opt => opt.Ignore()); // Bỏ qua trường Id            
+                */
+                _mapper.Map(productRequest, existingProduct);
+
                 //must optimize(Model Mapper java)
                 return Ok(existingProduct);
             }
