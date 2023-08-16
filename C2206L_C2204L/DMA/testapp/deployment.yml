@@ -1,0 +1,53 @@
+version: '3.9'
+
+services:
+  sqlserver2022:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserver2022
+    environment:
+      SA_PASSWORD: Abc123456789@
+      ACCEPT_EULA: Y
+    ports:
+      - "1440:1433"
+    networks:
+      - mynetwork
+    volumes:
+      - ./sql_server_2022_data:/var/opt/mssql/data
+
+  sqlserver2017:
+    image: mcr.microsoft.com/mssql/server:2017-latest
+    container_name: sqlserver2017
+    environment:
+      SA_PASSWORD: Abc123456789@
+      ACCEPT_EULA: Y
+    ports:
+        #host's port:container's port
+      - "1441:1433"  # Map host port 1434 to container port 1433
+    networks:
+      - mynetwork
+    volumes:
+      - ./sql_server_2017_data:/var/opt/mssql/data
+
+  aspnetcoreapi:
+    image: mcr.microsoft.com/dotnet/aspnet:7.0
+    container_name: aspnetcoreapi
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5005:80"  # Map host port 5000 to container port 80
+    volumes:
+      - .:/app  # Map local code directory to /app in the container
+    depends_on:
+      - sqlserver2022
+      - sqlserver2017
+    networks:
+      - mynetwork    
+
+networks:
+  mynetwork:
+    name: mynetwork
+
+#-d = detach = background
+#docker-compose -f ./deployment.yml up -d
+#docker-compose -f ./deployment.yml down
