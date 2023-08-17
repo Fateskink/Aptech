@@ -11,7 +11,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<DataContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("SQLServer2022")));
+                options.UseSqlServer(builder.Configuration.GetConnectionString("SQLServer2017")));
 builder.Services.AddScoped<DataSeeder>();
 
 builder.Services.AddCors(options =>

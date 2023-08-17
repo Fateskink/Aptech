@@ -28,22 +28,6 @@ services:
     volumes:
       - ./sql_server_2017_data:/var/opt/mssql/data
 
-  aspnetcoreapi:
-    image: mcr.microsoft.com/dotnet/aspnet:7.0
-    container_name: aspnetcoreapi
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - "5005:80"  # Map host port 5000 to container port 80
-    volumes:
-      - .:/app  # Map local code directory to /app in the container
-    depends_on:
-      - sqlserver2022
-      - sqlserver2017
-    networks:
-      - mynetwork    
-
 networks:
   mynetwork:
     name: mynetwork
