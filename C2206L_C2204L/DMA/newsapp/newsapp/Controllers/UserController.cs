@@ -94,6 +94,17 @@ namespace newsapp.Controllers
 
             return CreatedAtAction("GetUser", new { id = user.UserID }, user);
         }
+        [HttpPost("CheckLogin")]
+        public async Task<ActionResult<bool>> CheckLogin(string userName, string password)
+        {
+            User? existingUser = await _context.Users.Where(item =>
+                    item.UserName.Equals(userName) && item.Password.Equals(password))
+                    .FirstOrDefaultAsync();
+            if (existingUser == null) {
+                return NotFound();
+            }
+            return true;
+        }
 
         // DELETE: api/User/5
         [HttpDelete("{id}")]

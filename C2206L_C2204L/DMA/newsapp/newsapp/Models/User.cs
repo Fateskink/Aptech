@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Runtime.Serialization;
 
 namespace newsapp.Models
 {
@@ -9,7 +10,8 @@ namespace newsapp.Models
         public string UserName { get; set; }
         public string Password { get; set; }
         public string Description { get; set; }
-
+        
+        [IgnoreDataMember]
         public virtual ICollection<News> NewsList { get; set; } = new List<News>();
     }
 }

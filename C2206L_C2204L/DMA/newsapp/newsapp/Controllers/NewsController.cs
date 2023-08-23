@@ -48,6 +48,32 @@ namespace newsapp.Controllers
 
             return news;
         }
+        [HttpGet("{strSearch}")]
+        public async Task<ActionResult<List<News>>> SearchString(string strSearch)
+        {
+            strSearch = strSearch.Trim().ToLower();
+            IQueryable<News> query = _context.News;
+
+            if (!string.IsNullOrWhiteSpace(strSearch))
+            {
+                query = query.Where(item =>
+                    item.Content.ToLower().Trim().Contains(strSearch) ||
+                    item.Summary.ToLower().Trim().Contains(strSearch) ||
+                    item.Title.ToLower().Trim().Contains(strSearch)
+                );
+            }
+            List<News> newsList = await query.ToListAsync();
+            return Ok(newsList);
+        }
+        [HttpGet("search/{categoryID}")]
+        public async Task<ActionResult<List<News>>> GetNewsByCategoryID(int categoryID)
+        {            
+            List<News> result = await _context.News
+                                    .Where(news => news.CategoryID == categoryID)
+                                    .ToListAsync();            
+            return Ok(result);
+        }
+
 
         // PUT: api/News/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
@@ -94,6 +120,8 @@ namespace newsapp.Controllers
 
             return CreatedAtAction("GetNews", new { id = news.ID }, news);
         }
+
+
 
         // DELETE: api/News/5
         [HttpDelete("{id}")]
