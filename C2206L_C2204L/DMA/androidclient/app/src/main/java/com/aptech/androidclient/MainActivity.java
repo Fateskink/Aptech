@@ -72,7 +72,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<List<Product>> call, Throwable t) {
                 // Handle failure
+                System.err.println("eeee");
             }
         });
+        System.out.println("haha");
     }
 }

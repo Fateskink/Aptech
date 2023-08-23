@@ -13,6 +13,14 @@ services:
       - mynetwork
     volumes:
       - ./sql_server_2022_data:/var/opt/mssql/data
+  testapp-container:
+    image: testapp-dotnet7:1.0
+    container_name: testapp-container    
+    ports:
+      - "6000:5000"
+    networks:
+      - mynetwork    
+    command: ["sh", "-c", "dotnet dev-certs https --trust && dotnet testapp.dll"] 
 
   sqlserver2017:
     image: mcr.microsoft.com/mssql/server:2017-latest

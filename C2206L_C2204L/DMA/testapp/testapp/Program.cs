@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using testapp.Models;
 using testapp.Controllers;
+using System.Net;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,13 +19,19 @@ builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(builder =>
     {
-        builder.AllowAnyOrigin()
+        
+        builder.AllowAnyOrigin()        
                .AllowAnyMethod()
                .AllowAnyHeader();
     });
 });
 
+//builder.WebHost.UseUrls("http://127.0.0.1:5000");
 
+builder.WebHost.ConfigureKestrel(kestrelServerOptions =>
+{
+    kestrelServerOptions.Listen(IPAddress.Loopback, 5002);
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
