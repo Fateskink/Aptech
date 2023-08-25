@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Runtime.Serialization;
 
 namespace newsapp.Models
 {
@@ -11,6 +12,7 @@ namespace newsapp.Models
         
         public int Order { get; set; }
 
+        [IgnoreDataMember]
         public virtual ICollection<News> NewsList { get; set; } = new List<News>();
     }
 }

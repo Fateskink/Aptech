@@ -7,7 +7,9 @@
 
 sql_server_2022_data
 sql_server_2017_data
-
+*.png
+*.jpeg
+*.jpg
 C2203L/PHP/15-08-2022/de10/db
 ./C2203L/PHP/15-08-2022/de10/db
 .db

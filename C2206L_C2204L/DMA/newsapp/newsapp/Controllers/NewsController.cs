@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using newsapp.Models;
+using Bogus;
+using System.Transactions;
 
 namespace newsapp.Controllers
 {
@@ -21,10 +23,54 @@ namespace newsapp.Controllers
         }
 
         // GET: api/News
+        private void GenerateFakeData() {
+            using (var scope = new TransactionScope())
+            {
+                try
+                {
+                    Category newCategory = new Category
+                    {
+                        CategoryName = "category 11",
+                        CategoryType = "type 11",
+                        Order = 12,
+                    };
+                    
+                    _context.Categories.Add(newCategory);
+                    _context.SaveChanges();
+
+                    var faker = new Faker<News>()
+                        .RuleFor(p => p.Content, f => f.Commerce.ProductName())
+                        .RuleFor(p => p.Summary, f => f.Lorem.Sentence())
+                        .RuleFor(p => p.Title, f => f.Lorem.Sentence())
+                        .RuleFor(p => p.NumberRead, f => f.Random.Int(0, 1000));
+
+                    List<News> newsList = faker.Generate(200).ToList();
+                    foreach (var item in newsList)
+                    {
+                        item.Category = newCategory;
+                        item.Images = "";
+                        item.User = _context.Users.ToList()[0];
+                    }
+                    _context.News.AddRange(newsList);
+                    _context.SaveChanges();
+
+                    scope.Complete(); // Ghi nhận hoàn tất giao dịch
+                }
+                catch (Exception ex)
+                {
+                    // Xử lý nếu có lỗi trong giao dịch
+                    Console.WriteLine($"Error: {ex.Message}");
+                }
+            }
+        }
         [HttpGet]
         public async Task<ActionResult<IEnumerable<News>>> GetNews()
         {
-          if (_context.News == null)
+
+            if(!_context.News.Any()) {
+                GenerateFakeData();
+            }            
+            if (_context.News == null)
           {
               return NotFound();
           }
@@ -48,7 +94,7 @@ namespace newsapp.Controllers
 
             return news;
         }
-        [HttpGet("{strSearch}")]
+        [HttpGet("search/{strSearch}")]
         public async Task<ActionResult<List<News>>> SearchString(string strSearch)
         {
             strSearch = strSearch.Trim().ToLower();
@@ -65,13 +111,15 @@ namespace newsapp.Controllers
             List<News> newsList = await query.ToListAsync();
             return Ok(newsList);
         }
-        [HttpGet("search/{categoryID}")]
+        [HttpGet("category/{categoryID}")]
         public async Task<ActionResult<List<News>>> GetNewsByCategoryID(int categoryID)
         {            
             List<News> result = await _context.News
                                     .Where(news => news.CategoryID == categoryID)
-                                    .ToListAsync();            
+                                    .ToListAsync();
+            
             return Ok(result);
+            
         }
 
 

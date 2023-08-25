@@ -24,5 +24,7 @@ namespace newsapp.Models
         public Category Category { get; set; }
 
         public string Images { get; set; }
+
+        
     }
 }
