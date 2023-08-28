@@ -103,7 +103,7 @@ namespace newsapp.Controllers
             if (existingUser == null) {
                 return NotFound();
             }
-            return true;
+            return RedirectToAction("GetUsers");            
         }
 
         // DELETE: api/User/5
