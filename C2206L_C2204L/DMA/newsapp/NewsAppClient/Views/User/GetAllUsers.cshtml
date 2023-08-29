@@ -28,32 +28,32 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.UserID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UserName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Password)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                    @Html.ActionLink("Edit", "Edit", new {  id=item.UserID} ) 
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |                    
-                    <form asp-action="Delete" 
-                    asp-route-id="@item.UserID" 
-                    method="post" 
-                    onsubmit="return confirm('Are you sure you want to delete this user?');">
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Password)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.UserID">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.UserID">Details</a> |
+                    <form asp-action="Delete"
+                          asp-route-id="@item.UserID"
+                          method="post"
+                          onsubmit="return confirm('Are you sure you want to delete this user?');">
                         <button type="submit" class="btn btn-link">Delete</button>
                     </form>
-
-            </td>
-        </tr>
-}
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
