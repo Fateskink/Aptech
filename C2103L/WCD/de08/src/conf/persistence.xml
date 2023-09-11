@@ -4,6 +4,7 @@
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <class>models.Category</class>
     <class>models.Product</class>
+    <class>models.Category_1</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3316/c2103l?zeroDateTimeBehavior=convertToNull"/>

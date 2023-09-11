@@ -1,182 +1,112 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
  */
 package servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import models.Mobile;
-import com.mysql.cj.jdbc.Driver;
-import javax.persistence.TypedQuery;
 
-//@WebServlet("/MobileServlet") ko can dong nay neu trong web.xml da config roi
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.List;
+import javax.persistence.EntityTransaction;
+import models.Mobile;
+
+//@WebServlet("/MobileListServlet")
 public class MobileServlet extends HttpServlet {
+    private static final long serialVersionUID = 1L;
+    // Khai báo thuộc tính EntityManagerFactory
     private EntityManagerFactory emf;
 
     @Override
     public void init() throws ServletException {
-        // Khởi tạo EntityManagerFactory
+        // Tạo EntityManagerFactory trong phương thức init() của servlet
         emf = Persistence.createEntityManagerFactory("de04PU");
     }
 
-    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        String action = request.getParameter("action");
+            throws ServletException, IOException {        
+        // Tạo EntityManager
+        EntityManager em = emf.createEntityManager();
 
-        if (action == null) {
-            action = "list"; // Mặc định hiển thị danh sách Mobile
-        }
-        //doPut, doDelete ko co => phai switch
-        switch (action) {
-            case "list":
-                listMobiles(request, response);
-                break;
-            case "edit":
-                showEditForm(request, response);
-                break;
-            case "delete":
-                deleteMobile(request, response);
-                break;
-            default:
-                listMobiles(request, response);
+        try {
+            // Thực hiện truy vấn để lấy danh sách Mobile
+            List<Mobile> mobiles = em.createNamedQuery("Mobile.findAll", Mobile.class).getResultList();
+
+            // Đặt danh sách Mobile vào request attribute để truy cập từ JSP
+            request.setAttribute("mobiles", mobiles);
+
+            // Chuyển hướng đến trang JSP để hiển thị danh sách Mobile
+            request.getRequestDispatcher("/home.jsp").forward(request, response);
+        } finally {
+            // Đóng EntityManager
+            em.close();
         }
     }
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        String action = request.getParameter("action");
-
-        if (action == null) {
-            action = "list"; // Mặc định hiển thị danh sách Mobile
-        }
-
-        switch (action) {
-            case "create":
-                createMobile(request, response);
-                break;
-            case "update":
-                updateMobile(request, response);
-                break;
-            default:
-                listMobiles(request, response);
-        }
-    }
-
-    private void listMobiles(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        
-        EntityManager em = emf.createEntityManager();
-        TypedQuery<Mobile> query = em.createNamedQuery("Mobile.findAll", Mobile.class);
-        List<Mobile> mobiles = query.getResultList();
-
-        em.close();
-        
-        request.setAttribute("mobiles", mobiles);//truyen du lieu tu servlet len jsp(tu controller len view)
-        request.getRequestDispatcher("home.jsp").forward(request, response);
-    }
-
-    //hien thi form edit, ko thay doi gi duoi DB
-    private void showEditForm(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        int mobileId = Integer.parseInt(request.getParameter("mobileId"));
-
-        EntityManager em = emf.createEntityManager();
-        Mobile mobile = em.find(Mobile.class, mobileId);
-        em.close();
-        
-        request.setAttribute("mobile", mobile);
-        request.getRequestDispatcher("edit-mobile.jsp").forward(request, response);
-    }
-
-    private void createMobile(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        //lay du lieu tren form
-        String mobileName = request.getParameter("mobileName");
-        String warranty = request.getParameter("warranty");
-        Short inOutStock = Short.parseShort(request.getParameter("inOutStock"));
-        Float price = Float.parseFloat(request.getParameter("price"));
-        String accessories = request.getParameter("accessories");
-        String imageSrc = request.getParameter("imageSrc");
-
-        //tao moi object mobile, dua cac gia tri tu form vao object nay
-        Mobile mobile = new Mobile();        
-        mobile.setMobileName(mobileName);
-        mobile.setWarranty(warranty);
-        mobile.setInOutStock(inOutStock);
-        mobile.setPrice(price);
-        mobile.setAccessories(accessories);
-        mobile.setImageSrc(imageSrc);
-
-        //luu vao csdl, phai dung transaction
-        EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
-        em.persist(mobile);
-        em.getTransaction().commit();
-        em.close();
-
-        response.sendRedirect(request.getContextPath() + "/MobileServlet?action=list");
-    }
-
-    private void updateMobile(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        int mobileId = Integer.parseInt(request.getParameter("mobileId"));
-
-        EntityManager em = emf.createEntityManager();
-        Mobile mobile = em.find(Mobile.class, mobileId);
-
-        String mobileName = request.getParameter("mobileName");
-        String warranty = request.getParameter("warranty");
-        Short inOutStock = Short.parseShort(request.getParameter("inOutStock"));
-        Float price = Float.parseFloat(request.getParameter("price"));
-        String accessories = request.getParameter("accessories");
-        String imageSrc = request.getParameter("imageSrc");
-
-        mobile.setMobileName(mobileName);
-        mobile.setWarranty(warranty);
-        mobile.setInOutStock(inOutStock);
-        mobile.setPrice(price);
-        mobile.setAccessories(accessories);
-        mobile.setImageSrc(imageSrc);
-
-        em.getTransaction().begin();
-        em.merge(mobile);
-        em.getTransaction().commit();
-        em.close();
-
-        response.sendRedirect(request.getContextPath() + "/MobileServlet?action=list");
-    }
-
-    private void deleteMobile(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        int mobileId = Integer.parseInt(request.getParameter("mobileId"));
-
-        EntityManager em = emf.createEntityManager();
-        Mobile mobile = em.find(Mobile.class, mobileId);
-
-        em.getTransaction().begin();
-        em.remove(mobile);
-        em.getTransaction().commit();
-        em.close();
-
-        response.sendRedirect(request.getContextPath() + "/MobileServlet?action=list");
-    }
-
     @Override
     public void destroy() {
-        // Đóng EntityManagerFactory khi ứng dụng kết thúc
+        // Đóng EntityManagerFactory trong phương thức destroy() của servlet
         if (emf != null && emf.isOpen()) {
             emf.close();
         }
+    }    
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        // Lấy thông tin từ biểu mẫu tạo sản phẩm mới
+        String mobileName = request.getParameter("mobileName");
+        String warranty = request.getParameter("warranty");
+        String inOutStockStr = request.getParameter("inOutStock");
+        String priceStr = request.getParameter("price");
+        String accessories = request.getParameter("accessories");
+        String imageSrc = request.getParameter("imageSrc");
+
+        try {
+            // Chuyển đổi dữ liệu từ chuỗi sang kiểu dữ liệu tương ứng
+            short inOutStock = Short.parseShort(inOutStockStr);
+            float price = Float.parseFloat(priceStr);
+
+            // Tạo đối tượng Mobile từ thông tin nhận được
+            Mobile newMobile = new Mobile();
+            newMobile.setMobileName(mobileName);
+            newMobile.setWarranty(warranty);
+            newMobile.setInOutStock(inOutStock);
+            newMobile.setPrice(price);
+            newMobile.setAccessories(accessories);
+            newMobile.setImageSrc(imageSrc);
+           
+            EntityManager em = emf.createEntityManager();
+            // Bắt đầu giao dịch
+            EntityTransaction transaction = em.getTransaction();
+            transaction.begin();
+
+            // Thêm đối tượng Mobile vào cơ sở dữ liệu
+            em.persist(newMobile);
+
+            // Kết thúc giao dịch (lưu thay đổi vào cơ sở dữ liệu)
+            transaction.commit();
+            // Đóng EntityManager
+            em.close();
+            // Đóng EntityManagerFactory
+            emf.close();
+            // Redirect người dùng đến trang danh sách sản phẩm sau khi thêm thành công
+            response.sendRedirect("home.jsp");
+        } catch (NumberFormatException e) {
+            // Xử lý lỗi nếu có dữ liệu không hợp lệ
+            // ... (Bạn có thể thêm xử lý lỗi ở đây)
+        }
     }
 }
+

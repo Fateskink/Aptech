@@ -1,6 +1,7 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
  */
 package models;
 
@@ -16,19 +17,22 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
-
+/**
+ *
+ * @author sunli
+ */
 @Entity
 @Table(name = "tblmobile", catalog = "c2108g3", schema = "")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Mobile.findAll", query = "SELECT m FROM Mobile m"),
-    @NamedQuery(name = "Mobile.findByMobileId", query = "SELECT m FROM Mobile m WHERE m.mobileId = :mobileId"),
-    @NamedQuery(name = "Mobile.findByMobileName", query = "SELECT m FROM Mobile m WHERE m.mobileName = :mobileName"),
-    @NamedQuery(name = "Mobile.findByWarranty", query = "SELECT m FROM Mobile m WHERE m.warranty = :warranty"),
-    @NamedQuery(name = "Mobile.findByInOutStock", query = "SELECT m FROM Mobile m WHERE m.inOutStock = :inOutStock"),
-    @NamedQuery(name = "Mobile.findByPrice", query = "SELECT m FROM Mobile m WHERE m.price = :price"),
-    @NamedQuery(name = "Mobile.findByAccessories", query = "SELECT m FROM Mobile m WHERE m.accessories = :accessories"),
-    @NamedQuery(name = "Mobile.findByImageSrc", query = "SELECT m FROM Mobile m WHERE m.imageSrc = :imageSrc")})
+    @NamedQuery(name = "Mobile.findAll", query = "SELECT m FROM Mobile m")
+    , @NamedQuery(name = "Mobile.findByMobileId", query = "SELECT m FROM Mobile m WHERE m.mobileId = :mobileId")
+    , @NamedQuery(name = "Mobile.findByMobileName", query = "SELECT m FROM Mobile m WHERE m.mobileName = :mobileName")
+    , @NamedQuery(name = "Mobile.findByWarranty", query = "SELECT m FROM Mobile m WHERE m.warranty = :warranty")
+    , @NamedQuery(name = "Mobile.findByInOutStock", query = "SELECT m FROM Mobile m WHERE m.inOutStock = :inOutStock")
+    , @NamedQuery(name = "Mobile.findByPrice", query = "SELECT m FROM Mobile m WHERE m.price = :price")
+    , @NamedQuery(name = "Mobile.findByAccessories", query = "SELECT m FROM Mobile m WHERE m.accessories = :accessories")
+    , @NamedQuery(name = "Mobile.findByImageSrc", query = "SELECT m FROM Mobile m WHERE m.imageSrc = :imageSrc")})
 public class Mobile implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -45,7 +49,7 @@ public class Mobile implements Serializable {
     @Column(name = "in_out_stock")
     private Short inOutStock;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    @Column(name = "price", precision = 12, scale = 0)
+    @Column(name = "price", precision = 12)
     private Float price;
     @Column(name = "accessories", length = 100)
     private String accessories;
