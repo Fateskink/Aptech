@@ -1,10 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const employeeController = require('../controllers/employeeController'); //import
-
 // Lấy danh sách tất cả nhân viên
 router.get('/', employeeController.getAllEmployees);
-router.get('/stream_video', employeeController.streamVideo);
+//router.get('/stream_video', employeeController.streamVideo);
 
 // Lấy thông tin một nhân viên bằng ID
 router.get('/:id', employeeController.getEmployeeById);

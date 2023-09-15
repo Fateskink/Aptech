@@ -21,14 +21,12 @@ app.get('/', (req, res) => {
 
 const bodyParser = require('body-parser');
 const employeesRouter = require('./routes/employees');//router
-debugger
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.use('/api/employees', employeesRouter);
 
-const port = process.env.PORT || 3000;
-app.listen(port, () => {
-    debugger
+const port = process.env.PORT ?? 3000;
+app.listen(port, () => {    
     console.log(`Server is running on port ${port}`);
 });
