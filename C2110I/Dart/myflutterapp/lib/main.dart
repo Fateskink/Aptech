@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myflutterapp/screens/home/home.dart';
 import 'package:myflutterapp/screens/main.dart';
 
 void main() {
@@ -16,7 +17,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         useMaterial3: true,
       ),
-      home: Main(),
+      //home: Main(),
+      home: Home()
     );
   }
 }
