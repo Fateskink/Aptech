@@ -87,6 +87,14 @@ public class EmployeeServlet extends HttpServlet {
         request.getRequestDispatcher("delete-confirmation.jsp").forward(request, response);
     }
 
+    private boolean isEmployeeExists(String employeeName, String phoneNo) {
+        TypedQuery<Long> query = entityManager.createNamedQuery("Employee.checkExists", Long.class);
+        query.setParameter("name", employeeName);
+        query.setParameter("phone", phoneNo);
+        return query.getSingleResult() > 0;
+    }
+
+
     private void createEmployee(HttpServletRequest request) {
         String employeeNo = request.getParameter("employeeNo");
         String employeeName = request.getParameter("employeeName");
@@ -94,10 +102,19 @@ public class EmployeeServlet extends HttpServlet {
         String phoneNo = request.getParameter("phoneNo");
 
         entityManager.getTransaction().begin();
-        Employee employee = new Employee(employeeNo, employeeName, placeOfWork, phoneNo);
-        entityManager.persist(employee);
-        entityManager.getTransaction().commit();
-    }
+
+        // Kiểm tra xem Employee có trùng tên hoặc số điện thoại không
+        if (!isEmployeeExists(employeeName, phoneNo)) {
+            Employee employee = new Employee(employeeNo, employeeName, placeOfWork, phoneNo);
+            entityManager.persist(employee);
+            entityManager.getTransaction().commit();
+        } else {
+            // Xử lý trường hợp Employee trùng tên hoặc số điện thoại
+            // Có thể hiển thị thông báo lỗi hoặc xử lý theo ý muốn của bạn
+            entityManager.getTransaction().rollback(); // Quay lại trạng thái trước khi commit
+        }
+}
+
 
     private void updateEmployee(HttpServletRequest request) {
         int employeeNo = Integer.parseInt(request.getParameter("employeeNo"));

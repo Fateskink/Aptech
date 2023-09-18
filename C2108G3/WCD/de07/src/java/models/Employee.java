@@ -25,6 +25,7 @@ import java.io.Serializable;
     @NamedQuery(name = "Employee.findByEmployeeName", query = "SELECT e FROM Employee e WHERE e.employeeName = :employeeName"),
     @NamedQuery(name = "Employee.findByPlaceOfWork", query = "SELECT e FROM Employee e WHERE e.placeOfWork = :placeOfWork"),
     @NamedQuery(name = "Employee.findByPhoneNo", query = "SELECT e FROM Employee e WHERE e.phoneNo = :phoneNo")})
+    @NamedQuery(name = "Employee.checkExists", query = "SELECT COUNT(e) FROM Employee e WHERE e.employeeName = :name OR e.phoneNo = :phone")
 public class Employee implements Serializable {
 
     private static final long serialVersionUID = 1L;
