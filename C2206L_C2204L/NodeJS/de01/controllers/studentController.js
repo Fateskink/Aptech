@@ -28,6 +28,7 @@ async function getStudentById(req, res) {
 }
 
 async function createStudent(req, res) {
+  debugger
   const studentData = req.body;
   try {
     await studentRepository.createStudent(studentData);

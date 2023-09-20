@@ -60,12 +60,12 @@ async function getStudentById(id) {
 
 // Hàm thêm sinh viên mới
 async function createStudent(studentData) {
-  const { Name, Age, Address, JavaScore, CSharpScore } = studentData;
+  const { name, age, address, javaScore, cSharpScore } = studentData;
   try {
     const connection = await db.getConnection();
     await connection.query(
       'INSERT INTO students (Name, Age, Address, JavaScore, CSharpScore) VALUES (?, ?, ?, ?, ?)',
-      [Name, Age, Address, JavaScore, CSharpScore]
+      [name, age, address, javaScore, cSharpScore]
     );
     connection.release();
   } catch (error) {
@@ -75,12 +75,12 @@ async function createStudent(studentData) {
 
 // Hàm cập nhật thông tin sinh viên
 async function updateStudent(id, studentData) {
-  const { Name, Age, Address, JavaScore, CSharpScore } = studentData;
+  const { name, age, address, javaScore, cSharpScore } = studentData;
   try {
     const connection = await db.getConnection();
     const [result] = await connection.query(
       'UPDATE students SET Name = ?, Age = ?, Address = ?, JavaScore = ?, CSharpScore = ? WHERE Id = ?',
-      [Name, Age, Address, JavaScore, CSharpScore, id]
+      [name, age, address, javaScore, cSharpScore, id]
     );
     connection.release();
 

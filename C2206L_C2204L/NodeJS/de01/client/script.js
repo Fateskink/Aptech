@@ -11,11 +11,11 @@ document.addEventListener('DOMContentLoaded', () => {
         // Lấy dữ liệu từ form
         const formData = new FormData(studentForm);
         const studentData = {
-            Name: formData.get('name'),
-            Age: parseInt(formData.get('age')),
-            Address: formData.get('address'),
-            JavaScore: parseFloat(formData.get('javaScore')),
-            CSharpScore: parseFloat(formData.get('cSharpScore'))
+            name: formData.get('name'),
+            age: parseInt(formData.get('age')),
+            address: formData.get('address'),
+            javaScore: parseFloat(formData.get('javaScore')),
+            cSharpScore: parseFloat(formData.get('cSharpScore'))
         };
 
         // Gửi yêu cầu POST để thêm sinh viên mới
@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 },
                 body: JSON.stringify(studentData)
             });
-
+            debugger
             if (response.ok) {
                 // Nếu thêm thành công, làm mới danh sách sinh viên
                 fetchStudentList();
@@ -77,17 +77,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 students.forEach((student) => {
                     const row = document.createElement('tr');
+                    const {id, name, age, address, javaScore, cSharpScore} = student
                     row.innerHTML = `
-                        <td>${student.Id}</td>
-                        <td>${student.Name}</td>
-                        <td>${student.Age}</td>
-                        <td>${student.Address}</td>
-                        <td>${student.JavaScore}</td>
-                        <td>${student.CSharpScore}</td>
+                        <td>${id}</td>
+                        <td>${name}</td>
+                        <td>${age}</td>
+                        <td>${address}</td>
+                        <td>${javaScore}</td>
+                        <td>${cSharpScore}</td>
                         <td>
                             <button 
                                 class="delete-button" 
-                                data-student-id="${student.Id}">Xóa</button>
+                                data-student-id="${id}">Xóa</button>
                         </td>
                     `;
                     tbody.appendChild(row);
