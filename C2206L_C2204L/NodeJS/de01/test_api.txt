@@ -1,0 +1,24 @@
+curl http://localhost:3001/api/students | jq
+
+curl -X POST -H "Content-Type: application/json" -d '{
+  "Name": "John Doe",
+  "Age": 25,
+  "Address": "123 Main St",
+  "JavaScore": 90.5,
+  "CSharpScore": 85.0
+}' http://localhost:3001/api/students | jq
+
+curl -X PUT -H "Content-Type: application/json" -d '{
+  "Name": "Updated Name",
+  "Age": 30,
+  "Address": "456 New St",
+  "JavaScore": 95.0,
+  "CSharpScore": 88.5
+}' http://localhost:3001/api/students/21 | jq
+
+curl http://localhost:3001/api/students/21 | jq
+
+curl -X DELETE http://localhost:3001/api/students/21
+
+
+

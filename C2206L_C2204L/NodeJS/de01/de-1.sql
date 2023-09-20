@@ -1,12 +1,12 @@
 USE c2206l; -- Chuyển đổi sang cơ sở dữ liệu c2206l
 
 CREATE TABLE students (
-  Id INT AUTO_INCREMENT PRIMARY KEY,
+  id INT AUTO_INCREMENT PRIMARY KEY,
   Name VARCHAR(100) NOT NULL,
-  Age INT NOT NULL,
-  Address VARCHAR(500),
-  JavaScore DECIMAL(18, 1),
-  CSharpScore DECIMAL(18, 1)
+  age INT NOT NULL,
+  address VARCHAR(500),
+  javaScore DECIMAL(18, 1),
+  csharpScore DECIMAL(18, 1)
 );
 
 
