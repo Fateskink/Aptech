@@ -12,11 +12,11 @@ const port = 3001;
 app.use(express.json());
 
 // Sử dụng tuyến đường cho thực thể "employees"
-app.use('/api/employees', employeeRoutes);
-app.use('/api/users', userRoutes);
-app.use('/api/organizations', organizationRoutes);
-app.use('/api/sex', sexRoutes);
-app.use('/api/positions', positionRoutes);
+app.use('/api', employeeRoutes);
+app.use('/api', userRoutes);
+app.use('/api', organizationRoutes);
+app.use('/api', sexRoutes);
+app.use('/api', positionRoutes);
 
 
 app.listen(port, () => {
