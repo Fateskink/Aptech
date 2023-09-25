@@ -44,12 +44,31 @@ public class ProductServlet extends HttpServlet {
                 case "show":
                     showProduct(request, response);
                     break;
+                case "search":
+                    searchProducts(request, response);
+                    break;
                 // Add more cases for other actions
             }
         } else {
             // Default behavior when no action is specified
             listProducts(request, response);
         }
+    }
+    private void searchProducts(HttpServletRequest request, HttpServletResponse response) throws 
+        ServletException, IOException {
+        // Lấy giá trị từ trường search trong request
+        String searchTerm = request.getParameter("search");
+
+        // Sử dụng JPQL để tìm các sản phẩm có name chứa searchTerm
+        List<Product> products = entityManager.createQuery("SELECT p FROM Product p WHERE p.name LIKE :searchTerm", Product.class)
+                .setParameter("searchTerm", "%" + searchTerm + "%")
+                .getResultList();
+
+        // Đặt danh sách sản phẩm kết quả vào request
+        request.setAttribute("products", products);
+
+        // Chuyển hướng đến trang jsp hiển thị danh sách sản phẩm
+        request.getRequestDispatcher("/productlist.jsp").forward(request, response);
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws 
@@ -77,7 +96,7 @@ public class ProductServlet extends HttpServlet {
         request.setAttribute("products", products);
 
         // Chuyển hướng đến trang jsp hiển thị danh sách sản phẩm
-        request.getRequestDispatcher("/listProducts.jsp").forward(request, response);
+        request.getRequestDispatcher("/productlist.jsp").forward(request, response);
     }
 
     private void showProduct(HttpServletRequest request, HttpServletResponse response) throws 

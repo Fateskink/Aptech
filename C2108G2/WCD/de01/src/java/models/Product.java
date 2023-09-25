@@ -21,7 +21,7 @@ import javax.persistence.Table;
  * @author hoangnd
  */
 @Entity
-@Table(name = "products", catalog = "c2108g3", schema = "")
+@Table(name = "products", catalog = "c2108g2", schema = "")
 @NamedQueries({
     @NamedQuery(name = "Product.findAll", query = "SELECT p FROM Product p"),
     @NamedQuery(name = "Product.findById", query = "SELECT p FROM Product p WHERE p.id = :id"),
@@ -46,6 +46,14 @@ public class Product implements Serializable {
     @Basic(optional = false)
     @Column(name = "quantity", nullable = false)
     private int quantity;
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
 
     public Product() {
     }
@@ -77,13 +85,7 @@ public class Product implements Serializable {
         this.name = name;
     }
 
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
+    
 
     public int getQuantity() {
         return quantity;
@@ -115,7 +117,7 @@ public class Product implements Serializable {
 
     @Override
     public String toString() {
-        return "models.Product[ id=" + id + " ]";
+        return "servlets.Product[ id=" + id + " ]";
     }
     
 }
