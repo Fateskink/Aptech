@@ -1,14 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:noteapp/database/sqlite_helper.dart';
 import 'package:noteapp/repositories/note_repository.dart';
 import 'package:noteapp/screens/main_screen.dart';
 import 'package:provider/provider.dart';
 
 void main() {
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => NoteRepository(),
-      child: MyApp(),
-    ),
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider<NoteRepository>(
+            create: (context) => NoteRepository(),
+          ),
+          ChangeNotifierProvider<SQLiteHelper>(
+            create: (context) => SQLiteHelper(),
+          ),
+        ],
+        child: MyApp(),
+      )
   );
 }
 
