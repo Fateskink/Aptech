@@ -1,25 +1,65 @@
 import 'dart:math';
 //import 'package:flutter/material.dart';
 import 'dart:io';
-void bai01() {
+
+import 'package:myapp/student.dart';
+void bai01a() {
   print('Enter an integer: ');
   int n = int.parse(stdin.readLineSync() ?? "0");
   //print('Result is :${x * x}');
   print('Result is :${pow(n, 2)}');
 }
-void bai02() {
+void bai01b() {
   print('Enter m = ');
   int m = int.parse(stdin.readLineSync()!);
   print('Enter n = ');
   int n = int.parse(stdin.readLineSync()!);
   int sum = m + n;
   int multiply = m * n;
-  print('sum = ${sum}, multiply = ${multiply}');
-  print('Max value is ${max(sum, multiply)}');
+  int minus = m - n;
+  print('sum = ${sum}, multiply = ${multiply}, minus = ${minus}');//string concatenation
+  print('Max value is ${max(max(sum, multiply), minus)}');
+  print('Min value is ${min(min(sum, multiply), minus)}');
+}
+void bai01c() {
+  print('Enter a = ');
+  int a = int.parse(stdin.readLineSync()!);
+  print('Enter b = ');
+  int b = int.parse(stdin.readLineSync()!);
+  print('Enter c = ');
+  int c = int.parse(stdin.readLineSync()!);
+  print('max value is ${max(max(a, b), c)}');
+  print('min value is ${min(min(a, b), c)}');
+}
+void bai01d(){
+  print('Enter a = ');
+  int a = int.parse(stdin.readLineSync()!);
+  print('Enter b = ');
+  int b = int.parse(stdin.readLineSync()!);
+  print('Enter c = ');
+  int c = int.parse(stdin.readLineSync()!);
+  int minValue = min(min(a, b), c);
+  int maxValue = max(max(a, b), c);
+  int numberOfOdds = 0;
+  for(int i = minValue; i < maxValue; i++) {
+    if(i % 2 != 0) {
+      numberOfOdds++;
+      print('number ${numberOfOdds} is: ${i}');
+    }
+  }
+  print('numbers of odds is: ${numberOfOdds}');
+}
+void bai02a2b() {
+  Student student = Student();
+  student.input();
+  print(student);
 }
 void main() {
-  //bai01();
-  bai02();
+  //bai01a();
+  //bai01b();
+  //bai01c();
+  //bai01d();
+  bai02a2b();
   //runApp(const MyApp());
 }
 /*
