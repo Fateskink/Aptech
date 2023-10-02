@@ -37,92 +37,109 @@ public class ProductServlet extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+        throws ServletException, IOException {
         String action = request.getParameter("action");
         EntityManager em = emf.createEntityManager();
-        if ("insert".equals(action)) {
-            // Create a new Product
-            
-            EntityTransaction tx = em.getTransaction();
 
-            try {
-                tx.begin();
-                Product product = new Product();
-                product.setName(request.getParameter("name"));
-                product.setDescription(request.getParameter("description"));
-                
-                product.setPrice(Double.parseDouble(request.getParameter("price")));
-                product.setCategoryId(em.find(Category.class, Long.parseLong(request.getParameter("categoryId"))));                
-                em.persist(product);
-                tx.commit();
-            } catch (Exception e) {
-                if (tx != null && tx.isActive()) {
-                    tx.rollback();
-                }
-                e.printStackTrace();
-            } finally {
-                em.close();
+        try {
+            if ("insert".equals(action)) {
+                createProduct(request, em);
+            } else if ("update".equals(action)) {
+                updateProduct(request, em);
+            } else if ("delete".equals(action)) {
+                deleteProduct(request, em);
+            } else if ("assignCategory".equals(action)) {
+                assignCategory(request, em);
             }
             response.sendRedirect("productlist.jsp"); // Redirect to a suitable page
-        }else if ("update".equals(action)) {
-            // Update an existing Product            
-            EntityTransaction tx = em.getTransaction();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            em.close();
+        }
+    }    
+    private void createProduct(HttpServletRequest request, EntityManager em) {
+        EntityTransaction tx = em.getTransaction();
 
-            try {
-                tx.begin();
-                Long productId = Long.parseLong(request.getParameter("productId"));
-                Product product = em.find(Product.class, productId);
-                if (product != null) {
-                    product.setName(request.getParameter("productName"));
-                    product.setDescription(request.getParameter("productDescription"));
-                    product.setPrice(Double.parseDouble(request.getParameter("productPrice")));
-                    product.setCategoryId(em.find(Category.class, Long.parseLong(request.getParameter("categoryId"))));
-                }
-                tx.commit();
-            } catch (Exception e) {
-                if (tx != null && tx.isActive()) {
-                    tx.rollback();
-                }
-                e.printStackTrace();
-            } finally {
-                em.close();
+        try {
+            tx.begin();
+            Product product = new Product();
+            product.setName(request.getParameter("name"));
+            product.setDescription(request.getParameter("description"));
+            product.setPrice(Double.parseDouble(request.getParameter("price")));
+            product.setCategoryId(em.find(Category.class, Long.parseLong(request.getParameter("categoryId"))));
+            em.persist(product);
+            tx.commit();
+        } catch (Exception e) {
+            if (tx != null && tx.isActive()) {
+                tx.rollback();
             }
-            response.sendRedirect("productlist.jsp"); // Redirect to a suitable page
-        } else if ("delete".equals(action)) {
-            // Delete an existing Product            
-            EntityTransaction tx = em.getTransaction();
+            e.printStackTrace();
+        }
+    }
 
-            try {
-                tx.begin();
-                Long productId = Long.parseLong(request.getParameter("productId"));
-                Product product = em.find(Product.class, productId);
-                if (product != null) {
-                    em.remove(product);
-                }
-                tx.commit();
-            } catch (Exception e) {
-                if (tx != null && tx.isActive()) {
-                    tx.rollback();
-                }
-                e.printStackTrace();
-            } finally {
-                em.close();
-            }
-            response.sendRedirect("productlist.jsp"); // Redirect to a suitable page
-        } else if("assignCategory".equals(action)) {
-            EntityTransaction tx = em.getTransaction();
-            Long categoryId = Long.parseLong(request.getParameter("categoryId"));
+    private void updateProduct(HttpServletRequest request, EntityManager em) {
+        EntityTransaction tx = em.getTransaction();
+
+        try {
+            tx.begin();
             Long productId = Long.parseLong(request.getParameter("productId"));
             Product product = em.find(Product.class, productId);
-            Category category = em.find(Category.class, categoryId);
-            tx.begin();
-            if (product != null) {                    
-                    product.setCategoryId(category);
-                }
+            if (product != null) {
+                product.setName(request.getParameter("productName"));
+                product.setDescription(request.getParameter("productDescription"));
+                product.setPrice(Double.parseDouble(request.getParameter("productPrice")));
+                product.setCategoryId(em.find(Category.class, Long.parseLong(request.getParameter("categoryId"))));
+            }
             tx.commit();
+        } catch (Exception e) {
+            if (tx != null && tx.isActive()) {
+                tx.rollback();
+            }
+            e.printStackTrace();
         }
-        // Handle other CRUD operations (update and delete) similarly
     }
+
+    private void deleteProduct(HttpServletRequest request, EntityManager em) {
+        EntityTransaction tx = em.getTransaction();
+
+        try {
+            tx.begin();
+            Long productId = Long.parseLong(request.getParameter("productId"));
+            Product product = em.find(Product.class, productId);
+            if (product != null) {
+                em.remove(product);
+            }
+            tx.commit();
+        } catch (Exception e) {
+            if (tx != null && tx.isActive()) {
+                tx.rollback();
+            }
+            e.printStackTrace();
+        }
+    }
+
+    private void assignCategory(HttpServletRequest request, EntityManager em) {
+        EntityTransaction tx = em.getTransaction();
+        Long categoryId = Long.parseLong(request.getParameter("categoryId"));
+        Long productId = Long.parseLong(request.getParameter("productId"));
+        Product product = em.find(Product.class, productId);
+        Category category = em.find(Category.class, categoryId);
+
+        try {
+            tx.begin();
+            if (product != null) {
+                product.setCategoryId(category);
+            }
+            tx.commit();
+        } catch (Exception e) {
+            if (tx != null && tx.isActive()) {
+                tx.rollback();
+            }
+            e.printStackTrace();
+        }
+    }
+
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
