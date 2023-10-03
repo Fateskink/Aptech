@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:math';
+import 'dart:convert';
 
 class Student {
   late String name;
@@ -43,6 +44,28 @@ class Student {
       (gpa >= 7.5 && gpa < 8.5 ? 'b' :
         (gpa >= 6.5 && gpa < 7.5 ? 'c' :
           (gpa < 6.5 ? 'd' : 'Invalid')));
+  }
+  Map<String, dynamic> toJson() {
+    return {
+      'name': this.name,
+      'age': this.age,
+      'weight': this.weight,
+      'height': this.height,
+      'gpa': this.gpa
+    };
+  }
+
+  static void fromJson(String jsonString) {
+    // Parse the JSON string
+    Map<String, dynamic> jsonMap = json.decode(jsonString);
+    // Access the parsed data
+    Student newStudent = Student();
+    newStudent.name = jsonMap['name'];
+    newStudent.age = jsonMap['age'] is int ? jsonMap['age'] : int.parse(jsonMap['age']);
+    newStudent.weight = jsonMap['weight'] is num ? jsonMap['weight'].toDouble() : double.parse(jsonMap['weight']);
+    newStudent.height = jsonMap['height'] is num ? jsonMap['height'].toDouble() : double.parse(jsonMap['height']);
+    newStudent.gpa = jsonMap['gpa'] is num ? jsonMap['gpa'].toDouble() : double.parse(jsonMap['gpa']);
+    print(newStudent.toString());
   }
   @override
   String toString() {

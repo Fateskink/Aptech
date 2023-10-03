@@ -1,8 +1,8 @@
 import 'dart:math';
 //import 'package:flutter/material.dart';
 import 'dart:io';
-
 import 'package:myapp/student.dart';
+
 void bai01a() {
   print('Enter an integer: ');
   int n = int.parse(stdin.readLineSync() ?? "0");
@@ -52,7 +52,9 @@ void bai01d(){
 void bai02a2b() {
   Student student = Student();
   student.input();
-  print(student);
+  print(student.toJson().toString());
+  String jsonString = '{"name": "NGuyen VAn A", "age": 18, "weight": 75, "height": 170, "gpa": 7.3}';
+  Student.fromJson(jsonString);
 }
 void main() {
   //bai01a();
@@ -60,6 +62,7 @@ void main() {
   //bai01c();
   //bai01d();
   bai02a2b();
+
   //runApp(const MyApp());
 }
 /*
@@ -80,3 +83,4 @@ class MyApp extends StatelessWidget {
   }
 }
 */
+
