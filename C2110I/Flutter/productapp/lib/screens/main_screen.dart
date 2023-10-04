@@ -27,6 +27,7 @@ class MainScreen extends StatelessWidget {
                 title:'Show all products',
                 onTap: () {
                   print('Show all products');
+                  Navigator.pushNamed(context, '/products');
               },),
             ],
           ),

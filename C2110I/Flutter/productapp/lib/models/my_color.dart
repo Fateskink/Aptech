@@ -19,4 +19,19 @@ class MyColor {
     // TODO: implement toString
     return 'name: ${this.name}, color: ${color}';
   }
+  Map<String, dynamic> toMap() {
+    //Map = json = Dictionary
+    var map = <String, dynamic>{
+      'name': name,
+      'color': color
+    };
+    return map;
+  }
+  factory MyColor.fromMap(Map<String, dynamic> map) {
+    print('haha');
+    return MyColor(
+        name: map['name'],
+        color: Color(map['hexValue'])
+    );
+  }
 }

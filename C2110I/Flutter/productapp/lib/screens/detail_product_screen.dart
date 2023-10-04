@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:productapp/database/database_helper.dart';
 import 'package:productapp/models/my_color.dart';
 import 'package:productapp/models/product.dart';
 class DetailProductScreen extends StatefulWidget {
@@ -15,6 +16,7 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
 
   MyColor selectedColor = MyColor.getColors().first;
   Product? selectedProduct;
+  late DatabaseHelper _databaseHelper;
   @override
   void initState() {
     // TODO: implement initState
@@ -22,6 +24,7 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
     _textEditingCodeController = TextEditingController();
     _textEditingNameController = TextEditingController();
     _textEditingPriceController = TextEditingController();
+    _databaseHelper = DatabaseHelper.getInstance();
   }
   @override
   void dispose() {
@@ -59,6 +62,7 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
               ),
               Container(
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text('Color: ', style: TextStyle(fontSize: 17),),
                     DropdownMenu<MyColor>(
@@ -86,13 +90,22 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ElevatedButton(onPressed: (){
-                    this.selectedProduct = Product(
+                  ElevatedButton(onPressed: () async {
+                    try {
+                      selectedProduct = Product(
                         code: _textEditingCodeController.text,
                         name: _textEditingCodeController.text,
                         price: double.parse(_textEditingPriceController.text ?? '0'),
-                        color: this.selectedColor
-                    );
+                        color: this.selectedColor,
+                      );
+                      int productId = await _databaseHelper.insertProduct(selectedProduct!);
+                      if(productId > 0) {
+                        print('Insert successfully');
+                        Navigator.pop(context);
+                      }
+                    } catch (e) {
+                      print('Cannot insert, error: $e'); // Use e.toString() to get the error message
+                    }
                   },
                       child: Text('Save', style: TextStyle(fontSize: 18),)
                   )
