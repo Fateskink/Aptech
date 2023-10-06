@@ -2,18 +2,10 @@ import 'package:flutter/material.dart';
 
 class MyColor {
   String name;
-  Color color;
-  MyColor({required this.name, required this.color});
-  static getColors() {
-    return <MyColor>[
-      MyColor(name: 'white', color: Colors.white),
-      MyColor(name: 'yellow', color: Colors.yellow),
-      MyColor(name: 'blue', color: Colors.blue),
-      MyColor(name: 'red', color: Colors.red),
-      MyColor(name: 'purple', color: Colors.purple),
-
-    ];
-  }
+  String hexValue;
+  MyColor({required this.name, required this.hexValue});
+  //calculated value from hexValue
+  Color get color => Color(int.parse(hexValue.substring(1), radix: 16) + 0xFF000000);
   @override
   String toString() {
     // TODO: implement toString
@@ -23,7 +15,7 @@ class MyColor {
     //Map = json = Dictionary
     var map = <String, dynamic>{
       'name': name,
-      'color': color
+      'hexValue': hexValue
     };
     return map;
   }
@@ -31,7 +23,7 @@ class MyColor {
     print('haha');
     return MyColor(
         name: map['name'],
-        color: Color(map['hexValue'])
+        hexValue: map['hexValue']
     );
   }
 }

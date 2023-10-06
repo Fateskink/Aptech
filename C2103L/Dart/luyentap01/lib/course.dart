@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 class Course {
@@ -27,5 +28,32 @@ class Course {
 
     print('Input started date(yyyy-mm-dd):');
     this.startedDate = stdin.readLineSync()!;
+  }
+  @override
+  //This is a one-line/arrow function
+  /*
+  String toString() =>
+      "author's name: ${authorName},\n"+
+      "course's name: ${courseName},\n"+
+      "address: ${address},\n"+
+      "price: ${price},\n"+
+      "description: ${description},\n"+
+      "startedDate: ${startedDate},\n";
+   */
+  String toString() => '${authorName}('
+                        '${courseName}, '
+                        '${price}, '
+                        '${address}, '
+                        '${description}, '
+                        '${startedDate})';
+  Map<String, dynamic> toMap() {
+    return {
+      'authorName': authorName,
+      'courseName': courseName,
+      'price': price,
+      'address': address,
+      'description': description,
+      'startedDate': startedDate,
+    };
   }
 }

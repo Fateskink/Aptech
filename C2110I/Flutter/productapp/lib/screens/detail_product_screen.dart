@@ -13,8 +13,9 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
   late TextEditingController _textEditingCodeController;
   late TextEditingController _textEditingNameController;
   late TextEditingController _textEditingPriceController;
-
-  MyColor selectedColor = MyColor.getColors().first;
+  //This is a state
+  late List<MyColor> colors;
+  late MyColor selectedColor;
   Product? selectedProduct;
   late DatabaseHelper _databaseHelper;
   @override
@@ -25,6 +26,12 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
     _textEditingNameController = TextEditingController();
     _textEditingPriceController = TextEditingController();
     _databaseHelper = DatabaseHelper.getInstance();
+    _databaseHelper.getColors().then((value) {
+      setState(() {
+        colors = value;//reload UI
+        selectedColor = colors.first ?? MyColor(name: 'white', hexValue: "#FFFFFF");
+      });
+    });
   }
   @override
   void dispose() {
@@ -66,15 +73,18 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
                   children: [
                     Text('Color: ', style: TextStyle(fontSize: 17),),
                     DropdownMenu<MyColor>(
-                      initialSelection: MyColor.getColors().first,
+                      initialSelection: colors.first!,
                       onSelected: (MyColor? value) {
                         // This is called when the user selects an item.
                         setState(() {
                           selectedColor = value!;
                         });
                       },
-                      dropdownMenuEntries: MyColor.getColors().map<DropdownMenuEntry<MyColor>>((MyColor value) {
-                        return DropdownMenuEntry<MyColor>(value: value, label: value.name);
+                      dropdownMenuEntries: colors.map<DropdownMenuEntry<MyColor>>((MyColor value) {
+                        return DropdownMenuEntry<MyColor>(
+                            value: value,
+                            label: value.name
+                        );
                       }).toList(),
                     ),
                   ],
