@@ -14,7 +14,7 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
   late TextEditingController _textEditingNameController;
   late TextEditingController _textEditingPriceController;
   //This is a state
-  late List<MyColor> colors;
+  List<MyColor> colors = <MyColor>[];
   late MyColor selectedColor;
   Product? selectedProduct;
   late DatabaseHelper _databaseHelper;
@@ -49,7 +49,9 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
         backgroundColor: Colors.purple,
       ),
       body: SafeArea(
-        child: Container(
+        child: colors.length == 0 ?
+        const Center(child: CircularProgressIndicator(),)
+        :Container(
           padding: EdgeInsets.symmetric(horizontal: 30),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -106,7 +108,7 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
                         code: _textEditingCodeController.text,
                         name: _textEditingCodeController.text,
                         price: double.parse(_textEditingPriceController.text ?? '0'),
-                        color: this.selectedColor,
+                        colorId: this.selectedColor.id ?? 0,
                       );
                       int productId = await _databaseHelper.insertProduct(selectedProduct!);
                       if(productId > 0) {
