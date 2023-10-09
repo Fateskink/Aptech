@@ -1,0 +1,37 @@
+#scp -r /Users/hoangnd/Documents/code/udemy/ShopApp/shopapp-backend root@45.117.179.16:/root
+#scp -pr /Users/hoangnd/Documents/code/Aptech/C2110I/Flutter/deployment.yml root@45.117.179.16:/root
+#scp -pr /Users/hoangnd/Documents/code/Aptech/C2110I/Flutter/Dockerfile root@45.117.179.16:/root
+
+version: '3.3'
+services:
+  app:    
+    container_name: shopapp-container
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+    depends_on:
+      - db
+    networks:
+      - mynetwork
+
+  db:
+    container_name: mysql8-container
+    image: mysql:8.1.0    
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: Abc123456789@
+      MYSQL_DATABASE: ShopApp
+    ports:
+      - 3307:3306
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
+
+#docker-compose -f deployment.yml down
+#docker-compose -f deployment.yml up    
+#test container 
+#docker run -it --name openjdk-container maven:3.8.4-openjdk-17-slim
