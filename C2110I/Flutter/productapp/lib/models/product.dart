@@ -6,12 +6,14 @@ class Product {
   String code;
   double price;
   int colorId;
+  String? hexValue;
   Product({
     this.id,
     required this.code,
     required this.name,
     required this.price,
-    required this.colorId
+    required this.colorId,
+    this.hexValue,
   });
   Map<String, dynamic> toMap() {
     //Map = json = Dictionary
@@ -20,6 +22,7 @@ class Product {
       'code': code,
       'price': price,
       'colorId': colorId,
+      'hexValue': hexValue,
     };
     if (id != null) {
       map['id'] = id;
@@ -31,11 +34,13 @@ class Product {
         name = map['name'],
         code = map['code'],
         price = map['price'],
-        colorId = map['colorId'];
+        colorId = map['colorId'],
+        hexValue = map['hexValue'];
   @override
   String toString() =>
       'Code: ${code}, '
       'name: ${name}, '
       'price: ${price}, '
-      'colorId: ${colorId}';
+      'colorId: ${colorId}, '
+      'hexValue: ${hexValue}, ';
 }

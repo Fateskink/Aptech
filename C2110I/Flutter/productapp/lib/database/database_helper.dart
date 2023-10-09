@@ -96,7 +96,13 @@ class DatabaseHelper {
 
   Future<List<Product>> getProducts() async {
     Database? db = await database;
-    var result = await db!.query(productTable);
+
+    var result = await db!.rawQuery('''
+    SELECT ${productTable}.*, ${colorTable}.hexValue
+    FROM ${productTable}
+    JOIN ${colorTable} ON ${productTable}.colorId = ${colorTable}.id
+  ''');
+
     List<Product> products = [];
     for (var item in result) {
       products.add(Product.fromMap(item));
