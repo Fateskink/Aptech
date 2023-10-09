@@ -13,11 +13,12 @@ RUN mvn dependency:go-offline -B
 # Copy the entire project to the container
 COPY  ./shopapp-backend .
 
-# Build the Java Spring Boot project
-RUN mvn -X -e package -DskipTests
+#Build the Java Spring Boot project
+#RUN mvn -X -e package -DskipTests
 
 # Set the main class as an environment variable
-ENV MAIN_CLASS com.project.shopapp.ShopappApplication
+#ENV MAIN_CLASS com.project.shopapp.ShopappApplication
 
 # Set the command to run the Spring Boot application
-CMD java -jar target/shopapp.jar $MAIN_CLASS
+#CMD java -jar target/shopapp.jar $MAIN_CLASS
+CMD shopapp/mvnw spring-boot:run
