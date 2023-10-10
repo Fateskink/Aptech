@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <style>
+        .heading {
+            text-align: center;
+        }
+    </style>
+    <title>Categories</title>
+</head>
+<body>
+<h1 class="heading">Categories</h1>
+
+<table>
+    <tr>
+        <th>Category ID</th>
+        <th>Category Name</th>
+        <th>Description</th>
+        <th>Actions</th>
+    </tr>
+    <tr th:each="category : ${categories}">
+        <td th:text="${category.categoryID}"></td>
+        <td th:text="${category.categoryName}"></td>
+        <td th:text="${category.description}"></td>
+        <td>
+            <form th:action="/products" method="get">
+                <input type="hidden" name="categoryID" th:value="${category.categoryID}" />
+                <button type="submit">Show Products</button>
+            </form>
+        </td>
+    </tr>
+</table>
+</body>
+</html>
