@@ -1,24 +1,17 @@
-# Use an appropriate base image with Java and Maven installed
-FROM maven:3.8.4-openjdk-17-slim
-
-# Set the working directory inside the container
+FROM maven:3.8.4-openjdk-17-slim AS build
 WORKDIR /app
+COPY ./shopapp-backend /app
 
-# Copy the Maven project file(s) to the container
-COPY ./shopapp-backend/shopapp/pom.xml .
+RUN mvn package -f /app/shopapp/pom.xml
 
-# Download the project dependencies
-RUN mvn dependency:go-offline -B
+FROM openjdk:17-slim  
+WORKDIR /app
+COPY --from=build /app/shopapp/target/shopapp-0.0.1-SNAPSHOT.jar app.jar
 
-# Copy the entire project to the container
-COPY  ./shopapp-backend .
+EXPOSE 8080
+CMD ["java","-jar","app.jar"]
 
-#Build the Java Spring Boot project
-#RUN mvn -X -e package -DskipTests
+#docker build -f ./Dockerfile -t shopapp-spring:1.0.0 .
+#docker create --name shopapp-container shopapp-spring:1.0.0
 
-# Set the main class as an environment variable
-#ENV MAIN_CLASS com.project.shopapp.ShopappApplication
 
-# Set the command to run the Spring Boot application
-#CMD java -jar target/shopapp.jar $MAIN_CLASS
-CMD shopapp/mvnw spring-boot:run

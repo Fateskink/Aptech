@@ -1,3 +1,4 @@
+#run mvn install to create .jar file
 #scp -r /Users/hoangnd/Documents/code/udemy/ShopApp/shopapp-backend root@45.117.179.16:/root
 #scp -pr /Users/hoangnd/Documents/code/Aptech/C2110I/Flutter/deployment.yml root@45.117.179.16:/root
 #scp -pr /Users/hoangnd/Documents/code/Aptech/C2110I/Flutter/Dockerfile root@45.117.179.16:/root
@@ -6,11 +7,12 @@ version: '3.3'
 services:
   app:    
     container_name: shopapp-container
+    image: shopapp-spring:1.0.0 
     build:
       context: .
       dockerfile: Dockerfile
     ports:
-      - 8080:8080
+      - 8099:8080
     depends_on:
       - db
     networks:
