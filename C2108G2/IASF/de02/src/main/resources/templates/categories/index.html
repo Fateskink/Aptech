@@ -23,7 +23,7 @@
         <td th:text="${category.categoryName}"></td>
         <td th:text="${category.description}"></td>
         <td>
-            <form th:action="/products" method="get">
+            <form th:action="@{/products}" method="get">
                 <input type="hidden" name="categoryID" th:value="${category.categoryID}" />
                 <button type="submit">Show Products</button>
             </form>

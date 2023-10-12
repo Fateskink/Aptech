@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <h1>Do you really to assign product:${selectedProduct.productName} to other category:" </h1>
+    <form action="/products/update-category" method="post">
+        <input type="hidden" name="productID" th:value="${selectedProduct.productID}" />
+        <select id="categorySelect" name="categoryID">
+            <option value="">Select a category</option>
+            <option th:each="category : ${categories}"
+                    th:value="${category.categoryID}"
+                    th:text="${category.categoryName}"
+                    th:selected="${selectedCategory.categoryID == category.categoryID}">
+            </option>
+        </select>
+        <button type="submit">Update</button>
+    </form>
+</body>
+</html>
