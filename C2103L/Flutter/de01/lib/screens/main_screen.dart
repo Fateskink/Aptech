@@ -1,4 +1,5 @@
 
+import 'package:de01/screens/add_product_screen.dart';
 import 'package:flutter/material.dart';
 
 class MainScreen extends StatelessWidget {
@@ -42,6 +43,12 @@ class MainScreen extends StatelessWidget {
                 ),
                 onTap: () {
                   print('Show all products');
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AddProductScreen(),
+                    ),
+                  );
                 },
               )
 

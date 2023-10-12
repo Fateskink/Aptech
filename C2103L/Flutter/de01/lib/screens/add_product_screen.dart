@@ -1,5 +1,8 @@
 import 'package:de01/models/my_color.dart';
+import 'package:de01/models/product.dart';
+import 'package:de01/repositories/product_repository.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 
 class AddProductScreen extends StatefulWidget {
   const AddProductScreen({super.key});
@@ -15,6 +18,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final productRepository = GetIt.instance<ProductRepository>();
     List<MyColor> colors = <MyColor>[
       MyColor(name: 'white', hexValue: 0xFFFFFFFF),
       MyColor(name: 'purple', hexValue: 0xFF800080),
@@ -111,6 +115,13 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 padding: EdgeInsets.symmetric(vertical: 10, horizontal: 50),
               ),
               onTap: () {
+                Product product = Product(
+                    code: _colorTextEditingController.text,
+                    name: _nameTextEditingController.text,
+                    hexValue: selectedColor.hexValue,
+                    price: double.parse(_priceTextEditingController.text)
+                );
+                productRepository.addProduct(product);
                 print('Save');
               },
             ),
