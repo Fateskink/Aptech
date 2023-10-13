@@ -109,6 +109,7 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
                         name: _textEditingCodeController.text,
                         price: double.parse(_textEditingPriceController.text ?? '0'),
                         colorId: this.selectedColor.id ?? 0,
+                        //hexValue: this.selectedColor.hexValue
                       );
                       int productId = await _databaseHelper.insertProduct(selectedProduct!);
                       if(productId > 0) {

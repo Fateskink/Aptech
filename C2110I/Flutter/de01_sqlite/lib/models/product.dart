@@ -22,10 +22,12 @@ class Product {
       'code': code,
       'price': price,
       'colorId': colorId,
-      'hexValue': hexValue,
     };
     if (id != null) {
       map['id'] = id;
+    }
+    if (hexValue != null) {
+      map['hexValue'] = hexValue;
     }
     return map;
   }
