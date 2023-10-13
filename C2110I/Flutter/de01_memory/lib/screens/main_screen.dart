@@ -1,5 +1,6 @@
 
 import 'package:de01/screens/add_product_screen.dart';
+import 'package:de01/screens/product_list.dart';
 import 'package:flutter/material.dart';
 
 class MainScreen extends StatelessWidget {
@@ -30,6 +31,12 @@ class MainScreen extends StatelessWidget {
                 ),
                 onTap: () {
                   print('Add new product');
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AddProductScreen(),
+                    ),
+                  );
                 },
               ),
               GestureDetector(
@@ -46,7 +53,7 @@ class MainScreen extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => AddProductScreen(),
+                      builder: (context) => ProductListScreen(),
                     ),
                   );
                 },

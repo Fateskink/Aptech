@@ -115,6 +115,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 padding: EdgeInsets.symmetric(vertical: 10, horizontal: 50),
               ),
               onTap: () {
+                print('Save');
                 Product product = Product(
                     code: _colorTextEditingController.text,
                     name: _nameTextEditingController.text,
@@ -122,7 +123,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                     price: double.parse(_priceTextEditingController.text)
                 );
                 productRepository.addProduct(product);
-                print('Save');
+                Navigator.of(context).pop();
               },
             ),
           ],

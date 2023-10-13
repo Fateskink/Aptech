@@ -32,9 +32,10 @@ class ProductListScreen extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('P001', style: TextStyle(fontSize: 16),),
-                        Text('100.0', style: TextStyle(fontSize: 16),),
-                        Container(width: 60,height: 60,color: Colors.cyan,)
+                        Text(selectedProduct.code, style: TextStyle(fontSize: 16),),
+                        Text(selectedProduct.name, style: TextStyle(fontSize: 16),),
+                        Container(width: 60,height: 60,
+                          color: Color(selectedProduct.hexValue))
                       ],
                     ),
                     SizedBox(height: 10,),
