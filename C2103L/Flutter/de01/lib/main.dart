@@ -5,8 +5,11 @@ import 'package:de01/screens/product_list.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
+import 'repositories/color_repository.dart';
+
 void main() {
   GetIt.instance.registerLazySingleton<ProductRepository>(() => ProductRepository());
+  GetIt.instance.registerLazySingleton<ColorRepository>(() => ColorRepository());
   runApp(const MyApp());
 
 }
