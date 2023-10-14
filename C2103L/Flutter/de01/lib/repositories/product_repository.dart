@@ -10,7 +10,12 @@ class ProductRepository {
   }
 
   Future<void> addProduct(Product product) async {
-    // Simulate adding a product to an external source
+    if(products.where((element) =>
+        element.name == product.name || element.code == product.code
+    ).isNotEmpty) {
+      print('Cannot insert because name|code is duplicated');
+      return;
+    }
     print('Adding product: $product');
     products.add(product);
   }
