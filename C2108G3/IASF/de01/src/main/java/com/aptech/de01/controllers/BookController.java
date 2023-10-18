@@ -13,12 +13,15 @@ import org.springframework.stereotype.*;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/books")
 @RequiredArgsConstructor
 public class BookController {
     //inject book's repository
     private final BookRepository bookRepository;
+    //private final CategoryRepository categoryRepository;
     @GetMapping("")
     //Home's book
     public String welcome(Model model) {
@@ -26,6 +29,7 @@ public class BookController {
     }
     @GetMapping("insert")
     public String insert(Model model) {
+
         return "books/insert";
     }
     @PostMapping("insert")
@@ -42,12 +46,25 @@ public class BookController {
                 .id(0)
                 .build();
         bookRepository.save(book);
-        return "redirect:books";
+        return "redirect:/books/listbooks";
     }
     @PostMapping("logout")
     public String logout(Model model, HttpSession session) {
         //clear session
         session.invalidate();
         return "redirect:users/login";
+    }
+    @GetMapping("listbooks")
+    public String listbooks(Model model) {
+        List<Book> books = bookRepository.findAll();
+        model.addAttribute("books", books);
+        return "books/listbooks";
+    }
+    @PostMapping("delete")
+    @Transactional
+    public String deleteBook(@RequestParam("id") int bookId) {
+        System.out.println("Deleting book with ID: " + bookId);
+        bookRepository.deleteById(bookId);
+        return "redirect:/books/listbooks";
     }
 }
