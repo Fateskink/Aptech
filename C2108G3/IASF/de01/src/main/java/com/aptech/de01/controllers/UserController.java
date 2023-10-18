@@ -2,6 +2,7 @@ package com.aptech.de01.controllers;
 
 import com.aptech.de01.models.User;
 import com.aptech.de01.repositories.UserRepository;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.Banner;
 import org.springframework.stereotype.*;
@@ -22,10 +23,13 @@ public class UserController {
     public String login(
             @RequestParam("username") String username,
             @RequestParam("password") String password,
-            Model model) {
-        User user = userRepository.findByUsernameAndPassword(username, password).orElse(null);
+            Model model,
+            HttpSession session) {
+        User user = userRepository.findByUsernameAndPassword(username, password)
+                .orElse(null);
         if(user != null) {
-            return "redirect:/books/home";//later
+            session.setAttribute("username", username);
+            return "redirect:/books/index";//later
         } else {
             return "redirect:users/login";//later
         }

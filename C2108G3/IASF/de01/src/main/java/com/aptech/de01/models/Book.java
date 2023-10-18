@@ -9,6 +9,7 @@ import lombok.*;
 @Setter
 @Data
 @Entity
+@Builder
 @Table(name = "books")
 public class Book {
     @Id
