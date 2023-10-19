@@ -11,7 +11,6 @@ void main() {
   GetIt.instance.registerLazySingleton<ProductRepository>(() => ProductRepository());
   GetIt.instance.registerLazySingleton<ColorRepository>(() => ColorRepository());
   runApp(const MyApp());
-
 }
 
 class MyApp extends StatelessWidget {

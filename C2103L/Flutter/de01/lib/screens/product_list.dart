@@ -1,5 +1,6 @@
 import 'package:de01/models/product.dart';
 import 'package:de01/repositories/product_repository.dart';
+import 'package:de01/widgets/product_row.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
@@ -22,33 +23,7 @@ class ProductListScreen extends StatelessWidget {
             }
             return ListView.builder(itemBuilder: (context, index) {
               Product selectedProduct = snapshot.data![index];
-              return Container(
-                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                //padding: EdgeInsets.only(top: 0.05*screenWidth, right: 10, bottom: 5, left: 10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Mouse', style: TextStyle(fontSize: 16),),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(selectedProduct.code, style: TextStyle(fontSize: 16),),
-                        Text(selectedProduct.name, style: TextStyle(fontSize: 16),),
-                        Container(
-                          width: 60,height: 60,
-                          color: Color(selectedProduct.hexValue),
-                          //color: Colors.red,
-                        )
-                      ],
-                    ),
-                    SizedBox(height: 10,),
-                    Container(
-                      height: 1,
-                      color: Colors.grey,
-                    )
-                  ],
-                ),
-              );
+              return ProductRow(product: selectedProduct);
             },itemCount: snapshot.data?.length ?? 0,);
           },
         )
