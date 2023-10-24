@@ -1,10 +1,14 @@
+import 'package:de03/models/product.dart';
+import 'package:de03/repositories/color_repository.dart';
 import 'package:de03/repositories/product_repository.dart';
+import 'package:de03/screens/detail_screen.dart';
 import 'package:de03/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
 void main() {
   GetIt.instance.registerLazySingleton<ProductRepository>(() => ProductRepository());
+  GetIt.instance.registerLazySingleton<ColorRepository>(() => ColorRepository());
   runApp(const MyApp());
 }
 

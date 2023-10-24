@@ -32,6 +32,42 @@ class ProductRepository {
       price: 129.99,
       hexColor: '#FFFF00',
     ),
+    Product(
+      name: 'Canon EOS R5',
+      url: 'https://cdn.vjshop.vn/may-anh/mirrorless/canon/canon-eos-r5/canon-eos-r5-1-500x500.jpg',
+      price: 2999.99,
+      hexColor: '#800080',
+    ),
+    Product(
+      name: 'Bose QuietComfort Earbuds',
+      url: 'https://bizweb.dktcdn.net/thumb/large/100/451/485/products/sony-wf-1000xm5-jpeg.jpg?v=1686888478397',
+      price: 279.99,
+      hexColor: '#008080',
+    ),
+    Product(
+      name: 'Nintendo Switch Lite',
+      url: 'https://34gameshop.vn/wp-content/uploads/2023/03/03-1.png',
+      price: 199.99,
+      hexColor: '#FFA500',
+    ),
+    Product(
+      name: 'Amazon Echo Dot (3rd Gen)',
+      url: 'https://cdn-amz.woka.io/images/I/6182S7MYC2L._SR476,476_.jpg',
+      price: 49.99,
+      hexColor: '#800000',
+    ),
+    Product(
+      name: 'GoPro HERO9 Black',
+      url: 'https://cdn.vjshop.vn/camera-hanh-dong/gopro/gopro-11/anh-san-pham/gopro-hero-11-1-500x500.jpg',
+      price: 349.99,
+      hexColor: '#808080',
+    ),
+    Product(
+      name: 'Adidas Ultraboost',
+      url: 'https://cdn.runningshoesguru.com/wp-content/uploads/2023/03/Adidas-Ultraboost-Light-2-1.jpeg',
+      price: 179.99,
+      hexColor: '#008000',
+    ),
   ];
   Future<List<Product>> fetchProducts() async {
     // Simulate fetching products from an external source (e.g., API, database)

@@ -1,5 +1,6 @@
 import 'package:de03/models/product.dart';
 import 'package:de03/repositories/product_repository.dart';
+import 'package:de03/screens/detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
@@ -25,31 +26,40 @@ class HomeScreen extends StatelessWidget {
                     itemCount: products.length,
                     itemBuilder: (BuildContext context, int index) {
                       Product selectedProduct = products[index];
-                      return Container(
-                        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                        child: Row(
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.all(Radius.circular(10)),
-                              child: Image.network(
-                                selectedProduct.url,
-                                width: 100,
-                                height: 100,
-                                fit: BoxFit.cover,
+                      return InkWell(
+                        child: Container(
+                          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                          child: Row(
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.all(Radius.circular(10)),
+                                child: Image.network(
+                                  selectedProduct.url,
+                                  width: 100,
+                                  height: 100,
+                                  fit: BoxFit.cover,
+                                ),
                               ),
-                            ),
-                            SizedBox(width: 10,),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(selectedProduct.name,style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
-                                SizedBox(height: 10,),
-                                Text('\$'+'${selectedProduct.price}',style: TextStyle(fontSize: 16),),
-                              ],
-                            )
-                          ],
+                              SizedBox(width: 10,),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(selectedProduct.name,style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+                                  SizedBox(height: 10,),
+                                  Text('\$'+'${selectedProduct.price}',style: TextStyle(fontSize: 16),),
+                                ],
+                              )
+                            ],
+                          ),
                         ),
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => DetailScreen(product: selectedProduct),
+                            ),
+                          );
+                        },
                       );
                     }),
               );
