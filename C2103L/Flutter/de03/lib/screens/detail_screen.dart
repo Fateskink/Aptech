@@ -13,17 +13,18 @@ class DetailScreen extends StatefulWidget {
 }
 
 class _DetailScreenState extends State<DetailScreen> {
-  List<String> colors = <String>[];
-  List<bool> isSelectedList = <bool>[];
+  List<Color> _colors = <Color>[];
+  List<bool> _isSelectedList = <bool>[];
+  Color _selectedColor = Colors.white;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     final colorRepository = GetIt.instance<ColorRepository>();
     setState(() {
-      colors = colorRepository.colors;
-      isSelectedList = List.filled(colors.length, false);
-      isSelectedList[0] = true;
+      _colors = colorRepository.colors;
+      _isSelectedList = List.filled(_colors.length, false);
+      _isSelectedList[0] = true;
     });
   }
   @override
@@ -68,22 +69,22 @@ class _DetailScreenState extends State<DetailScreen> {
                 fit: BoxFit.cover,
               ),
               Container(
-                padding: EdgeInsets.only(left: 20),
+                padding: EdgeInsets.only(left: 20, top: 20),
                 width: 200,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: colors.asMap().entries.map((entry) {
+                  children: _colors.asMap().entries.map((entry) {
                     final index = entry.key;
-                    final color = entry.value;
-
+                    Color color = entry.value;
                     return ColorButton(
-                      //color: Color(int.parse(color.replaceAll('#', ''), radix: 16)),
-                      color: Colors.red,
-                      isSelected: isSelectedList[index],
+                      color: color,
+
+                      isSelected: _isSelectedList[index],
                       onTap: (isSelected) {
                         setState(() {
-                          isSelectedList = List.filled(colors.length, false);
-                          isSelectedList[index] = true;
+                          _isSelectedList = List.filled(_colors.length, false);
+                          _isSelectedList[index] = true;
+                          _selectedColor = _colors[index];
                         });
                       },
                     );
