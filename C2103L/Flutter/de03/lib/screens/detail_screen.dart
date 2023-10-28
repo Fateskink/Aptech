@@ -1,4 +1,5 @@
 import 'package:de03/models/product.dart';
+import 'package:de03/repositories/cart_repository.dart';
 import 'package:de03/repositories/color_repository.dart';
 import 'package:de03/widgets/color_button.dart';
 import 'package:flutter/material.dart';
@@ -20,18 +21,20 @@ class _DetailScreenState extends State<DetailScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    final colorRepository = GetIt.instance<ColorRepository>();
+    final _colorRepository = GetIt.instance<ColorRepository>();
     setState(() {
-      _colors = colorRepository.colors;
+      _colors = _colorRepository.colors;
       _isSelectedList = List.filled(_colors.length, false);
       _isSelectedList[0] = true;
     });
   }
   @override
   Widget build(BuildContext context) {
+    final _cartRepository = GetIt.instance<CartRepository>();
     return Scaffold(
       body: SafeArea(
         child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -78,7 +81,6 @@ class _DetailScreenState extends State<DetailScreen> {
                     Color color = entry.value;
                     return ColorButton(
                       color: color,
-
                       isSelected: _isSelectedList[index],
                       onTap: (isSelected) {
                         setState(() {
@@ -90,7 +92,31 @@ class _DetailScreenState extends State<DetailScreen> {
                     );
                   }).toList(),
                 ),
-              )
+              ),
+              SizedBox(height: 10,),
+              Text(
+                widget.product.description ?? '',
+                style: TextStyle(fontSize: 18),
+                maxLines: 5,
+                overflow: TextOverflow.ellipsis,
+              ),
+              SizedBox(height: 10,),
+              GestureDetector(
+                child: Container(
+                  padding: EdgeInsets.symmetric(vertical: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center
+                    ,
+                    children: [
+                      Icon(Icons.add_shopping_cart, size: 60,),
+                    ],
+                  )
+                ),
+                onTap: () {
+                  _cartRepository.addToCart(
+                      id: widget.product.id);
+                },
+              ),
             ],
           ),
         ),
