@@ -17,6 +17,8 @@ class _DetailScreenState extends State<DetailScreen> {
   List<Color> _colors = <Color>[];
   List<bool> _isSelectedList = <bool>[];
   Color _selectedColor = Colors.white;
+  int _quantity = 0;
+  final _cartRepository = GetIt.instance<CartRepository>();
   @override
   void initState() {
     // TODO: implement initState
@@ -27,10 +29,15 @@ class _DetailScreenState extends State<DetailScreen> {
       _isSelectedList = List.filled(_colors.length, false);
       _isSelectedList[0] = true;
     });
+    _cartRepository.getQuantity(id: widget.product.id).then((value) {
+      setState(() {
+        _quantity = value;
+      });
+    });
   }
   @override
   Widget build(BuildContext context) {
-    final _cartRepository = GetIt.instance<CartRepository>();
+
     return Scaffold(
       body: SafeArea(
         child: Container(
@@ -101,6 +108,11 @@ class _DetailScreenState extends State<DetailScreen> {
                 overflow: TextOverflow.ellipsis,
               ),
               SizedBox(height: 10,),
+              Text(
+                'Number of products: ${_quantity}',
+                style: TextStyle(fontSize: 18),
+              ),
+              SizedBox(height: 10,),
               GestureDetector(
                 child: Container(
                   padding: EdgeInsets.symmetric(vertical: 20),
@@ -113,8 +125,12 @@ class _DetailScreenState extends State<DetailScreen> {
                   )
                 ),
                 onTap: () {
-                  _cartRepository.addToCart(
-                      id: widget.product.id);
+                  _cartRepository.addToCart(id: widget.product.id);
+                  _cartRepository.getQuantity(id: widget.product.id).then((value) {
+                    setState(() {
+                      _quantity = value;
+                    });
+                  });
                 },
               ),
             ],

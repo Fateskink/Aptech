@@ -46,7 +46,7 @@ class ProductRepository {
     Product(
       id: 6,
       name: 'Canon EOS R5',
-      url: 'https://cdn.vjshop.vn/may-anh/mirrorless/canon/canon-eos-r5/canon-eos-r5-1-500x500.jpg',
+      url: 'https://bizweb.dktcdn.net/thumb/large/100/451/485/products/sony-wf-1000xm5-jpeg.jpg?v=1686888478397',
       price: 2999.99,
       description: 'achs Bank USA, Salt Lake City Branch. Member FDIC. Apple Card Owners and Co‑Owners may individually apply for a S',
       color: Colors.white,

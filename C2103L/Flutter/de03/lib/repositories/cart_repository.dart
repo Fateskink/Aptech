@@ -4,21 +4,23 @@ import 'package:shared_preferences/shared_preferences.dart';
 class CartRepository {
   SharedPreferences? _prefs;
 
-  Future<void> init() async {
-    _prefs = await SharedPreferences.getInstance();
+  Future<void> getPreference() async {
+    if(_prefs == null) {
+      _prefs = await SharedPreferences.getInstance();
+    }
   }
 
-
-  Future<void> addToCart({
+  Future<void> addToCart ({
     required int id
   }) async {
-
+    await getPreference();
     if(_prefs?.getKeys().contains('$id') == true) {
       _prefs!.setInt('$id', _prefs!.getInt('$id')! + 1);
     } else {
       _prefs!.setInt('$id',1);
     }
   }
+  /*
   Future<void> removeFromCart({
     required int id
   }) async {
@@ -32,7 +34,13 @@ class CartRepository {
         _prefs!.setInt(key, quantity);
       }
     }
+   */
+  Future<int> getQuantity({required int id}) async {
+    await getPreference();
+    String key = '$id';
+    return _prefs!.getInt(key) ?? 0;
   }
+
 /*
   Future<void> removeFromCart(Map<String, dynamic> item) async {
     final cartItems = getCartItems();
