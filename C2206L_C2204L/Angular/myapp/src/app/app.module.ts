@@ -6,13 +6,15 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { CounterComponent } from './counter/counter.component';
 import { DatafetcherComponent } from './datafetcher/datafetcher.component';
+import { ColorItem } from './widgets/color.item/color.item';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     CounterComponent,
-    DatafetcherComponent
+    DatafetcherComponent,
+    ColorItem
   ],
   imports: [
     CommonModule,
@@ -24,7 +26,8 @@ import { DatafetcherComponent } from './datafetcher/datafetcher.component';
     //"root component"
     //AppComponent
     //LoginComponent,
-    CounterComponent,
+    //CounterComponent,
+    DatafetcherComponent
   ]
 })
 export class AppModule { }

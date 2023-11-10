@@ -1,1 +1,5 @@
-<p>datafetcher works!</p>
+<div *ngFor="let color of colors; let i = index">
+    <color-item [color]="color"            
+        (click)="selectColor(i)" 
+            [isSelected]='i == selectedColorIndex'></color-item>
+</div>

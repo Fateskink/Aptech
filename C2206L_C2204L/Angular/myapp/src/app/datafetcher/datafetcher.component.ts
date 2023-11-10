@@ -13,4 +13,9 @@ export class DatafetcherComponent {
     '#f39c12', 
     '#9b59b6'
   ];
+  selectedColorIndex: number = 0;
+  selectColor(index: number) {
+    debugger
+    this.selectedColorIndex = index;
+  }
 }
