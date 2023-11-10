@@ -4,11 +4,15 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
+import { CounterComponent } from './counter/counter.component';
+import { DatafetcherComponent } from './datafetcher/datafetcher.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent
+    LoginComponent,
+    CounterComponent,
+    DatafetcherComponent
   ],
   imports: [
     CommonModule,
@@ -19,7 +23,8 @@ import { LoginComponent } from './login/login.component';
   bootstrap: [
     //"root component"
     //AppComponent
-    LoginComponent
+    //LoginComponent,
+    CounterComponent,
   ]
 })
 export class AppModule { }
