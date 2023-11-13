@@ -7,5 +7,5 @@ import { Component, Input } from '@angular/core';
 })
 export class ColorItem {
   @Input() color: string = '#3498db'; // Default color
-  @Input() isSelected: boolean = false;
+  @Input() isSelected: boolean = false; //props in ReactJS
 }

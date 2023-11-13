@@ -1,5 +1,9 @@
-<div *ngFor="let color of colors; let i = index">
-    <color-item [color]="color"            
+<h1>COLOR</h1>
+<div *ngFor="let eachColor of colors; let i = index"
+    class="color-item"
+>
+    <color-item [color]="eachColor"            
         (click)="selectColor(i)" 
-            [isSelected]='i == selectedColorIndex'></color-item>
+            [isSelected]='i == selectedColorIndex'>
+    </color-item>
 </div>
