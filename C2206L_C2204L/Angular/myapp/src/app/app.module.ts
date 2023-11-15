@@ -7,6 +7,7 @@ import { LoginComponent } from './login/login.component';
 import { CounterComponent } from './counter/counter.component';
 import { DatafetcherComponent } from './datafetcher/datafetcher.component';
 import { ColorItem } from './widgets/color.item/color.item';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { ColorItem } from './widgets/color.item/color.item';
   imports: [
     CommonModule,
     BrowserModule,
-    FormsModule
+    FormsModule,
+    HttpClientModule,
   ],
   providers: [],
   bootstrap: [

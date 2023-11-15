@@ -1,3 +1,4 @@
+import { ProductImage } from "src/models/product.image";
 export interface Product {
     id: number;
     name: string;
