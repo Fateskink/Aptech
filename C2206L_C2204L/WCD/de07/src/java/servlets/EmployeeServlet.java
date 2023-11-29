@@ -4,21 +4,42 @@
  */
 package servlets;
 
+import entities.*;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.*;
 import java.io.IOException;
 import java.io.*;
+import java.util.List;
+import javax.persistence.*;
 
 public class EmployeeServlet extends HttpServlet {
- 
+    private RequestDispatcher dispatcher;    
+    private EntityManager entityManager = Persistence
+                        .createEntityManagerFactory("de07PU")
+                        .createEntityManager();
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.setAttribute("x", 1);    
-        request.setAttribute("y", 2);    
-        RequestDispatcher dispatcher = request.getRequestDispatcher("employees.jsp");
-        dispatcher.forward(request, response);
+        //http://localhost:8080/de07/EmployeeServlet?x=2&y=3
+        /*
+        Integer x = Integer.valueOf(request.getParameter("x"));
+        Integer y = Integer.valueOf(request.getParameter("y"));
+        Integer sum = x + y;
+        request.setAttribute("sum", sum);
+        */        
+        try {            
+            List<Employee> employees = entityManager.createNamedQuery(
+                    "Employee.findAll", Employee.class).getResultList();
+            request.setAttribute("employees", employees);
+            this.dispatcher = request.getRequestDispatcher("employees.jsp");
+            dispatcher.forward(request, response);
+            this.entityManager.close();
+            this.entityManager.getEntityManagerFactory().close();            
+        } catch (ServletException | IOException e) {
+            System.err.println(e.toString());        
+        }
+        
     }
     
     @Override

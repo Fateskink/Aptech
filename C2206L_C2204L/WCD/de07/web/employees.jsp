@@ -7,8 +7,6 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <h1>This is Employees</h1>
-        <p>x = ${x}</p>
-        <p>y = ${y}</p>
+        <h1>This is Employees</h1>           
     </body>
 </html>
