@@ -15,9 +15,20 @@ import javax.persistence.*;
 
 public class EmployeeServlet extends HttpServlet {
     private RequestDispatcher dispatcher;    
-    private EntityManager entityManager = Persistence
-                        .createEntityManagerFactory("de07PU")
-                        .createEntityManager();
+    private EntityManager entityManager;
+
+    @Override
+    public void init() throws ServletException {
+        super.init(); 
+        System.out.println("init...");
+    }
+
+    @Override
+    public void destroy() {
+        super.destroy(); 
+        System.out.println("destroy...");
+    }
+    
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -29,6 +40,9 @@ public class EmployeeServlet extends HttpServlet {
         request.setAttribute("sum", sum);
         */        
         try {            
+            entityManager = Persistence
+                        .createEntityManagerFactory("de07PU")
+                        .createEntityManager();
             List<Employee> employees = entityManager.createNamedQuery(
                     "Employee.findAll", Employee.class).getResultList();
             request.setAttribute("employees", employees);
