@@ -4,6 +4,7 @@
  */
 package servlets;
 
+
 import entities.*;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
@@ -12,43 +13,39 @@ import java.io.IOException;
 import java.io.*;
 import java.util.List;
 import javax.persistence.*;
+import org.apache.tomcat.util.digester.EnvironmentPropertySource;
 
 public class EmployeeServlet extends HttpServlet {
     private RequestDispatcher dispatcher;    
-    private EntityManager entityManager;
+    private EntityManager entityManager;    
 
     @Override
     public void init() throws ServletException {
         super.init(); 
-        System.out.println("init...");
+        System.out.println("init...");                             
     }
+    
 
     @Override
     public void destroy() {
         super.destroy(); 
         System.out.println("destroy...");
+        
     }
     
     @Override    
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        //http://localhost:8080/de07/EmployeeServlet?x=2&y=3
-        /*
-        Integer x = Integer.valueOf(request.getParameter("x"));
-        Integer y = Integer.valueOf(request.getParameter("y"));
-        Integer sum = x + y;
-        request.setAttribute("sum", sum);
-        */        
+            throws ServletException, IOException {                
         try {   
              // Lấy giá trị của tham số employeeNo từ URL
             String employeeNo = request.getParameter("employeeNo");        
             // Lấy giá trị của tham số action từ URL
             String action = request.getParameter("action") == null ? "" : 
-                    request.getParameter("action");
-            entityManager = Persistence
-                        .createEntityManagerFactory("de07PU")
-                        .createEntityManager();
-            if(action.toLowerCase().equals("delete")) {
+                    request.getParameter("action");            
+            this.entityManager = Persistence
+                        .createEntityManagerFactory(Environment.PERSISTENCE_UNIT)
+                .createEntityManager();
+            if(action.toLowerCase().equals("delete")) {                
                 entityManager.getTransaction().begin();
                 // Tìm nhân viên cần xóa dựa trên mã số nhân viên
                 Employee employee = entityManager.find(Employee.class, employeeNo);
@@ -62,12 +59,13 @@ public class EmployeeServlet extends HttpServlet {
             List<Employee> employees = entityManager.createNamedQuery(
                         "Employee.findAll", Employee.class).getResultList();
                 request.setAttribute("employees", employees);
-                this.dispatcher = request.getRequestDispatcher("employees.jsp");
-                dispatcher.forward(request, response);
-                this.entityManager.close();
-                this.entityManager.getEntityManagerFactory().close();                        
+            this.dispatcher = request.getRequestDispatcher("employees.jsp");
+            dispatcher.forward(request, response);                                  
         } catch (ServletException | IOException e) {
             System.err.println(e.toString());        
+        } finally {
+            this.entityManager.close();
+            this.entityManager.getEntityManagerFactory().close();  
         }
         
     }
@@ -78,8 +76,32 @@ public class EmployeeServlet extends HttpServlet {
         String action = request.getParameter("action") == null ? "" : 
                     request.getParameter("action");
         if(action.toLowerCase().equals("insert")) {
-            //chagpt: lam the nao lay duoc du lieu tren form vao day va goi ham insert
-            //sau khi insert data thi Back ve doGet o tren
+            String employeeNo = request.getParameter("employeeNo");
+            String name = request.getParameter("name");
+            String placeOfWork = request.getParameter("placeOfWork");
+            String phoneNo = request.getParameter("phoneNo");            
+            try {
+                this.entityManager = Persistence
+                        .createEntityManagerFactory(Environment.PERSISTENCE_UNIT)
+                .createEntityManager();
+                entityManager.getTransaction().begin();
+                // Tạo một đối tượng Employee mới
+                Employee employee = new Employee();
+                employee.setEmployeeNo(employeeNo);
+                employee.setEmployeeName(name);                
+                employee.setPlaceOfWork(placeOfWork);
+                employee.setPhoneNumber(phoneNo);
+
+                // Chèn nhân viên vào cơ sở dữ liệu
+                entityManager.persist(employee);
+                entityManager.getTransaction().commit();                
+                response.sendRedirect("EmployeeServlet");
+            } catch (Exception e) {
+                entityManager.getTransaction().rollback();
+                e.printStackTrace();
+            } finally {
+                entityManager.close();
+            }
         }
     }
     
