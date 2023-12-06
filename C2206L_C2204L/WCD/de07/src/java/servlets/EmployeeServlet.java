@@ -11,6 +11,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.*;
 import java.io.IOException;
 import java.io.*;
+import java.util.Hashtable;
 import java.util.List;
 import javax.persistence.*;
 import org.apache.tomcat.util.digester.EnvironmentPropertySource;
@@ -23,8 +24,7 @@ public class EmployeeServlet extends HttpServlet {
     public void init() throws ServletException {
         super.init(); 
         System.out.println("init...");                             
-    }
-    
+    }    
 
     @Override
     public void destroy() {
@@ -79,7 +79,26 @@ public class EmployeeServlet extends HttpServlet {
             String employeeNo = request.getParameter("employeeNo");
             String name = request.getParameter("name");
             String placeOfWork = request.getParameter("placeOfWork");
-            String phoneNo = request.getParameter("phoneNo");            
+            String phoneNo = request.getParameter("phoneNo");    
+            // Kiểm tra và lưu các trường null vào Hashtable
+            Hashtable<String, String> errorFields = new Hashtable<>();
+            if (employeeNo == null || employeeNo.isEmpty()) {
+                errorFields.put("employeeNo", "Employee No is required");
+            }
+            if (name == null || name.isEmpty()) {
+                errorFields.put("name", "Name is required");
+            }
+            if (placeOfWork == null || placeOfWork.isEmpty()) {
+                errorFields.put("placeOfWork", "Place of Work is required");
+            }
+            if (phoneNo == null || phoneNo.isEmpty()) {
+                errorFields.put("phoneNo", "Phone No is required");
+            }
+            if (!errorFields.isEmpty()) {
+                request.setAttribute("errorFields", errorFields);
+                request.getRequestDispatcher("addEmployee.jsp").forward(request, response);
+                return;
+            }            
             try {
                 this.entityManager = Persistence
                         .createEntityManagerFactory(Environment.PERSISTENCE_UNIT)
