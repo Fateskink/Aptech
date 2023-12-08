@@ -5,17 +5,30 @@ class Mobile {
   String? manufacturer;
   int releasedYear;
   double price;
-  static Mobile input() {
+  factory Mobile.input() {
+  //static Mobile input() {
     print('Enter name: ');
     String _name = stdin.readLineSync() ?? '';
     print('Enter manufacturer: ');
     String _manufacturer = stdin.readLineSync() ?? '';
+    int _releasedYear = 0;
+    do {
+      print('Enter releasedYear: ');
+      _releasedYear = int.parse(stdin.readLineSync() ?? '2000');
+      if (_releasedYear < 1999) {
+        print('Release year must be >= 1999');
+      }
+    } while (_releasedYear < 1999);
 
-    print('Enter releasedYear: ');
-    int _releasedYear = int.parse(stdin.readLineSync() ?? '2000');
+    double _price = 0;
+    do {
+      print('Enter price: ');
+      _price = double.parse(stdin.readLineSync() ?? '0');
+      if (_price < 500 || _price > 6000) {
+        print('Release year must be >= 1999');
+      }
+    } while (_price < 500 || _price > 6000);
 
-    print('Enter price: ');
-    double _price = double.parse(stdin.readLineSync() ?? '0');
     return new Mobile(
         name: _name,
         releasedYear: _releasedYear,
