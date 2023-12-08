@@ -100,9 +100,23 @@ public class EmployeeServlet extends HttpServlet {
                 return;
             }            
             try {
+                
+                //check if phoneno exists               
                 this.entityManager = Persistence
-                        .createEntityManagerFactory(Environment.PERSISTENCE_UNIT)
-                .createEntityManager();
+                                    .createEntityManagerFactory(Environment.PERSISTENCE_UNIT)
+                                    .createEntityManager();
+                TypedQuery<Employee> query = entityManager.createNamedQuery(
+                        "Employee.findByPhoneNumber", 
+                        Employee.class);
+                query.setParameter("phoneNumber", phoneNo);
+                if(!query.getResultList().isEmpty()) {
+                    //send error to jsp
+                    request.setAttribute("employeeExist", 
+                            "This employee is existed, please try other");
+                    request.getRequestDispatcher("addEmployee.jsp").forward(request, response);
+                    return;
+                }
+                
                 entityManager.getTransaction().begin();
                 // Tạo một đối tượng Employee mới
                 Employee employee = new Employee();

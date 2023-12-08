@@ -8,6 +8,11 @@
 <body>
     <h1>Add Employee</h1>
     <div class="container">
+      <span class="error text-danger">        
+        <% if (request.getAttribute("employeeExist") != null) { %>
+            <%= request.getAttribute("employeeExist") %>
+        <% } %>
+    </span>   
     <form action="EmployeeServlet?action=insert" method="POST">
         <div class="mb-3">
             <label for="employeeNo" class="form-label">Employee No:</label>
