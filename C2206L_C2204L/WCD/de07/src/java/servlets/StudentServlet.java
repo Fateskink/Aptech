@@ -20,8 +20,8 @@ public class StudentServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         // Retrieve form data        
-        try {
-            String name = request.getParameter("name");
+        try {                                
+            String name = request.getParameter("name");                        
             String address = request.getParameter("address");
             String phoneNo = request.getParameter("phoneNo");
             String className = request.getParameter("className");
