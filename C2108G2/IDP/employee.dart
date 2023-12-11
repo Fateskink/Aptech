@@ -20,14 +20,19 @@ class Employee {
         int workingDay = 0;
         while(true) {
             print('Enter workingDay: ');
-            int workingDay = int.parse(stdin.readLineSync() ?? "0");
-            if(workingDay > 1 || workingDay < 31) {
+            workingDay = int.parse(stdin.readLineSync() ?? "0");
+            if(workingDay > 1 && workingDay < 31) {
                 break;
             }
         }
-
-        print('Enter dailySalary: ');
-        double dailySalary = double.parse(stdin.readLineSync() ?? "0");
+        double dailySalary = 0;
+        while(true) {
+            print('Enter dailySalary: ');
+            dailySalary = double.parse(stdin.readLineSync() ?? "0");;
+            if(dailySalary > 10 && dailySalary < 100) {
+                break;
+            }
+        }
         return new Employee(id: id, name: name, workingDay: workingDay, dailySalary: dailySalary);
     }
     @override
