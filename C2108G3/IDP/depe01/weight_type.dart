@@ -1,4 +1,0 @@
-enum WeightType {
-    Kilogram,
-    Pound
-}
