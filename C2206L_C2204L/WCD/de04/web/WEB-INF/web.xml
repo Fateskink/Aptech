@@ -4,8 +4,16 @@
         <servlet-name>ProductServlet</servlet-name>
         <servlet-class>servlets.ProductServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Question02Servlet</servlet-name>
+        <servlet-class>servlets.Question02Servlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ProductServlet</servlet-name>
         <url-pattern>/</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Question02Servlet</servlet-name>
+        <url-pattern>/Question02Servlet</url-pattern>
     </servlet-mapping>
 </web-app>

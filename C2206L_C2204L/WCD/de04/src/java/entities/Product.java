@@ -37,6 +37,7 @@ public class Product implements Serializable {
     @Basic(optional = false)
     private String name;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+   
     private BigDecimal price;
     private String url;
 

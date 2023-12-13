@@ -1,8 +1,6 @@
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ page import="java.util.List" %>
 <%@ page import="entities.Product" %>
-
 <!DOCTYPE html>
 <html>
     <head>
@@ -19,12 +17,12 @@
         }
 
         </style>
+        <h1>Detail product</h1>
         <% 
-          List<Product> products = (List<Product>) request.getAttribute("products");           
+          Product product = (Product)request.getAttribute("product");   
+          int xx=1;
        %>
-       <div class="row">
-            <% for (Product product : products) { %>
-               <div class="col-lg-4 col-md-6">
+        <div class="col-lg-4 col-md-6">
                   <div class="product-item">
                       <a href="ProductServlet?id=<%= product.getId() %>">
                         <img src="<%= product.getUrl() %>" 
@@ -36,14 +34,7 @@
                      </a>
                   </div>
                </div>
-            <% } %>
-         </div>
-         <div>
-            <% 
-               String contextPath = ((HttpServletRequest) request).getContextPath();   
-           %>
-          <a href="<%= contextPath %>/insertNewMobile.jsp">Add New</a>
-       </div>
+         <a href="ProductServlet">Back to List</a>
          <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
          <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     </body>
