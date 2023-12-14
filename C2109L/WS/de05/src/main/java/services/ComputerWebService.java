@@ -1,5 +1,20 @@
-
 package services;
+import com.aptech.de05.Computer;
+import java.util.List;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.*;
+import javax.persistence.Persistence;
+import javax.ws.rs.core.Response;
+
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
 @Path("/computers")
 public class ComputerWebService {
@@ -7,7 +22,7 @@ public class ComputerWebService {
     private EntityManager em;
 
     public ComputerWebService() {
-        emf = Persistence.createEntityManagerFactory("YourPersistenceUnit"); // Replace with your persistence unit name
+        emf = Persistence.createEntityManagerFactory("com.aptech.de05_de05_jar_1.0-SNAPSHOTPU"); // Replace with your persistence unit name
         em = emf.createEntityManager();
     }
 
