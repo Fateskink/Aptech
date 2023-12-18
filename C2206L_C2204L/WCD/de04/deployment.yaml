@@ -13,6 +13,20 @@ services:
       - ./de04.sql:/docker-entrypoint-initdb.d/init-script.sql
     networks:
       - local-network
+  
+  mysql5-container:
+    container_name: mysql5-container
+    image: mysql:5.7.44   
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: Abc123456789@
+      #MYSQL_DATABASE: de04
+    ports:
+      - 3308:3306
+    volumes: 
+      - ./de04.sql:/docker-entrypoint-initdb.d/init-script.sql
+    networks:
+      - local-network
 
   phpmyadmin8-container:
     #intel host
@@ -30,6 +44,22 @@ services:
     networks:
       - local-network
 
+  phpmyadmin5-container:
+    #intel host
+    image: phpmyadmin/phpmyadmin
+    #mac m1 host
+    #image: arm64v8/phpmyadmin     
+    container_name: phpmyadmin5-container
+    restart: always
+    depends_on:
+      - mysql8-container      
+    ports:
+      - "8101:80" #port mapping
+    environment:
+      PMA_HOST: mysql5-container #phpMyAdmin Host
+    networks:
+      - local-network
+
 networks:
   local-network:
     name: local-network
@@ -37,4 +67,7 @@ networks:
 
 #docker-compose -f ./deployment.yaml up -d mysql8-container
 #docker-compose -f ./deployment.yaml up -d phpmyadmin8-container
+
+#docker-compose -f ./deployment.yaml up -d mysql5-container
+#docker-compose -f ./deployment.yaml up -d phpmyadmin5-container
       
