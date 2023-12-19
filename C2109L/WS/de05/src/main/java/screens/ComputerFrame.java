@@ -3,12 +3,22 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package screens;
+import com.aptech.de05.Computer;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Vector;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import java.util.List;
 
 public class ComputerFrame extends JFrame {
     private JTextField txtComputerId;
@@ -19,11 +29,16 @@ public class ComputerFrame extends JFrame {
     private JButton btnAddNew;
     private JButton btnFind;
     private JTable tblProducts;
+    private Client client;
+    private WebTarget webTarget;
+    private List<Computer> computers = new ArrayList<Computer>();
 
     public ComputerFrame() {
         initComponents();
+        webTarget = client.target("http://localhost:8080/computers");
     }
-
+    
+    
     private void initComponents() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("Product Form");
@@ -115,15 +130,26 @@ public class ComputerFrame extends JFrame {
         // Get data from the database or any other source
         Vector<Vector<String>> productsData = new Vector<Vector<String>>();
         // Populate productsData with the product information
-            
+        Response response = webTarget.request(MediaType.APPLICATION_JSON).get();
+        if (response.getStatus() == Response.Status.OK.getStatusCode()) {            
+            this.computers = response.readEntity(new GenericType<List<Computer>>() {});            
+        } 
+        // Create table model
+        for (Computer computer : computers) {
+            Vector<String> rowData = new Vector<String>();
+            rowData.add(computer.getId());
+            rowData.add(String.valueOf(computer.getPrice()));
+            rowData.add(computer.getName());
+            rowData.add(computer.getManufacturer());
+            productsData.add(rowData);
+        }
         // Create table model
         Vector<String> columnNames = new Vector<String>();
         columnNames.add("Computer ID");
         columnNames.add("Price");
         columnNames.add("Name");
-        columnNames.add("Manufacture");
+        columnNames.add("Manufacturer");
         DefaultTableModel model = new DefaultTableModel(productsData, columnNames);
-
         // Set the table model
         tblProducts.setModel(model);
     }
@@ -133,9 +159,19 @@ public class ComputerFrame extends JFrame {
         String price = txtPrice.getText();
         String name = txtName.getText();
         String manufacture = txtManufacture.getText();
-
+        // Create a new Computer object
+        Computer computer = new Computer();
+        computer.setId(computerId);
+        computer.setPrice(Float.parseFloat(price));
+        computer.setName(name);
+        computer.setManufacturer(manufacture);
+        
         // Add the new product to the database or any other storage
-
+        Response response = webTarget.request(MediaType.APPLICATION_JSON)
+                .post(Entity.entity(computer, MediaType.APPLICATION_JSON));
+        if (response.getStatus() == Response.Status.CREATED.getStatusCode()) {
+            System.out.println("Computer added successfully");
+        } 
         // Clear the input fields
         txtComputerId.setText("");
         txtPrice.setText("");
