@@ -23,8 +23,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: Abc123456789@
       MYSQL_DATABASE: c2110i
-    volumes:
-      - ./mysql-data:/var/lib/mysql
+          
     ports:
       - 3307:3306    
     networks:
