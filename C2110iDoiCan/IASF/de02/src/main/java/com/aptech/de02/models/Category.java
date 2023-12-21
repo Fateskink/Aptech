@@ -4,8 +4,8 @@ import lombok.*;
 
 import java.util.List;
 
-@Entity
 @Table(name = "categories")
+@Entity
 @Builder
 @Getter
 @Setter

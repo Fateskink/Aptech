@@ -2,8 +2,6 @@ package com.aptech.de02.models;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.List;
-
 @Entity
 @Table(name = "products")
 @Builder
@@ -12,7 +10,6 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-
 public class Product {
     @Id
     @Column(name = "product_id")
