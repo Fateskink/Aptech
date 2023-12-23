@@ -54,7 +54,7 @@ class _InsertProductScreenState extends State<InsertProductScreen> {
                     ))
                         .toList(),
                     onChanged: (String? selectedItem) {
-                      print('haha');
+                      print(selectedItem ?? '');
                     },
                   ),
                 ],
