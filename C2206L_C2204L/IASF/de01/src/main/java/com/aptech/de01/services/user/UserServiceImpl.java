@@ -1,6 +1,6 @@
 package com.aptech.de01.services.user;
 
-import com.aptech.de01.model.User;
+import com.aptech.de01.models.User;
 import com.aptech.de01.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

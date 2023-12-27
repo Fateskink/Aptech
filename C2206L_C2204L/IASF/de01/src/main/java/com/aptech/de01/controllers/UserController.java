@@ -18,20 +18,24 @@ public class UserController {
     @GetMapping("/login")
     public String login(Model model) {
         // Send data to the view in Thymeleaf
-        model.addAttribute("x", "1");
-        model.addAttribute("y", "2");
+        //model.addAttribute("x", "1");
+        //model.addAttribute("y", "2");
         // Return the view name in Thymeleaf
         return "user/login";//detail of Thymeleaf view
     }
     @PostMapping("/login")
     public String processLogin(@RequestParam("username") String username,
-                               @RequestParam("password") String password) {
-        if (userService.login("student", "student")) {
+                               @RequestParam("password") String password,
+                               Model model) {
+        if (userService.login(username, password)) {
             // Successful login
-            return "redirect:/dashboard"; // Redirect to the dashboard page
+            // Redirect to the dashboard page
+            return "redirect:/";
         } else {
             // Failed login
-            return "redirect:/users/login?error"; // Redirect back to the login page with an error parameter
+            String errorMessage = "Incorrect username or password. Please try again.";
+            model.addAttribute("errorMessage", errorMessage);
+            return "user/login";
         }
     }
 }

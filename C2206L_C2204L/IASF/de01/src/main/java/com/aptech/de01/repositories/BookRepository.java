@@ -4,10 +4,16 @@ import com.aptech.de01.models.Book;
 import com.aptech.de01.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-@Repository
-public interface UserRepository extends JpaRepository<User, Long> {
-    User findByUsernameAndPassword(String username, String password);
-}
+import java.util.List;
 
+@Repository
+public interface BookRepository extends JpaRepository<Book, Long> {
+    /*
+    @Query("SELECT DISTINCT b.category FROM Book b")
+    List<String> getCategoryNames();
+    */
+
+}
