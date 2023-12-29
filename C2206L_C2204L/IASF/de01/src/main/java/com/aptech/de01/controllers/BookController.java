@@ -1,14 +1,13 @@
 package com.aptech.de01.controllers;
 
 import com.aptech.de01.dtos.requests.BookRequest;
+import com.aptech.de01.dtos.responses.BookResponse;
 import com.aptech.de01.models.Book;
 import com.aptech.de01.services.book.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,8 +20,8 @@ public class BookController {
 
     @GetMapping("")
     public String getAllBooks(Model model) {
-        List<Book> books = bookService.findAll();
-        model.addAttribute("books", books);
+        List<BookResponse> bookResponses = bookService.findAll();
+        model.addAttribute("bookResponses", bookResponses);
         return "book/list";
     }
     //Hien ra giao dien de insert
@@ -37,6 +36,12 @@ public class BookController {
     public String createBook(BookRequest bookDTO) {
         //BookRequest
         bookService.insert(bookDTO);
+        return "redirect:/books";
+    }
+
+    @DeleteMapping("/{bookId}")
+    public String deleteBook(@PathVariable("bookId") Long id) {
+        bookService.delete(id);
         return "redirect:/books";
     }
 }

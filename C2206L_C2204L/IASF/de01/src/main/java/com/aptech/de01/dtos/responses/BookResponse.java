@@ -12,12 +12,13 @@ import java.math.BigDecimal;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class BookResponse {
     private Long id;
     private String title;
     private String category;
     private BigDecimal price;
     public Boolean isExpensive() {
-        return price > 10.0;
+        return price.compareTo(BigDecimal.valueOf(10.0)) > 0;
     }
 }

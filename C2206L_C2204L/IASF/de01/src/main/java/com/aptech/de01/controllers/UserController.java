@@ -1,6 +1,7 @@
 package com.aptech.de01.controllers;
 
 import com.aptech.de01.services.user.UserService;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,10 +27,11 @@ public class UserController {
     @PostMapping("/login")
     public String processLogin(@RequestParam("username") String username,
                                @RequestParam("password") String password,
-                               Model model) {
+                               Model model, HttpSession session) {
         if (userService.login(username, password)) {
             // Successful login
-            // Redirect to the dashboard page
+            session.setAttribute("username", username);
+            session.setAttribute("loggedIn", true);
             return "redirect:/";
         } else {
             // Failed login
