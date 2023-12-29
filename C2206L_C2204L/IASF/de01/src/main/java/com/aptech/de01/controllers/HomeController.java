@@ -14,8 +14,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequiredArgsConstructor
 public class HomeController {
     @GetMapping("")
-    public String home(Model model) {
-        return "home";//detail of Thymeleaf view
+    public String home(Model model, HttpSession session) {
+        if (session.getAttribute("username") == null) {
+            return "redirect:/users/login";
+        }
+        return "home";
     }
     @GetMapping("/logout")
     public String logout(HttpSession session) {
