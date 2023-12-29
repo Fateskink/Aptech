@@ -1,5 +1,6 @@
 import 'package:de01/models/my_color.dart';
 import 'package:de01/models/product.dart';
+import 'package:de01/repositories/color_repository.dart';
 import 'package:de01/repositories/product_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -16,19 +17,27 @@ class _AddProductScreenState extends State<AddProductScreen> {
   TextEditingController _nameTextEditingController = TextEditingController();
   TextEditingController _priceTextEditingController = TextEditingController();
 
+  final productRepository = GetIt.instance<ProductRepository>();
+  final colorRepository = GetIt.instance<ColorRepository>();
+
+  List<MyColor> colors = <MyColor>[];
+  MyColor? selectedColor;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    fetchColors();
+  }
+  void fetchColors() async {
+    List<MyColor> fetchedColors = await colorRepository.fetchColors();
+    setState(() {
+      colors = fetchedColors;
+      selectedColor = colors.isNotEmpty ? colors.first : null;
+    });
+  }
   @override
   Widget build(BuildContext context) {
-    final productRepository = GetIt.instance<ProductRepository>();
-    List<MyColor> colors = <MyColor>[
-      MyColor(name: 'white', hexValue: 0xFFFFFFFF),
-      MyColor(name: 'purple', hexValue: 0xFF800080),
-      MyColor(name: 'blue', hexValue: 0xFF0000FF),
-      MyColor(name: 'cyan', hexValue: 0xFF00FFFF),
-      MyColor(name: 'red', hexValue: 0xFFFF0000),
-      MyColor(name: 'yellow', hexValue: 0xFFFFFF00),
-      MyColor(name: 'orange', hexValue: 0xFFFFA500),
-    ];
-    MyColor selectedColor = colors.first;
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Exam'),
@@ -114,15 +123,15 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 child: Text('Save', style: TextStyle(fontSize: 20, color: Colors.white),),
                 padding: EdgeInsets.symmetric(vertical: 10, horizontal: 50),
               ),
-              onTap: () {
+              onTap: () async {
                 print('Save');
                 Product product = Product(
                     code: _colorTextEditingController.text,
                     name: _nameTextEditingController.text,
-                    hexValue: selectedColor.hexValue,
+                    hexValue: selectedColor?.hexValue ?? 0,
                     price: double.parse(_priceTextEditingController.text)
                 );
-                productRepository.addProduct(product);
+                await productRepository.addProduct(product);
                 Navigator.of(context).pop();
               },
             ),

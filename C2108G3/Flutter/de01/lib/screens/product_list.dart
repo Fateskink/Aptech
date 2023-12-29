@@ -11,6 +11,10 @@ class ProductListScreen extends StatelessWidget {
     double screenWidth = MediaQuery.of(context).size.width;
     final productRepository = GetIt.instance<ProductRepository>();
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Exam'),
+        backgroundColor: Colors.purple,
+      ),
       body: SafeArea(
         child: FutureBuilder<List<Product>>(
           future: productRepository.fetchProducts(),

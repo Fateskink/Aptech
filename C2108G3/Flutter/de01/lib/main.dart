@@ -1,4 +1,5 @@
 import 'package:de01/repositories/product_repository.dart';
+import 'package:de01/repositories/color_repository.dart';
 import 'package:de01/screens/add_product_screen.dart';
 import 'package:de01/screens/main_screen.dart';
 import 'package:de01/screens/product_list.dart';
@@ -7,6 +8,8 @@ import 'package:get_it/get_it.dart';
 
 void main() {
   GetIt.instance.registerLazySingleton<ProductRepository>(() => ProductRepository());
+  GetIt.instance.registerLazySingleton<ColorRepository>(
+          () => ColorRepository());
   runApp(const MyApp());
 
 }
