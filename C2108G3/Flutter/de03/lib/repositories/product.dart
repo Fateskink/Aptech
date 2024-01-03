@@ -40,8 +40,9 @@ class ProductRepository {
         price: 321.11
     ),
   ];
+  //async function
   Future<List<Product>> getProducts() async {
     await Future.delayed(Duration(seconds: 2));
-    return this.products;
+    return products;
   }
 }

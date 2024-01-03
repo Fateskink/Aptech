@@ -1,4 +1,5 @@
 import 'package:de03/repositories/product.dart';
+import 'package:de03/screens/detail.dart';
 import 'package:de03/screens/home.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -18,7 +19,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      home: HomeScreen(),
+      //home: HomeScreen(),
+      home: DetailScreen()
     );
   }
 }
