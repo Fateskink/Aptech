@@ -1,65 +1,51 @@
+
 import 'dart:io';
 
-import 'book.dart';
-List<Book> books =  [];
-void addDocument() {
-  print('number of books: ');
-  int n = int.parse(stdin.readLineSync() ?? '0');  
+import 'employee.dart';
+List<Employee> employees = [];
+void input() {
+  print('Enter number of employees: ');
+  int n = int.parse(stdin.readLineSync() ?? "0");
   for(int i = 0; i < n; i++) {
-    print('Enter information of book : ${i+1}');
-    Book book = Book.input();
-    books.add(book);
+    Employee employee = Employee.input();
+    employees.add(employee);
   }
 }
-void displayAllDocuments() {
-  books.forEach((book) {
-    print(book);
+void sort() {
+  employees.sort((e1, e2) {
+    return e1.name.compareTo(e2.name);
+  });
+  display();
+}
+void display() {
+  employees.forEach((employee) {
+    print(employee.toString());
   });
 }
-void searchByAuthorName(String authorName) {
-  List<Book> filteredBooks = books
-            .where((book) => book.authorName == authorName)
-            .toList();
-  filteredBooks.forEach((book) {
-    print(book);
-  });
-}
-void showMenu() {
-  int choice = 0;
-  while(choice != 4) {
-    print('Add New Books');
-    print('Display All Books');
-    print('Search Books By Author Name');
-    print('Exit');
-    print('Enter your choice(1-4):');
-    choice = int.parse(stdin.readLineSync() ?? '0');
-    switch(choice) {
-      case 1: 
-        addDocument();
-        break;
-      case 2:
-        displayAllDocuments();
-        break;
-      case 3:
-        print('Enter author name to search: ');
-        String _authorName = stdin.readLineSync() ?? '';
-        searchByAuthorName(_authorName);
-        break;
-      case 4:
-        break;
-      default:
-        print('Invalid choice, please select 1-4');  
+void analyse() {
+  Map<int, int> map = Map();
+  employees.forEach((employee) {
+    int workingDays = employee.workingDays;
+    //map.update(workingDays, (value) => value + 1, ifAbsent: () => 1);
+    if(map.containsKey(workingDays)) {
+      map[workingDays] = map[workingDays]! + 1;
+    } else {
+      map[workingDays] = 1;
     }
-  }
-  
+  });
+  map.keys.forEach((key) {
+    int numberOfEmployees = map[key] ?? 0;
+    int workingDays = key;
+    print('There are $numberOfEmployees with $workingDays days');
+  });
+}
+void find() {
+  double maxSalary = employees.map((e) => e.monthlySalary).reduce((a, b) => a > b ? a : b);
+  List<Employee> employeesWithMaxSalary = employees.where((e) => e.monthlySalary == maxSalary).toList();
+  employeesWithMaxSalary.forEach((element) {
+    print(element.toString());
+  });
 }
 void main() {
-  String firstName = 'Nguyen';
-  String lastName = 'Duc Hoang';
-  String fullName = '${firstName} ${lastName}';
-  print('Your full name is : '+fullName);
-  final Book book1 = Book(name: 'C++ programming', authorName: 'Nguyen Van A', price: 12.3);
-  book1.name = 'Java Programmmmig';  
-  print(book1);  
-  showMenu();
+  print('hello');
 }
