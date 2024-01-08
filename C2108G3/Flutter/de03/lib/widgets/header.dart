@@ -17,6 +17,7 @@ class Header extends StatelessWidget {
           GestureDetector(
             onTap: () {
               print('Back');
+              Navigator.of(context).pop();
             },
             child: Icon(Icons.arrow_back_sharp),
           ),

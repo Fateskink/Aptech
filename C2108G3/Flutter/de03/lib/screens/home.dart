@@ -1,5 +1,6 @@
 import 'package:de03/models/product.dart';
 import 'package:de03/repositories/product.dart';
+import 'package:de03/screens/detail.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 class HomeScreen extends StatelessWidget {
@@ -26,34 +27,44 @@ class HomeScreen extends StatelessWidget {
                 itemBuilder: (BuildContext context, int index) {
                   Product product = products[index];
                   // Build your list item widget using the product data
-                  return Container(
-                    margin: EdgeInsets.only(top: 10),
-                    child: Row(
-                      children: [
-                        SizedBox(width: 10,),
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(5),
-                          child: Image(
-                            image: NetworkImage(product.url),
-                            width: 80,
-                            height: 80,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                        SizedBox(width: 10,),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              product.title,
-                              style: TextStyle(fontSize: 19, fontWeight: FontWeight.bold),
+                  return GestureDetector(
+                    child: Container(
+                      margin: EdgeInsets.only(top: 10),
+                      child: Row(
+                        children: [
+                          SizedBox(width: 10,),
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(5),
+                            child: Image(
+                              image: NetworkImage(product.url),
+                              width: 80,
+                              height: 80,
+                              fit: BoxFit.cover,
                             ),
-                            Text('\$${product.price.toStringAsFixed(2)}'),
-                          ],
-                        ),
-                      ],
+                          ),
+                          const SizedBox(width: 10,),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                product.title,
+                                style: TextStyle(fontSize: 19, fontWeight: FontWeight.bold),
+                              ),
+                              Text('\$${product.price.toStringAsFixed(2)}'),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DetailScreen(productId: product.id),
+                        ),
+                      );
+                    },
                   );
                 },
               );

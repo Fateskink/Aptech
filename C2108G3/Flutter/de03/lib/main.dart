@@ -19,8 +19,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      //home: HomeScreen(),
-      home: DetailScreen()
+      home: HomeScreen(),
+      //home: DetailScreen()
     );
   }
 }
