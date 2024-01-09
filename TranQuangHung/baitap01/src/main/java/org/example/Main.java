@@ -18,6 +18,8 @@ public class Main {
         System.out.println("haha");
         System.out.println(productB);
 
+
+
     }
     /*
     How to connect from Java Application to MySQL:
