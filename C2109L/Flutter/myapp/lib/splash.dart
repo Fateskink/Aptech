@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/widgets/my_button.dart';
 
 class Splash extends StatelessWidget {
   const Splash({super.key});
@@ -31,26 +32,26 @@ class Splash extends StatelessWidget {
                     Container(
                       height: screenHeight * 0.25,
                       width: double.infinity,
-                      color: Colors.white,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Container(
-                            child: GestureDetector(
+                          MyButton(
+                              title: 'Login',
+                              textColor: Colors.white,
+                              backgroundColor: Colors.blue,
                               onTap: () {
-                                // Add your onTap logic here
+                                print('Login');
                               },
-                              child: Text('Login'),
-                            ),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Colors.blue,
-                            ),
                           ),
                           SizedBox(height: 20,),
-                          Container(
-                            child: Text('Sign up'),
+                          MyButton(
+                            title: 'Sign up',
+                            textColor: Colors.blue,
+                            backgroundColor: Colors.white,
+                            onTap: () {
+                              print('Sign up');
+                            },
                           ),
                         ],
                       ),
