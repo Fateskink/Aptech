@@ -71,13 +71,16 @@ class _SigninState extends State<Signin> {
                       ),
                     ),
                     SizedBox(height: 20,),
-                    MyButton(
-                      title: 'Login',
-                      textColor: Colors.white,
-                      backgroundColor: Colors.blue,
-                      onTap: () {
-                        print('Login');
-                      },
+                    Container(
+                      margin: EdgeInsets.symmetric(horizontal: 20),
+                      child: MyButton(
+                        title: 'Login',
+                        textColor: Colors.white,
+                        backgroundColor: Colors.blue,
+                        onTap: () {
+                          print('Login');
+                        },
+                      ),
                     ),
                     GestureDetector(
                       child: Container(
@@ -90,7 +93,47 @@ class _SigninState extends State<Signin> {
                       onTap: () {
 
                       },
-                    )
+                    ),
+                    Container(
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Container(
+                                padding: EdgeInsets.all(10),
+                                child: Row(
+                                    children:[
+                                      Image(
+                                        image: AssetImage('images/facebook.png'),
+                                        fit: BoxFit.cover,
+                                        width: 20,
+                                        height: 20,
+                                      ),
+                                      SizedBox(width: 10,),
+                                      Text('Facebook')
+                                    ]
+                                ),
+                              ),
+                              SizedBox(width: 30,),
+                              Container(
+                                padding: EdgeInsets.all(10),
+                                child: Row(
+                                    children:[
+                                      Image(
+                                        image: AssetImage('images/google.png'),
+                                        fit: BoxFit.cover,
+                                        width: 20,
+                                        height: 20,
+                                      ),
+                                      SizedBox(width: 10,),
+                                      Text('Google')
+                                    ]
+                                ),
+                              ),
+
+                            ]
+                        )
+                    ),
                   ],
                 ),
               )
