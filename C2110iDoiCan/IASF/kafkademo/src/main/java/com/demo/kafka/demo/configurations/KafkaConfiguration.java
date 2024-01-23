@@ -37,7 +37,6 @@ public class KafkaConfiguration {
         converter.setTypeMapper(typeMapper);
         return converter;
     }
-
     @Bean
     public NewTopic productTopic() {
         return new NewTopic("product", 1, (short) 1);

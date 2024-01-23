@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/signin.dart';
 import 'package:myapp/splash.dart';
+import 'package:myapp/tickets.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,7 +16,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       //home: Splash(),
-      home: Signin()
+      //home: Signin()
+      home: Tickets(),
     );
   }
 }
