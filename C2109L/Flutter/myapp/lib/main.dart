@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/friends.dart';
 import 'package:myapp/signin.dart';
 import 'package:myapp/splash.dart';
 import 'package:myapp/tickets.dart';
@@ -17,7 +18,8 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       //home: Splash(),
       //home: Signin()
-      home: Tickets(),
+      //home: Tickets(),
+      home: Friends()
     );
   }
 }
