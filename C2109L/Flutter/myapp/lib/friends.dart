@@ -8,6 +8,13 @@ class Friends extends StatefulWidget {
 }
 
 class _FriendsState extends State<Friends> {
+  final fakedTasks = <String>[
+    "He'd have you all unravel at the",
+    'Who scream',
+    'Revolution is coming...',
+    'Heed not the rabble','Sound of screams but the',
+    'Revolution, they...'
+  ];
   @override
   void initState() {
     // TODO: implement initState
@@ -18,6 +25,7 @@ class _FriendsState extends State<Friends> {
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       body: SafeArea(
         child: Container(
@@ -127,51 +135,59 @@ class _FriendsState extends State<Friends> {
                 ),
               ),
               Text('Badges', style: TextStyle(fontWeight: FontWeight.bold),),
-              Flexible(child: GridView.count(
-                primary: false,
-                padding: const EdgeInsets.all(20),
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-                crossAxisCount: 2,
-                children: <Widget>[
-                  Container(
-                    padding: const EdgeInsets.all(8),
-                    child: Center(
-                      child: Text("He'd have you all unravel at the", textAlign: TextAlign.center,),
-                    ),
+              Container(
+                height: screenHeight * 0.25,
+                child: GridView.count(
+                  primary: false,
+                  padding: const EdgeInsets.all(20),
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                  crossAxisCount: 4,
+                  children: fakedTasks.map((e) => Container(
+                      padding: const EdgeInsets.all(8),
+                      child: Center(
+                        child: Text("He'd have you all unravel at the", textAlign: TextAlign.center,),
+                      ),
                       decoration: BoxDecoration(
                           color: Colors.teal[100],
                           borderRadius: BorderRadius.circular(100)
                       )
-                  ),
-                  Container(
-                    padding: const EdgeInsets.all(8),
-                    color: Colors.teal[200],
-                    child: const Text('Heed not the rabble'),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.all(8),
-                    color: Colors.teal[300],
-                    child: const Text('Sound of screams but the'),
+                  )).toList(growable: true),
+                ),
+              ),
+              Expanded(
+                  child: ListView.builder(
+                      itemCount: 5,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Container(
+                          padding: EdgeInsets.all(10),
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Text('crispi calamaddee', style: TextStyle(fontWeight: FontWeight.bold),),
+                                  Expanded(child: Container()),
+                                  Icon(Icons.access_alarm_outlined, size: 25,)
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Icon(Icons.calendar_month, size: 20,),
+                                  Text('24 July'),
+                                  SizedBox(width: 10,),
+                                  Icon(Icons.lock_clock, size: 20,),
+                                  Text('10:00 AM'),
+                                  SizedBox(width: 10,),
+                                  Icon(Icons.monetization_on, size: 20,),
+                                  Text('10560'),
+                                ],
+                              )
+                            ],
+                          ),
+                        );
+                  })
+              )
 
-                  ),
-                  Container(
-                    padding: const EdgeInsets.all(8),
-                    color: Colors.teal[400],
-                    child: const Text('Who scream'),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.all(8),
-                    color: Colors.teal[500],
-                    child: const Text('Revolution is coming...'),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.all(8),
-                    color: Colors.teal[600],
-                    child: const Text('Revolution, they...'),
-                  ),
-                ],
-              ))
             ],
           ),
         ),
