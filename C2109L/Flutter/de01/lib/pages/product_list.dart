@@ -1,15 +1,14 @@
 import 'package:de01/models/product.dart';
+import 'package:de01/repositories/product_repository.dart';
 import 'package:flutter/material.dart';
 
 class ProductList extends StatelessWidget {
   ProductList({super.key});
-  List<Product> products = [
-    Product(title: 'Mouse', description: 'P001', price: 100, color: 0xFF000000),
-    Product(title: 'Keyboard', description: 'P002', price: 200, color: 0xFF00FF00),
-    Product(title: 'Monitor', description: 'P003', price: 500, color: 0xFF0000FF),
-  ];
+  final ProductRepository _productRepository = ProductRepository();
+
   @override
   Widget build(BuildContext context) {
+    List<Product> products = _productRepository.products;
     return Scaffold(
       body: Container(
         child: ListView.builder(
