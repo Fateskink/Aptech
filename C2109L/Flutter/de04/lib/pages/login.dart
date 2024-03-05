@@ -9,6 +9,8 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,6 +34,7 @@ class _LoginState extends State<Login> {
                 Text('Brand', style: TextStyle(fontSize: 40, color: Colors.white),),
                 Expanded(child: Container()),
                 TextField(
+                  controller: _emailController,
                   decoration: InputDecoration(
                     labelText: 'Email',
                     labelStyle: TextStyle(color: Colors.white), // Optional: Change label text color
@@ -44,6 +47,7 @@ class _LoginState extends State<Login> {
                   ),
                 ),
                 TextField(
+                  controller: _passwordController,
                   obscureText: true,
                   decoration: InputDecoration(
                     labelText: 'Password',
@@ -59,7 +63,24 @@ class _LoginState extends State<Login> {
                 SizedBox(height: 25,),
                 InkWell(
                   onTap: () {
-                    // Action to perform when the container is pressed
+                    String _email = _emailController.text;
+                    String _password = _passwordController.text;
+                    // Email validation
+                    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(_email)) {
+                      print('Invalid email format');
+                      return; // Exit onTap if email format is invalid
+                    }
+
+                    // Password validation
+                    if (_password.length < 4) {
+                      print('Password must be at least 4 characters long');
+                      return; // Exit onTap if password is too short
+                    }
+
+                    if(_email=="student@aptech.com.vn" && _password=="aptech123") {
+                      print('Login successfully');
+                    }
+
                   },
                   child: Container(
                     width: double.infinity, // Adjust width as needed
@@ -105,7 +126,11 @@ class _LoginState extends State<Login> {
                 SizedBox(height: 15,),
                 InkWell(
                   onTap: () {
-                    // Action to perform when the container is pressed
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text("This feature is under construction"),
+                      ),
+                    );
                   },
                   child: Container(
                     width: double.infinity, // Adjust width as needed

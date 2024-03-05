@@ -1,4 +1,5 @@
 import 'package:de04/pages/login.dart';
+import 'package:de04/pages/task_page.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -13,7 +14,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      home: Login()
+      home: TaskPage()
+      //home: Login()
     );
   }
 }
