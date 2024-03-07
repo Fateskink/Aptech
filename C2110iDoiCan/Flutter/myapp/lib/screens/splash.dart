@@ -58,7 +58,19 @@ class Splash extends StatelessWidget {
                   textColor: Colors.white,
                   backgroundColor: Colors.orange,
                   title: 'Register Now'
-                )
+                ),
+                InkWell(
+                  child: Padding(
+                    child: Text('Quick login with touch id',
+                        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                    padding: EdgeInsets.symmetric(vertical: 20),
+                  ),
+                  onTap: () {
+                    print('Quick login with touch id');
+                  },
+                ),
+                Icon(Icons.fingerprint, color: Colors.white, size:  100,),
+                Text('Use touch Id', style: TextStyle(color: Colors.white)),
               ],
             ),
           )
