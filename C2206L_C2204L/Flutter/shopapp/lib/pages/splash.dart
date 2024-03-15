@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodapp/utils/app_colors.dart';
 import 'package:foodapp/widgets/uibutton.dart';
 class Splash extends StatefulWidget {
   const Splash({super.key});
@@ -126,8 +127,8 @@ class _SplashState extends State<Splash> {
                     ),
                     CustomButton(
                         text: _isLastItem ? 'Get started':'Next',
-                        backgroundColor: _isLastItem ? Colors.purple : Colors.white,
-                        textColor: !_isLastItem ? Colors.purple : Colors.white,
+                        backgroundColor: _isLastItem ? AppColors.primaryColor : Colors.white,
+                        textColor: !_isLastItem ? AppColors.primaryColor: Colors.white,
                     )
                   ],
                 ),
