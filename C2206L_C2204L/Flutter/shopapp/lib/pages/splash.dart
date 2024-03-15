@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:foodapp/widgets/uibutton.dart';
+class Splash extends StatefulWidget {
+  const Splash({super.key});
 
-class Splash extends StatelessWidget {
-  Splash({super.key});
+  @override
+  State<Splash> createState() => _SplashState();
+}
+
+class _SplashState extends State<Splash> {
   final List<Map<String, String?>> functionalities = [
     {
       'title': 'Quản lý Hàng Tồn Kho',
@@ -29,29 +35,108 @@ class Splash extends StatelessWidget {
       'description': 'Hiển thị quảng cáo sản phẩm nổi bật và tích hợp tính năng chia sẻ sản phẩm và ưu đãi trên các nền tảng xã hội.',
     },
   ];
+  int _currentPage = 0; //private variable
+  Widget buildDots() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: List.generate(
+        functionalities.length, // Same as itemCount above
+            (index) => AnimatedContainer(
+              duration: Duration(milliseconds: 300),
+              margin: EdgeInsets.symmetric(horizontal: 4),
+              height: 10,
+              width: _currentPage == index ? 20 : 10,
+              decoration: BoxDecoration(
+                color: _currentPage == index ? Colors.blue : Colors.grey,
+                borderRadius: BorderRadius.circular(5),
+              ),
+            ),
+      ),
+    );
+  }
+  bool get _isLastItem => _currentPage == functionalities.length - 1;
   @override
   //like render() in React Class Component
   Widget build(BuildContext context) {
-    final String title = functionalities[0]['title'] as String ?? '';
-    final String description = functionalities[0]['description'] as String ?? '';
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
-      body: Container(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center, //justity content in react
-          crossAxisAlignment: CrossAxisAlignment.center,//align-items in react
-          children: [
-            Image(image: AssetImage('assets/inventory.png')),
-            Text(title, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 30),
-              child: Text(description,
-                  style: TextStyle(
-                  fontSize: 15,
-              )),
+      body: Stack(
+        children: [
+          PageView.builder(
+            onPageChanged: (int page) {
+              setState(() {
+                _currentPage = page;
+              });
+              // Your custom logic here when page changes
+              print('Page $_currentPage selected');
+            },
+            scrollDirection: Axis.horizontal,
+            itemCount: functionalities.length,
+            itemBuilder: (context, index) {
+              var item = functionalities[index];
+              return Container(
+                width: screenWidth,
+                height: screenHeight,
+                padding: const EdgeInsets.all(10.0), // Optional: Adjust padding as needed
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Image(
+                      image: AssetImage('assets/${item['image']}'),
+                      width: 180,
+                      height: 180,
+                    ),
+                    const SizedBox(height: 20.0),
+                    Text(
+                      item['title'] ?? '',
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                    ),
+                    const SizedBox(height: 20.0),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 30),
+                      child: Text(
+                        item['description'] ?? '',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 15,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              width: screenWidth,
+              height: screenHeight / 5,
+              //color: Colors.deepOrange.withOpacity(0.5),
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  children: [
+                    Padding(
+                      child: buildDots(),
+                      padding: EdgeInsets.all(10),
+                    ),
+                    CustomButton(
+                        text: _isLastItem ? 'Get started':'Next',
+                        backgroundColor: _isLastItem ? Colors.purple : Colors.white,
+                        textColor: !_isLastItem ? Colors.purple : Colors.white,
+                    )
+                  ],
+                ),
+              ),
             ),
-          ],
-        ),
+          )
+        ],
       )
     );
   }
 }
+
