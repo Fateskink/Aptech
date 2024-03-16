@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodapp/utils/app_colors.dart';
 
 class CustomButton extends StatelessWidget {
   final VoidCallback? onTap;
@@ -12,7 +13,7 @@ class CustomButton extends StatelessWidget {
     this.onTap,
     required this.text,
     this.textColor = Colors.white,//defaut value
-    this.backgroundColor = Colors.red,
+    this.backgroundColor = AppColors.primaryColor,
     this.borderColor = Colors.blue,
   }) : super(key: key);
 
@@ -23,10 +24,11 @@ class CustomButton extends StatelessWidget {
       child: AnimatedContainer(
         duration: Duration(milliseconds: 1000),
         height: 50,
-        padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+        padding: EdgeInsets.symmetric(vertical: 12, horizontal: 15),
+        alignment: Alignment.center,
         child: Text(
           text,
-          style: TextStyle(color: textColor),
+          style: TextStyle(color: textColor, fontSize: 17),
         ),
         decoration: BoxDecoration(
           color: backgroundColor,

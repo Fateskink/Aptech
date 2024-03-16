@@ -1,0 +1,34 @@
+import 'package:foodapp/dtos/responses/api_response.dart';
+import 'package:foodapp/services/api_constants.dart';
+import 'dart:convert' as convert;
+import 'package:http/http.dart' as http;
+
+class UserService {
+  Future<ApiResponse> login({
+    required String username,
+    required String password
+  }) async {
+
+    final String apiUrl = '${APIConstants.baseUrl}/login'; // Endpoint for login API
+    final Map<String, String> data = {
+      'username': username,
+      'password': password,
+    };
+
+    final response = await http.post(
+      Uri.parse(apiUrl),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: convert.jsonEncode(data),
+    );
+
+    if (response.statusCode == 200) {
+      // Parse the response JSON
+      final ApiResponse responseData = convert.jsonDecode(response.body);
+      return responseData;//contains token
+    } else {
+      throw Exception('Failed to login');
+    }
+  }
+}
