@@ -30,7 +30,7 @@
                            <td><%= product.getPrice() %></td> 
                            <td><%= product.getDescription() %></td>
                            <td>
-                               <a href="assign.jsp?productid=<%= product.getId() %>">
+                               <a href="ProductServlet?type=assign&product_id=<%= product.getId() %>">
                                    Assign this product to another category
                                </a>
                            </td>

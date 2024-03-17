@@ -30,7 +30,7 @@
                            <td><%= category.getName() %></td>
                            <td><%= category.getDescription() %></td>
                            <td>
-                               <a href="ProductServlet?category_id=<%= category.getId() %>">
+                               <a href="ProductServlet?type=findAll&category_id=<%= category.getId() %>">
                                    Show Products
                                </a>
                            </td>
