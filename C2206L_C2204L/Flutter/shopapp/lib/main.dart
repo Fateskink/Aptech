@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foodapp/pages/login.dart';
+import 'package:foodapp/pages/register.dart';
 import 'package:foodapp/services/auth_service.dart';
 import 'package:foodapp/services/token_service.dart';
 import 'package:foodapp/services/user_service.dart';
@@ -31,6 +32,12 @@ final GoRouter _router = GoRouter(
           path: 'login',
           builder: (BuildContext context, GoRouterState state) {
             return const Login();
+          },
+        ),
+        GoRoute(
+          path: 'register',
+          builder: (BuildContext context, GoRouterState state) {
+            return const Register();
           },
         ),
       ],

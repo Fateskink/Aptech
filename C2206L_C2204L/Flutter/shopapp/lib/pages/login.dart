@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:foodapp/dtos/requests/login_request.dart';
+import 'package:foodapp/dtos/requests/user/login_request.dart';
 import 'package:foodapp/dtos/responses/api_response.dart';
 import 'package:foodapp/services/auth_service.dart';
 import 'package:foodapp/services/token_service.dart';
@@ -9,7 +9,7 @@ import 'package:foodapp/widgets/uibutton.dart';
 import 'package:get_it/get_it.dart';
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
-
+import 'package:go_router/go_router.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -176,6 +176,7 @@ class _LoginState extends State<Login> {
                   GestureDetector(
                     onTap: () {
                       print('Register');
+                      context.go('/register');
                     },
                     child: Container(
                       padding: EdgeInsets.symmetric(vertical: 10),
