@@ -1,8 +1,17 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:foodapp/services/token_service.dart';
+import 'package:foodapp/token.dart';
 import 'package:foodapp/utils/app_colors.dart';
 import 'package:foodapp/widgets/uibutton.dart';
+import 'package:get_it/get_it.dart';
+import 'dart:convert' as convert;
+import 'package:http/http.dart' as http;
+import 'package:go_router/go_router.dart';
+
 class Splash extends StatefulWidget {
-  const Splash({super.key});
+  Splash({super.key});
 
   @override
   State<Splash> createState() => _SplashState();
@@ -61,6 +70,7 @@ class _SplashState extends State<Splash> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
+    final tokenService = GetIt.instance<TokenService>();
 
     return Scaffold(
       body: Stack(
@@ -129,6 +139,32 @@ class _SplashState extends State<Splash> {
                         text: _isLastItem ? 'Get started':'Next',
                         backgroundColor: _isLastItem ? AppColors.primaryColor : Colors.white,
                         textColor: !_isLastItem ? AppColors.primaryColor: Colors.white,
+                        onTap: () async {
+                          //last item
+                          if (_isLastItem == true) {
+                            // Get the JWT token from SharedPreferences
+                            Token tokens = await tokenService.getTokens();
+                            String jwtToken = tokens.token;
+                            // Check if the token exists and is not empty
+                            if (jwtToken.isNotEmpty) {
+                             bool isExpired = false;
+                              //call api to get isExpired from server(write api later
+                              // Check if the token is expired
+                              if (isExpired == true) {
+                                // Token is expired, clear tokens and redirect to login
+                                tokenService.clearTokens();
+                                context.go('/login');
+                                // Redirect to login page
+                              } else {
+                                // Token is not expired
+                                context.go('/main');
+                              }
+                            } else {
+                              // Token is empty or not found
+                              context.go('/login');
+                            }
+                          }
+                        },
                     )
                   ],
                 ),

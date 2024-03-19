@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:foodapp/dtos/requests/login_request.dart';
 import 'package:foodapp/dtos/responses/api_response.dart';
+import 'package:foodapp/services/auth_service.dart';
 import 'package:foodapp/services/token_service.dart';
 import 'package:foodapp/services/user_service.dart';
 import 'package:foodapp/utils/app_colors.dart';
 import 'package:foodapp/widgets/uibutton.dart';
 import 'package:get_it/get_it.dart';
+import 'dart:convert' as convert;
+import 'package:http/http.dart' as http;
 
 
 class Login extends StatefulWidget {
@@ -17,14 +21,30 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   final phoneNumberController = TextEditingController();
   final passwordController = TextEditingController();
-  bool rememberPassword = true;
+  bool rememberPassword = false;
+
+  late UserService userService;
+  late TokenService tokenService;
+  late AuthService authService;
+
+  @override
+  void initState() {
+    //33445566, pass: 123456789
+    super.initState();
+    //inject service
+    userService = GetIt.instance<UserService>();
+    tokenService = GetIt.instance<TokenService>();
+    authService = GetIt.instance<AuthService>();
+    // Retrieve credentials
+    authService.getCredentials().then((credentials) { //promise
+      phoneNumberController.text = credentials['phoneNumber'] ?? '';
+      passwordController.text = credentials['password'] ?? '';
+    });
+  }
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-    //inject service
-    final userService = GetIt.instance<UserService>();
-    final tokenService = GetIt.instance<TokenService>();
     return Scaffold(
       body: Container(
         child: Stack(
@@ -134,14 +154,22 @@ class _LoginState extends State<Login> {
                       backgroundColor: AppColors.primaryColor,
                       onTap: () async {
                         print('Login');
-                        String phoneNumber = phoneNumberController.text;
-                        String password = passwordController.text;
-                        ApiResponse response = await userService.login(username: phoneNumber, password: password);
+                        ApiResponse response = await userService.login(
+                            LoginRequest(
+                                phoneNumber: phoneNumberController.text,
+                                password: passwordController.text
+                            )
+                        );
                         Map<String, dynamic> data = response.data;
                         String token = data['token'];
                         String refreshToken = data['refresh_token'];
                         //save to local
-                        tokenService.saveTokens(token: token, refreshToken: refreshToken);
+                        await tokenService.saveTokens(token: token, refreshToken: refreshToken);
+                        if(rememberPassword == true) {
+                          await authService.saveCredentials(
+                              phoneNumber: phoneNumberController.text,
+                              password: passwordController.text);
+                        }
                       },
                     ),
                   ),
