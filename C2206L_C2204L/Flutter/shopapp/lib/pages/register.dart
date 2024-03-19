@@ -118,32 +118,27 @@ class _RegisterState extends State<Register> {
                     SizedBox(
                       height: 10,
                     ),
-                    InkWell(
-                      onTap: () {
-                        setState(() {
-                          rememberPassword = !rememberPassword;
-                        });
-                      },
-                      child: Row(
-                        mainAxisAlignment:MainAxisAlignment.end,
-                        children: [
-                          Container(
-                            padding: EdgeInsets.only(left: 10, top: 10, right: 5, bottom: 10),
-                            child: Icon(
-                              rememberPassword == true ? Icons.check_box : Icons.check_box_outline_blank, // Use the appropriate icon
-                              color: Colors.white, // Set the cocheck_box_outline_blanklor of the icon
-                            ),
-                          ),
-                          SizedBox(width: 5), // Add some spacing between the icon and text
-                          Text(
-                            'Remember password',
-                            style: TextStyle(
-                              fontSize: 16, // Set the font size
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white, // Set the text color
-                            ),
-                          ),
-                        ],
+                    Container(
+                      height: 54,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.7),
+                        borderRadius: BorderRadius.circular(22), // Border radius
+                        border: Border.all(
+                          color: AppColors.primaryColor, // Border color
+                          width: 1, // Border width
+                        ),
+                      ),
+                      child: TextField(
+                        controller: retypedPasswordController, // Pass your TextEditingController here
+                        obscureText: true,
+                        decoration: InputDecoration(
+                          hintText: 'Retype your password', // Placeholder text
+                          border: InputBorder.none, // Remove default TextField border
+                          contentPadding: EdgeInsets.symmetric(horizontal: 15), // Padding
+                        ),
+                        keyboardType: TextInputType.phone, // Set keyboard type to phone
+                        style: TextStyle(color: Colors.black), // Text color
                       ),
                     ),
                     Container(

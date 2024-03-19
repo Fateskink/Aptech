@@ -6,7 +6,8 @@ import 'package:foodapp/services/token_service.dart';
 import 'package:foodapp/services/user_service.dart';
 import 'package:get_it/get_it.dart';
 import 'package:foodapp/pages/splash.dart';
-import 'package:go_router/go_router.dart';
+import 'package:go_router/go_route'
+    'r.dart';
 
 /*
 flutter pub add http shared_preferences get_it
