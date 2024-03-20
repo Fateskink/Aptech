@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:foodapp/dtos/requests/user/register_request.dart';
 import 'package:foodapp/dtos/responses/api_response.dart';
@@ -5,11 +6,14 @@ import 'package:foodapp/services/auth_service.dart';
 import 'package:foodapp/services/token_service.dart';
 import 'package:foodapp/services/user_service.dart';
 import 'package:foodapp/utils/app_colors.dart';
+import 'package:foodapp/utils/utility.dart';
 import 'package:foodapp/widgets/uibutton.dart';
 import 'package:get_it/get_it.dart';
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
+
 
 class Register extends StatefulWidget {
   const Register({super.key});
@@ -19,14 +23,40 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
-  final phoneNumberController = TextEditingController();
-  final passwordController = TextEditingController();
-  final retypedPasswordController = TextEditingController();
+  final TextEditingController phoneNumberController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController retypedPasswordController = TextEditingController();
+  final TextEditingController fullNameController = TextEditingController();
+  final TextEditingController dobController = TextEditingController();
+
   bool rememberPassword = false;
 
   late UserService userService;
   late TokenService tokenService;
   late AuthService authService;
+  DateTime selectedDate = DateTime.now();
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? pickedDate;
+    // Show showDatePicker for other platforms
+    pickedDate = await showDatePicker(
+      context: context,
+      initialDate: selectedDate,
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+    );
+    if (pickedDate != null && pickedDate != selectedDate) {
+      setState(() {
+        selectedDate = pickedDate ?? DateTime.now();
+        dobController.text = DateFormat('dd/MM/yyyy').format(selectedDate!); // Format the date
+        // Calculate age
+        int age = DateTime.now().difference(selectedDate!).inDays ~/ 365;
+        // Check if age is less than 18
+        if (age < 18) {
+          Utility.alert(context, 'Age must be 18 or above.');
+        }
+      });
+    }
+  }
 
   @override
   void initState() {
@@ -104,6 +134,69 @@ class _RegisterState extends State<Register> {
                         ),
                       ),
                       child: TextField(
+                        controller: fullNameController, // Pass your TextEditingController here
+                        decoration: InputDecoration(
+                          hintText: 'Enter fullName', // Placeholder text
+                          border: InputBorder.none, // Remove default TextField border
+                          contentPadding: EdgeInsets.symmetric(horizontal: 15), // Padding
+                        ),
+                        keyboardType: TextInputType.phone, // Set keyboard type to phone
+                        style: TextStyle(color: Colors.black), // Text color
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Container(
+                      height: 54,
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.7),
+                        borderRadius: BorderRadius.circular(22), // Border radius
+                        border: Border.all(
+                          color: AppColors.primaryColor, // Border color
+                          width: 1, // Border width
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: TextField(
+                              controller: dobController,
+                              enabled: false, // Disable editing
+                              decoration: InputDecoration(
+                                contentPadding: EdgeInsets.symmetric(horizontal: 15), // Padding
+                                hintText: 'Select your DOB',
+                                border: InputBorder.none, // Remove border
+                              ),
+                            ),
+                          ),
+                          IconButton(
+                            icon: Icon(
+                              Icons.calendar_today,
+                              color: AppColors.primaryColor,
+                              size: 30,
+                            ),
+                            onPressed: () => _selectDate(context),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Container(
+                      height: 54,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.7),
+                        borderRadius: BorderRadius.circular(22), // Border radius
+                        border: Border.all(
+                          color: AppColors.primaryColor, // Border color
+                          width: 1, // Border width
+                        ),
+                      ),
+                      child: TextField(
                         controller: passwordController, // Pass your TextEditingController here
                         obscureText: true,
                         decoration: InputDecoration(
@@ -141,6 +234,9 @@ class _RegisterState extends State<Register> {
                         style: TextStyle(color: Colors.black), // Text color
                       ),
                     ),
+                    SizedBox(
+                      height: 20,
+                    ),
                     Container(
                       width: double.infinity,
                       child: CustomButton(
@@ -155,7 +251,8 @@ class _RegisterState extends State<Register> {
                                   phoneNumber: phoneNumberController.text,
                                   password: passwordController.text,
                                   retypePassword: retypedPasswordController.text,
-                                  dateOfBirth: '2000-01-01'
+                                  dateOfBirth: selectedDate,
+                                  fullName: fullNameController.text ?? ''
                               )
                           );
                           Map<String, dynamic> data = response.data;
@@ -173,8 +270,8 @@ class _RegisterState extends State<Register> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        print('Register');
-                        context.go('/register');
+                        print('Login');
+                        context.go("/login");
                       },
                       child: Container(
                         padding: EdgeInsets.symmetric(vertical: 10),
@@ -182,15 +279,15 @@ class _RegisterState extends State<Register> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              'Do not have an account ?',
+                              'Have account ?',
                               style: TextStyle(
-                                color: Colors.white,
+                                color: Colors.black,
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
                             Text(
-                              ' Register',
+                              ' Login',
                               style: TextStyle(
                                 color: AppColors.primaryColor,
                                 fontSize: 16,

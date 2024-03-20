@@ -12,6 +12,7 @@ import 'package:go_router/go_route'
 /*
 flutter pub add http shared_preferences get_it
 flutter pub add go_router
+flutter pub add intl
 
 * */
 void main() {

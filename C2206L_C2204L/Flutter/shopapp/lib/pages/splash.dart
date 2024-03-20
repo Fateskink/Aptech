@@ -147,7 +147,7 @@ class _SplashState extends State<Splash> {
                             String jwtToken = tokens.token;
                             // Check if the token exists and is not empty
                             if (jwtToken.isNotEmpty) {
-                             bool isExpired = false;
+                             bool isExpired = true;
                               //call api to get isExpired from server(write api later
                               // Check if the token is expired
                               if (isExpired == true) {
