@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:foodapp/dtos/requests/user/register_request.dart';
 import 'package:foodapp/dtos/responses/api_response.dart';
+import 'package:foodapp/dtos/responses/user/user_response.dart';
 import 'package:foodapp/services/auth_service.dart';
 import 'package:foodapp/services/token_service.dart';
 import 'package:foodapp/services/user_service.dart';
@@ -77,234 +78,237 @@ class _RegisterState extends State<Register> {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
-        body: Container(
-          child: Stack(
-            children: [
-              Image(
-                image: AssetImage('assets/background.png'),
-                fit: BoxFit.cover,
-                width: screenWidth,
-                height: screenHeight,
-              ),
-              Container(
-                margin: EdgeInsets.symmetric(horizontal: 30),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Expanded(child: Container(),),
-                    Text('Register',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(color: Colors.white, fontSize: 50),
-                    ),
-                    Expanded(child: Container(),),
-                    Container(
-                      height: 54,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.7),
-                        borderRadius: BorderRadius.circular(22), // Border radius
-                        border: Border.all(
-                          color: AppColors.primaryColor, // Border color
-                          width: 1, // Border width
-                        ),
+        body: SingleChildScrollView(
+          child: Container(
+            width: screenWidth,//prevent exceed pixel when press textfield
+            height: screenHeight,
+            child: Stack(
+              children: [
+                Image(
+                  image: AssetImage('assets/background.png'),
+                  fit: BoxFit.cover,
+                  width: screenWidth,
+                  height: screenHeight,
+                ),
+                Container(
+                  margin: EdgeInsets.symmetric(horizontal: 30),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(child: Container(),),
+                      Text('Register',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.white, fontSize: 50),
                       ),
-                      child: TextField(
-                        controller: phoneNumberController, // Pass your TextEditingController here
-                        decoration: InputDecoration(
-                          hintText: 'Enter phone number', // Placeholder text
-                          border: InputBorder.none, // Remove default TextField border
-                          contentPadding: EdgeInsets.symmetric(horizontal: 15), // Padding
-                        ),
-                        keyboardType: TextInputType.phone, // Set keyboard type to phone
-                        style: TextStyle(color: Colors.black), // Text color
-                      ),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Container(
-                      height: 54,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.7),
-                        borderRadius: BorderRadius.circular(22), // Border radius
-                        border: Border.all(
-                          color: AppColors.primaryColor, // Border color
-                          width: 1, // Border width
-                        ),
-                      ),
-                      child: TextField(
-                        controller: fullNameController, // Pass your TextEditingController here
-                        decoration: InputDecoration(
-                          hintText: 'Enter fullName', // Placeholder text
-                          border: InputBorder.none, // Remove default TextField border
-                          contentPadding: EdgeInsets.symmetric(horizontal: 15), // Padding
-                        ),
-                        keyboardType: TextInputType.phone, // Set keyboard type to phone
-                        style: TextStyle(color: Colors.black), // Text color
-                      ),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Container(
-                      height: 54,
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.7),
-                        borderRadius: BorderRadius.circular(22), // Border radius
-                        border: Border.all(
-                          color: AppColors.primaryColor, // Border color
-                          width: 1, // Border width
-                        ),
-                      ),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: TextField(
-                              controller: dobController,
-                              enabled: false, // Disable editing
-                              decoration: InputDecoration(
-                                contentPadding: EdgeInsets.symmetric(horizontal: 15), // Padding
-                                hintText: 'Select your DOB',
-                                border: InputBorder.none, // Remove border
-                              ),
-                            ),
+                      Expanded(child: Container(),),
+                      Container(
+                        height: 54,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.7),
+                          borderRadius: BorderRadius.circular(22), // Border radius
+                          border: Border.all(
+                            color: AppColors.primaryColor, // Border color
+                            width: 1, // Border width
                           ),
-                          IconButton(
-                            icon: Icon(
-                              Icons.calendar_today,
-                              color: AppColors.primaryColor,
-                              size: 30,
-                            ),
-                            onPressed: () => _selectDate(context),
+                        ),
+                        child: TextField(
+                          controller: phoneNumberController, // Pass your TextEditingController here
+                          decoration: InputDecoration(
+                            hintText: 'Enter phone number', // Placeholder text
+                            border: InputBorder.none, // Remove default TextField border
+                            contentPadding: EdgeInsets.symmetric(horizontal: 15), // Padding
                           ),
-                        ],
-                      ),
-                    ),
-
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Container(
-                      height: 54,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.7),
-                        borderRadius: BorderRadius.circular(22), // Border radius
-                        border: Border.all(
-                          color: AppColors.primaryColor, // Border color
-                          width: 1, // Border width
+                          keyboardType: TextInputType.phone, // Set keyboard type to phone
+                          style: TextStyle(color: Colors.black), // Text color
                         ),
                       ),
-                      child: TextField(
-                        controller: passwordController, // Pass your TextEditingController here
-                        obscureText: true,
-                        decoration: InputDecoration(
-                          hintText: 'Enter your password', // Placeholder text
-                          border: InputBorder.none, // Remove default TextField border
-                          contentPadding: EdgeInsets.symmetric(horizontal: 15), // Padding
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Container(
+                        height: 54,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.7),
+                          borderRadius: BorderRadius.circular(22), // Border radius
+                          border: Border.all(
+                            color: AppColors.primaryColor, // Border color
+                            width: 1, // Border width
+                          ),
                         ),
-                        keyboardType: TextInputType.phone, // Set keyboard type to phone
-                        style: TextStyle(color: Colors.black), // Text color
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Container(
-                      height: 54,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.7),
-                        borderRadius: BorderRadius.circular(22), // Border radius
-                        border: Border.all(
-                          color: AppColors.primaryColor, // Border color
-                          width: 1, // Border width
+                        child: TextField(
+                          controller: fullNameController, // Pass your TextEditingController here
+                          decoration: InputDecoration(
+                            hintText: 'Enter fullName', // Placeholder text
+                            border: InputBorder.none, // Remove default TextField border
+                            contentPadding: EdgeInsets.symmetric(horizontal: 15), // Padding
+                          ),
+                          keyboardType: TextInputType.phone, // Set keyboard type to phone
+                          style: TextStyle(color: Colors.black), // Text color
                         ),
                       ),
-                      child: TextField(
-                        controller: retypedPasswordController, // Pass your TextEditingController here
-                        obscureText: true,
-                        decoration: InputDecoration(
-                          hintText: 'Retype your password', // Placeholder text
-                          border: InputBorder.none, // Remove default TextField border
-                          contentPadding: EdgeInsets.symmetric(horizontal: 15), // Padding
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Container(
+                        height: 54,
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.7),
+                          borderRadius: BorderRadius.circular(22), // Border radius
+                          border: Border.all(
+                            color: AppColors.primaryColor, // Border color
+                            width: 1, // Border width
+                          ),
                         ),
-                        keyboardType: TextInputType.phone, // Set keyboard type to phone
-                        style: TextStyle(color: Colors.black), // Text color
-                      ),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Container(
-                      width: double.infinity,
-                      child: CustomButton(
-                        text: 'Register',
-                        textColor: Colors.white,
-                        borderColor: Colors.white,
-                        backgroundColor: AppColors.primaryColor,
-                        onTap: () async {
-                          print('Register');
-                          ApiResponse response = await userService.register(
-                              RegisterRequest(
-                                  phoneNumber: phoneNumberController.text,
-                                  password: passwordController.text,
-                                  retypePassword: retypedPasswordController.text,
-                                  dateOfBirth: selectedDate,
-                                  fullName: fullNameController.text ?? ''
-                              )
-                          );
-                          Map<String, dynamic> data = response.data;
-                          String token = data['token'];
-                          String refreshToken = data['refresh_token'];
-                          //save to local
-                          await tokenService.saveTokens(token: token, refreshToken: refreshToken);
-                          if(rememberPassword == true) {
-                            await authService.saveCredentials(
-                                phoneNumber: phoneNumberController.text,
-                                password: passwordController.text);
-                          }
-                        },
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        print('Login');
-                        context.go("/login");
-                      },
-                      child: Container(
-                        padding: EdgeInsets.symmetric(vertical: 10),
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(
-                              'Have account ?',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
+                            Expanded(
+                              child: TextField(
+                                controller: dobController,
+                                enabled: false, // Disable editing
+                                decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.symmetric(horizontal: 15), // Padding
+                                  hintText: 'Select your DOB',
+                                  border: InputBorder.none, // Remove border
+                                ),
                               ),
                             ),
-                            Text(
-                              ' Login',
-                              style: TextStyle(
+                            IconButton(
+                              icon: Icon(
+                                Icons.calendar_today,
                                 color: AppColors.primaryColor,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-
+                                size: 30,
                               ),
+                              onPressed: () => _selectDate(context),
                             ),
                           ],
                         ),
                       ),
-                    ),
-                    Expanded(child: Container(),),
-                    Expanded(child: Container(),),
-                  ],
-                ),
-              )
-            ],
+
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Container(
+                        height: 54,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.7),
+                          borderRadius: BorderRadius.circular(22), // Border radius
+                          border: Border.all(
+                            color: AppColors.primaryColor, // Border color
+                            width: 1, // Border width
+                          ),
+                        ),
+                        child: TextField(
+                          controller: passwordController, // Pass your TextEditingController here
+                          obscureText: true,
+                          decoration: InputDecoration(
+                            hintText: 'Enter your password', // Placeholder text
+                            border: InputBorder.none, // Remove default TextField border
+                            contentPadding: EdgeInsets.symmetric(horizontal: 15), // Padding
+                          ),
+                          keyboardType: TextInputType.phone, // Set keyboard type to phone
+                          style: TextStyle(color: Colors.black), // Text color
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        height: 54,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.7),
+                          borderRadius: BorderRadius.circular(22), // Border radius
+                          border: Border.all(
+                            color: AppColors.primaryColor, // Border color
+                            width: 1, // Border width
+                          ),
+                        ),
+                        child: TextField(
+                          controller: retypedPasswordController, // Pass your TextEditingController here
+                          obscureText: true,
+                          decoration: InputDecoration(
+                            hintText: 'Retype your password', // Placeholder text
+                            border: InputBorder.none, // Remove default TextField border
+                            contentPadding: EdgeInsets.symmetric(horizontal: 15), // Padding
+                          ),
+                          keyboardType: TextInputType.phone, // Set keyboard type to phone
+                          style: TextStyle(color: Colors.black), // Text color
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Container(
+                        width: double.infinity,
+                        child: CustomButton(
+                          text: 'Register',
+                          textColor: Colors.white,
+                          borderColor: Colors.white,
+                          backgroundColor: AppColors.primaryColor,
+                          onTap: () {
+                            userService.register(
+                                RegisterRequest(
+                                  phoneNumber: phoneNumberController.text,
+                                  password: passwordController.text,
+                                  retypePassword: retypedPasswordController.text,
+                                  dateOfBirth: selectedDate,
+                                  fullName: fullNameController.text,
+                                )
+                            ).then((ApiResponse response) {
+                              Map<String, dynamic> data = response.data;
+                              UserResponse userResponse = UserResponse.fromJson(data);
+                              // Navigate to login page
+                              context.go("/login");
+                            }).catchError((error) {
+                              // Handle the error
+                              print("Registration failed: $error");
+                              // Show an error message to the user
+                            });
+                          }
+                          ,
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          print('Login');
+                          context.go("/login");
+                        },
+                        child: Container(
+                          padding: EdgeInsets.symmetric(vertical: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Have account ?',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                ' Login',
+                                style: TextStyle(
+                                  color: AppColors.primaryColor,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Expanded(child: Container(),),
+                      Expanded(child: Container(),),
+                    ],
+                  ),
+                )
+              ],
+            ),
           ),
         )
     );

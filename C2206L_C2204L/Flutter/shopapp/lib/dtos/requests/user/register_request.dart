@@ -4,7 +4,7 @@ class RegisterRequest {
   final String retypePassword;
   final String fullName;
   final DateTime dateOfBirth;
-  int roleId;
+  int? roleId;
 
   RegisterRequest({
     required this.phoneNumber,
@@ -16,8 +16,8 @@ class RegisterRequest {
   })  : assert(phoneNumber.length >= 5, 'Phone number must be at least 5 characters'),
         assert(password.isNotEmpty, 'Password cannot be blank'),
         assert(password == retypePassword, 'Passwords do not match'),
-        assert(_calculateAge(dateOfBirth) >= 18, 'Age must be 18 or above'),
-        roleId = roleId ?? 1 {
+        assert(_calculateAge(dateOfBirth) >= 18, 'Age must be 18 or above')
+        {
     // TODO: implement RegisterRequest
     throw UnimplementedError();
   } // Default value for roleId
