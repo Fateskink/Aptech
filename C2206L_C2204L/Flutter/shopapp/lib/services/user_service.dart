@@ -65,7 +65,6 @@ class UserService {
     } else {
       String errorMessage = convert.utf8.decode(convert.jsonDecode(response.body)['message'].codeUnits);
       throw Exception(errorMessage);
-
     }
   }
 }

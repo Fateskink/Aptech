@@ -125,8 +125,8 @@ networks:
 #docker-compose -f ./deployment.yaml rm -s -f redis-container
 #docker-compose -f ./deployment.yaml up -d redis-container
 
-#docker-compose -f ./deployment.yaml rm -s -f debezium-kafka-container
-#docker-compose -f ./deployment.yaml up -d debezium-kafka-container
+#docker-compose -f ./deployment.yaml rm -s -f debezium-kafka-broker-01
+#docker-compose -f ./deployment.yaml up -d debezium-kafka-broker-01
 #docker-compose -f ./deployment.yaml up -d debezium-connect-container
 
 
