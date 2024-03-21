@@ -4,11 +4,13 @@ import 'package:foodapp/dtos/responses/api_response.dart';
 import 'package:foodapp/services/api_constants.dart';
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 
 class UserService {
   Future<ApiResponse> login(
     LoginRequest request
   ) async {
+
     final String apiUrl = '${APIConstants.baseUrl}/users/login'; // Endpoint for login API
     final Map<String, dynamic> data = {
       'phone_number': request.phoneNumber,
@@ -37,12 +39,15 @@ class UserService {
 
     // Prepare request data
     final Map<String, dynamic> data = {
+      'fullname': request.fullName,
+      'address': request.address ?? '',
       'phone_number': request.phoneNumber,
       'password': request.password,
-      'retype_password': request.retypePassword, // Include retypePassword field
-      'date_of_birth': request.dateOfBirth, // Include dateOfBirth field
-      "role_id": request.roleId ?? 1, // Include roleId field
+      'retype_password': request.retypePassword,
+      'date_of_birth': DateFormat('yyyy-MM-dd').format(request.dateOfBirth), // Convert date to 'yyyy-MM-dd' format
+      'role_id': request.roleId ?? 1,
     };
+
 
     // Send POST request to register API
     final response = await http.post(
@@ -58,8 +63,9 @@ class UserService {
       final ApiResponse responseData = ApiResponse.fromJson(convert.jsonDecode(response.body));
       return responseData; // Contains token
     } else {
-      throw Exception('Failed to register');
+      String errorMessage = convert.utf8.decode(convert.jsonDecode(response.body)['message'].codeUnits);
+      throw Exception(errorMessage);
+
     }
   }
-
 }

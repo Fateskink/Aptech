@@ -28,6 +28,7 @@ class _RegisterState extends State<Register> {
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController retypedPasswordController = TextEditingController();
   final TextEditingController fullNameController = TextEditingController();
+  final TextEditingController addressController = TextEditingController();
   final TextEditingController dobController = TextEditingController();
 
   bool rememberPassword = false;
@@ -208,7 +209,7 @@ class _RegisterState extends State<Register> {
                             border: InputBorder.none, // Remove default TextField border
                             contentPadding: EdgeInsets.symmetric(horizontal: 15), // Padding
                           ),
-                          keyboardType: TextInputType.phone, // Set keyboard type to phone
+                          keyboardType: TextInputType.text, // Set keyboard type to phone
                           style: TextStyle(color: Colors.black), // Text color
                         ),
                       ),
@@ -234,7 +235,32 @@ class _RegisterState extends State<Register> {
                             border: InputBorder.none, // Remove default TextField border
                             contentPadding: EdgeInsets.symmetric(horizontal: 15), // Padding
                           ),
-                          keyboardType: TextInputType.phone, // Set keyboard type to phone
+                          keyboardType: TextInputType.text, // Set keyboard type to phone
+                          style: TextStyle(color: Colors.black), // Text color
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Container(
+                        height: 54,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.7),
+                          borderRadius: BorderRadius.circular(22), // Border radius
+                          border: Border.all(
+                            color: AppColors.primaryColor, // Border color
+                            width: 1, // Border width
+                          ),
+                        ),
+                        child: TextField(
+                          controller: addressController,
+                          decoration: InputDecoration(
+                            hintText: 'Address(optional)', // Placeholder text
+                            border: InputBorder.none, // Remove default TextField border
+                            contentPadding: EdgeInsets.symmetric(horizontal: 15), // Padding
+                          ),
+                          keyboardType: TextInputType.text, // Set keyboard type to phone
                           style: TextStyle(color: Colors.black), // Text color
                         ),
                       ),
@@ -256,6 +282,7 @@ class _RegisterState extends State<Register> {
                                   retypePassword: retypedPasswordController.text,
                                   dateOfBirth: selectedDate,
                                   fullName: fullNameController.text,
+                                  address: addressController.text
                                 )
                             ).then((ApiResponse response) {
                               Map<String, dynamic> data = response.data;
@@ -263,9 +290,7 @@ class _RegisterState extends State<Register> {
                               // Navigate to login page
                               context.go("/login");
                             }).catchError((error) {
-                              // Handle the error
-                              print("Registration failed: $error");
-                              // Show an error message to the user
+                              Utility.alert(context, error.message ?? '');
                             });
                           }
                           ,
