@@ -2,7 +2,7 @@
 #include <iostream>
 using namespace std;
 
-int main(int argc, const char * argv[]) {
+int main1(int argc, const char * argv[]) {
     int year = 0;
     cout << "Enter a year : ";
     cin >> year;
