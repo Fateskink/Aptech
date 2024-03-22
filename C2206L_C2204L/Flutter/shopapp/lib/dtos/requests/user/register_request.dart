@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 class RegisterRequest {
   final String phoneNumber;
   final String password;
@@ -31,6 +33,17 @@ class RegisterRequest {
       return age - 1;
     }
     return age;
+  }
+  Map<String, dynamic> toJson() {
+    return {
+      'fullname': fullName,
+      'address': address ?? '',
+      'phone_number': phoneNumber,
+      'password': password,
+      'retype_password': retypePassword,
+      'date_of_birth': DateFormat('yyyy-MM-dd').format(dateOfBirth), // Convert date to 'yyyy-MM-dd' format
+      'role_id': roleId ?? 1,
+    };
   }
 }
 
