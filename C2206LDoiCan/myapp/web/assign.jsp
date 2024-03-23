@@ -17,7 +17,7 @@
             <% List<Category> categories = (List<Category>) request.getAttribute("categories");
                if (categories != null) {
                    for (Category category : categories) { %>
-                       <option value="<%= category.getId() %>"><%= category.getName() %></option>
+                       <option name="categoryId" value="<%= category.getId() %>"><%= category.getName() %></option>
             <%    }
                } %>
         </select>

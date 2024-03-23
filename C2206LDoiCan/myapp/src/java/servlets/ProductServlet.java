@@ -102,6 +102,31 @@ public class ProductServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+      EntityManager entityManager = null;
+      try {
+        // Retrieve selected category ID and productId from the form
+        String categoryId = request.getParameter("category");
+        String productId = request.getParameter("productId");
+        entityManager = entityManagerFactory.createEntityManager();
+        Category category = entityManager.find(Category.class, Long.parseLong(categoryId));
+        entityManager.getTransaction().begin();
+
+        // Find the product with the given productId
+        Product product = entityManager.find(Product.class, Long.parseLong(productId));
+        product.setCategoryId( category);                
+        entityManager.getTransaction().commit();
+        } catch (Exception e) {
+            // Rollback the transaction if an exception occurs
+            if (entityManager != null && entityManager.getTransaction().isActive()) {
+                entityManager.getTransaction().rollback();
+            }
+            // Handle any exceptions
+            e.printStackTrace(); // This is just for demonstration, you should handle exceptions appropriately
+        } finally {
+            // Close the EntityManager
+            if (entityManager != null && entityManager.isOpen()) {
+                entityManager.close();
+            }
+        }
     }
 }
