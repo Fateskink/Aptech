@@ -1,6 +1,6 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package servlets;
 
@@ -9,19 +9,14 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+
 import models.Category;
 import com.mysql.cj.jdbc.Driver;
+import jakarta.servlet.*;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.*;
 
 
-/**
- *
- * @author hoangnd
- */
 public class CategoryServlet extends HttpServlet {
     private EntityManagerFactory entityManagerFactory 
             = Persistence.createEntityManagerFactory("myappPU");
@@ -98,4 +93,3 @@ INSERT INTO products (name, price, category_id, description) VALUES
 ('Shampoo', 9.99, 'X555', 'Moisturizing shampoo for all hair types');
 
 */
-

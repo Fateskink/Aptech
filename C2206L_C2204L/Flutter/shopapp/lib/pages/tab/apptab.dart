@@ -3,6 +3,7 @@ import 'package:foodapp/pages/tab/cart/cart.dart';
 import 'package:foodapp/pages/tab/favorites/favorites.dart';
 import 'package:foodapp/pages/tab/home/home.dart';
 import 'package:foodapp/pages/tab/profile/profile.dart';
+import 'package:foodapp/utils/app_colors.dart';
 
 class AppTab extends StatefulWidget {
   @override
@@ -39,9 +40,7 @@ class _AppTabState extends State<AppTab> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Bottom Tab Navigation'),
-      ),
+      appBar: null, // Remove the top app bar
       body: PageView(
         controller: _pageController,
         onPageChanged: (index) {
@@ -59,6 +58,7 @@ class _AppTabState extends State<AppTab> {
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed, // Ensure all tabs are visible
         currentIndex: _selectedIndex,
+        selectedItemColor: AppColors.primaryColor,
         onTap: _onItemTapped,
         items: [
           BottomNavigationBarItem(
