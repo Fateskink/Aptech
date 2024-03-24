@@ -1,0 +1,30 @@
+import 'package:foodapp/models/coupon.dart';
+
+class CouponCondition {
+  final int id;
+  final Coupon coupon;
+  final String attribute;
+  final String operator;
+  final String value;
+  final double discountAmount;
+
+  CouponCondition({
+    required this.id,
+    required this.coupon,
+    required this.attribute,
+    required this.operator,
+    required this.value,
+    required this.discountAmount,
+  });
+
+  factory CouponCondition.fromJson(Map<String, dynamic> json) {
+    return CouponCondition(
+      id: json['id'],
+      coupon: Coupon.fromJson(json['coupon']),
+      attribute: json['attribute'],
+      operator: json['operator'],
+      value: json['value'],
+      discountAmount: json['discount_amount'].toDouble(),
+    );
+  }
+}

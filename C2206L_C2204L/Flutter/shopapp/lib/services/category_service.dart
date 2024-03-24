@@ -10,12 +10,7 @@ class CategoryService {
     final Map<String, dynamic> requestData = request.toJson();
 
     final Uri uri = Uri.parse(apiUrl).replace(
-      queryParameters: {
-        'page': requestData['page'].toString(),
-        'limit': requestData['limit'].toString(),
-        'keyword': requestData['keyword'].toString(),
-        'category_id': requestData['categoryId'].toString(),
-      },
+      queryParameters: request.toJson(),
     );
 
     final response = await http.post(
