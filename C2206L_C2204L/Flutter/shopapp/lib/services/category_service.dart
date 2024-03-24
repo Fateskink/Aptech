@@ -5,7 +5,8 @@ import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
 
 class CategoryService {
-  Future<ApiResponse> getProducts(GetCategoryRequest request) async {
+
+  Future<ApiResponse> getCategories(GetCategoryRequest request) async {
     final String apiUrl = '${APIConstants.baseUrl}/categories';
     final Map<String, dynamic> requestData = request.toJson();
 

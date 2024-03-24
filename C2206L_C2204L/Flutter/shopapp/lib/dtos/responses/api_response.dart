@@ -1,7 +1,7 @@
 class ApiResponse {
   final String message;
   final String status;
-  final Map<String, dynamic> data;
+  final dynamic data;
 
   ApiResponse({
     required this.message,
