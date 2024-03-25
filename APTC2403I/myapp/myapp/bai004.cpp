@@ -9,7 +9,7 @@
 #include <iostream>
 using namespace std;
 
-int main() {
+int main4() {
     int number;
     do {
         cout << "Enter a number: ";
