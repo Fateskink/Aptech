@@ -1,3 +1,4 @@
+import 'package:foodapp/extensions/custon_string.dart';
 import 'package:foodapp/models/order_detail.dart';
 class OrderResponse {
   final int id;
@@ -38,18 +39,18 @@ class OrderResponse {
     return OrderResponse(
       id: json['id'] as int,
       userId: json['user_id'] as int,
-      fullName: json['fullName'] as String,
+      fullName: (json['fullName'] as String?)?.toUtf8() ?? '',
       phoneNumber: json['phone_number'] as String,
       email: json['email'] as String,
-      address: json['address'] as String,
-      note: json['note'] as String,
+      address: (json['address'] as String?)?.toUtf8() ?? '',
+      note: (json['note'] as String?)?.toUtf8() ?? '',
       orderDate: json['order_date'] as String,
       status: json['status'] as String,
-      totalMoney: json['total_money'] as double,
-      shippingMethod: json['shipping_method'] as String,
-      shippingAddress: json['shipping_address'] as String,
+      totalMoney: (json['total_money'] as num).toDouble(),
+      shippingMethod: (json['shipping_method'] as String?)?.toUtf8() ?? '',
+      shippingAddress: (json['shipping_address'] as String?)?.toUtf8() ?? '',
       shippingDate: json['shipping_date'] as String,
-      paymentMethod: json['payment_method'] as String,
+      paymentMethod: (json['payment_method'] as String?)?.toUtf8() ?? '',
       orderDetails: (json['order_details'] as List<dynamic>)
           .map((e) => OrderDetail.fromJson(e as Map<String, dynamic>))
           .toList(),

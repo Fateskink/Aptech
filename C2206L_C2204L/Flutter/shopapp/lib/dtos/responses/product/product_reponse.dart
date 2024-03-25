@@ -27,14 +27,14 @@ class ProductResponse  {
     List<ProductImage> productImages = productImagesJson.map(
             (imageJson) => ProductImage.fromJson(imageJson)).toList();
     return ProductResponse(
-      id: json['id'],
-      name: json['name'],
-      price: json['price'].toDouble(),
-      thumbnail: json['thumbnail'],
-      description: json['description'],
-      totalPages: json['totalPages'],
-      productImages: productImages,
-      categoryId: json['category_id'],
+      id: json['id'] ?? 0,
+      name: json['name'] ?? '',
+      price: json['price'] != null ? json['price'].toDouble() : 0.0,
+      thumbnail: json['thumbnail'] ?? '',
+      description: json['description'] ?? '',
+      totalPages: json['totalPages'] ?? 0,
+      productImages: productImages ?? [],
+      categoryId: json['category_id'] ?? 0,
     );
   }
 }

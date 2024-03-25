@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:foodapp/dtos/requests/category/get_category_request.dart';
+import 'package:foodapp/dtos/requests/product/get_product_request.dart';
 import 'package:foodapp/dtos/responses/api_response.dart';
+import 'package:foodapp/dtos/responses/product/product_list_response.dart';
+import 'package:foodapp/dtos/responses/product/product_reponse.dart';
 import 'package:foodapp/models/category.dart';
+import 'package:foodapp/models/product.dart';
 import 'package:foodapp/services/category_service.dart';
 import 'package:foodapp/services/product_service.dart';
 import 'package:foodapp/utils/app_colors.dart';
@@ -21,6 +25,7 @@ class _HomeState extends State<Home> {
   int page = 0;
   int limit = 20;
   Category? selectedCategory;
+  String keyword = '';
 
   @override
   void initState() {
@@ -56,7 +61,7 @@ class _HomeState extends State<Home> {
               ),
               Row(
                 children: [
-                  FutureBuilder<ApiResponse>(
+                  FutureBuilder<dynamic>(
                     future: categoryService.getCategories(
                         GetCategoryRequest(page: page, limit: limit)
                     ), // Assuming getCategories() returns a Future<List<Category>>
@@ -67,8 +72,11 @@ class _HomeState extends State<Home> {
                         return Text('Error: ${snapshot.error}');
                       } else {
                         ApiResponse apiResponse = snapshot.data! as ApiResponse;
-                        final categories = apiResponse.data;
-                        return Row(
+                        final categories = (apiResponse.data as List).map((jsonItem) {
+                          return Category.fromJson(jsonItem);
+                        }).toList();
+                        return ListView(
+                          scrollDirection: Axis.horizontal,
                           children: [
                             InkWell(
                               onTap: () {
@@ -117,19 +125,38 @@ class _HomeState extends State<Home> {
           ),
           Positioned.fill(
             top: MediaQuery.of(context).size.height * 0.15, // Adjust the top position
-            child: ListView.builder(
-              itemCount: 10, // Replace with the actual number of products
-              itemBuilder: (context, index) {
-                // Replace the following placeholder widgets with your product items
-                return ListTile(
-                  leading: Icon(Icons.image), // Replace with product thumbnail
-                  title: Text('Product $index'),
-                  subtitle: Text('Description'), // Replace with product description
-                  trailing: Text('\$20.00'), // Replace with product price
-                );
+            child: FutureBuilder<dynamic>(
+              future: productService.getProducts(GetProductRequest(
+                page: page,
+                limit: limit,
+                keyword: keyword,
+                categoryId: selectedCategory?.id ?? 0
+              )), // Call your API here
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: CircularProgressIndicator()); // Show loading indicator while waiting for data
+                } else if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}')); // Show error message if there's an error
+                } else {
+                  // Data fetched successfully, display ListView
+                  List<ProductResponse> productResponses = snapshot.data!.products; // Extract products from the response
+                  return ListView.builder(
+                    itemCount: productResponses.length,
+                    itemBuilder: (context, index) {
+                      ProductResponse productResponse = productResponses[index];
+                      return ListTile(
+                        leading: Image.network(productResponse.thumbnail), // Display product thumbnail
+                        title: Text(productResponse.name),
+                        subtitle: Text(productResponse.description),
+                        trailing: Text('\$${productResponse.price.toStringAsFixed(2)}'),
+                      );
+                    },
+                  );
+                }
               },
             ),
-          ),
+          )
+          ,
         ],
       ),
     );

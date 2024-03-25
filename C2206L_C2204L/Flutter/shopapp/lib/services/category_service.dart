@@ -5,21 +5,19 @@ import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
 
 class CategoryService {
-
   Future<ApiResponse> getCategories(GetCategoryRequest request) async {
     final String apiUrl = '${APIConstants.baseUrl}/categories';
-    final Map<String, dynamic> requestData = request.toJson();
+    final Map<String, String> requestData = request.toJson();
 
     final Uri uri = Uri.parse(apiUrl).replace(
-      queryParameters: request.toJson(),
+      queryParameters: requestData,
     );
 
-    final response = await http.post(
+    final response = await http.get(
       uri,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
-      body: convert.jsonEncode(requestData),
     );
 
     if (response.statusCode == 200) {
@@ -28,9 +26,7 @@ class CategoryService {
       ApiResponse.fromJson(convert.jsonDecode(response.body));
       return responseData; // Contains token
     } else {
-      String errorMessage =
-      convert.utf8.decode(convert.jsonDecode(response.body)['message'].codeUnits);
-      throw Exception(errorMessage);
+      throw Exception(convert.jsonDecode(response.body)['message']?.toUtf8() ?? '');
     }
   }
 }

@@ -24,8 +24,7 @@ class UserService {
       final ApiResponse responseData = ApiResponse.fromJson(convert.jsonDecode(response.body));
       return responseData;//contains token
     } else {
-      String errorMessage = convert.utf8.decode(convert.jsonDecode(response.body)['message'].codeUnits);
-      throw Exception(errorMessage);
+      throw Exception(convert.jsonDecode(response.body)['message']?.toUtf8() ?? '');
     }
   }
   Future<ApiResponse> register(RegisterRequest request) async {
@@ -45,8 +44,7 @@ class UserService {
       final ApiResponse responseData = ApiResponse.fromJson(convert.jsonDecode(response.body));
       return responseData; // Contains token
     } else {
-      String errorMessage = convert.utf8.decode(convert.jsonDecode(response.body)['message'].codeUnits);
-      throw Exception(errorMessage);
+      throw Exception(convert.jsonDecode(response.body)['message']?.toUtf8() ?? '');
     }
   }
 }

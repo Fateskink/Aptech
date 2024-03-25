@@ -1,3 +1,5 @@
+import 'package:foodapp/extensions/custon_string.dart';
+
 class UserResponse {
   final int? id;
   final String? fullName;
@@ -26,7 +28,7 @@ class UserResponse {
       id: json['id'] as int?,
       fullName: json['fullname'] as String?,
       phoneNumber: json['phone_number'] as String,
-      address: json['address'] as String?,
+      address: (json['address'] as String?)?.toUtf8() ?? '',
       isActive: json['is_active'] as bool,
       dateOfBirth: json['date_of_birth'] == null
           ? null
