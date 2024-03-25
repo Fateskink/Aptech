@@ -9,7 +9,7 @@
 #include <iostream>
 using namespace std;
 
-int main() {
+int main6() {
     int min = 0;
     int max = 0;
     double average = 0.0;
@@ -33,7 +33,7 @@ int main() {
         }
     }
     average = sum / i;
-    cout<<"min = "<<min<<", max = "<<max<<", average = "<< average;
+    cout<<"min = "<<min<<", max = "<<max<<", average = "<< average<<"\n";
     return 0;
 }
 
