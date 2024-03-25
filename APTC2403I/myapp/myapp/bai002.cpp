@@ -1,7 +1,7 @@
 #include <iostream>
 using namespace std;
 
-int main(int argc, const char * argv[]) {
+int main2(int argc, const char * argv[]) {
     int x, y, z;
     cout << "Enter x = ";
     cin >> x;
