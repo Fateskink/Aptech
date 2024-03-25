@@ -12,6 +12,7 @@
 		FAB770902BB15C0000C92227 /* bai003.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FAB7708F2BB15C0000C92227 /* bai003.cpp */; };
 		FAB770922BB1603400C92227 /* bai004.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FAB770912BB1603400C92227 /* bai004.cpp */; };
 		FAB770942BB167F900C92227 /* bai005.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FAB770932BB167F900C92227 /* bai005.cpp */; };
+		FAB770962BB16DF300C92227 /* bai006.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FAB770952BB16DF300C92227 /* bai006.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -33,6 +34,7 @@
 		FAB7708F2BB15C0000C92227 /* bai003.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = bai003.cpp; sourceTree = "<group>"; };
 		FAB770912BB1603400C92227 /* bai004.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = bai004.cpp; sourceTree = "<group>"; };
 		FAB770932BB167F900C92227 /* bai005.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = bai005.cpp; sourceTree = "<group>"; };
+		FAB770952BB16DF300C92227 /* bai006.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = bai006.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,6 +72,7 @@
 				FAB7708F2BB15C0000C92227 /* bai003.cpp */,
 				FAB770912BB1603400C92227 /* bai004.cpp */,
 				FAB770932BB167F900C92227 /* bai005.cpp */,
+				FAB770952BB16DF300C92227 /* bai006.cpp */,
 			);
 			path = myapp;
 			sourceTree = "<group>";
@@ -132,6 +135,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FA6D8B192BAD85A000A7C9A2 /* bai001.cpp in Sources */,
+				FAB770962BB16DF300C92227 /* bai006.cpp in Sources */,
 				FAB770902BB15C0000C92227 /* bai003.cpp in Sources */,
 				FA7C749C2BAD8974002F2F17 /* bai002.cpp in Sources */,
 				FAB770922BB1603400C92227 /* bai004.cpp in Sources */,
