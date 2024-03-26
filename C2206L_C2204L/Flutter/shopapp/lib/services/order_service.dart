@@ -1,0 +1,24 @@
+import 'package:foodapp/dtos/requests/category/get_category_request.dart';
+import 'package:foodapp/dtos/requests/order/insert_order_request.dart';
+import 'package:foodapp/dtos/responses/api_response.dart';
+import 'package:foodapp/models/http_method.dart';
+import 'package:foodapp/services/api_constants.dart';
+import 'dart:convert' as convert;
+import 'package:http/http.dart' as http;
+
+import 'base_service.dart';
+
+class OrderService extends BaseService {
+  Future<ApiResponse> createOrder(InsertOrderRequest insertOrderRequest) async {
+    final String apiUrl = '${APIConstants.baseUrl}/orders';
+    final Map<String, dynamic> requestData = insertOrderRequest.toJson();
+
+    final ApiResponse response = await request(
+      apiUrl: apiUrl,
+      method: HttpMethod.POST,
+      requestData: requestData,
+    );
+    return response;
+  }
+}
+
