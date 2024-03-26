@@ -5,8 +5,9 @@ import Router from 'koa-router';
 import bodyParser from 'koa-bodyparser';
 import usersRouter from './routes/usersRouter';
 
-//yarn add @types/koa @types/koa-router @types/koa-bodyparser mongodb
-
+//yarn add @types/koa @types/koa-router @types/koa-bodyparser
+//yarn add mongodb
+//npm i -D @types/express @types/node ts-node ts-node-dev typescript
 const app = new Koa();
 
 // Middleware
