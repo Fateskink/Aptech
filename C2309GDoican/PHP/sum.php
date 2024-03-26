@@ -22,12 +22,20 @@
         // Convert the values to integers
         $x = intval($x);
         $y = intval($y);
-
+        if($x > 10) {
+            echo "x is greater than 10";
+        } else {
+            echo "x is smaller than 10";
+        }
         // Calculate the sum
         $sum = $x + $y;
-
+        if($x != 0 && $y != 0) {
+            echo "<h1>The sum of $x and $y is: $sum<h1>";
+        } else {
+            echo "<h1 style='color:red;'>Please input x, y<h1>";
+        }
         // Return the sum
-        echo "<h1>The sum of $x and $y is: $sum<h1>";
+        
         ?>
 </body>
 </html>
