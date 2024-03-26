@@ -6,8 +6,6 @@ import 'package:foodapp/dtos/responses/product/product_list_response.dart';
 import 'package:foodapp/models/http_method.dart';
 import 'package:foodapp/services/api_constants.dart';
 import 'package:foodapp/services/base_service.dart';
-import 'dart:convert' as convert;
-import 'package:http/http.dart' as http;
 
 class ProductService extends BaseService {
   Future<ProductListResponse> getProducts(GetProductRequest getProductRequest) async {
