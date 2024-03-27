@@ -33,7 +33,7 @@ void partition(int arr[], int size, int pivot) {
     cout << endl;
 }
 
-int main() {
+int main010() {
     int arr[] = {5, 10, 30, 19, 28, 73, 6, 22, 11};
     
     int pivot = 0;
