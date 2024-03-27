@@ -1,6 +1,6 @@
 // usersRoutes.ts
 
-import Router from 'koa-router';
+const Router = require('koa-router');
 import { getUsers, createUser } from '../controllers/usersController';
 
 const router = new Router();
@@ -8,4 +8,4 @@ const router = new Router();
 router.get('/users', getUsers);
 router.post('/users', createUser);
 
-export default router;
+module.exports = router;

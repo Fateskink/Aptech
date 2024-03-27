@@ -5,6 +5,7 @@ import userRepository  from '../repositories/userRepository';
 
 
 export async function getUsers(ctx: Context) {
+  debugger
   ctx.body = await userRepository.getUsers(); 
 }
 

@@ -1,7 +1,11 @@
 import { getClient } from '../db/db';
 
 export async function getUsers() {
+  debugger
+  console.log('haha')
+  /*
   try {
+    
     const client = getClient();
     const db = client.db('shopapp');
     const collection = db.collection('users');
@@ -11,6 +15,7 @@ export async function getUsers() {
     console.error('Error fetching users:', error);
     return [];
   }
+  */
 }
 export default {
     getUsers
