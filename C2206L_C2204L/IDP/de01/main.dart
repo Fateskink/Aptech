@@ -16,6 +16,7 @@ void bai2() {
     print('Input json string');
     String inputJsonString = stdin.readLineSync() ?? '';
     Student convertedStudent = Student.fromJson(jsonDecode(inputJsonString));
+    //{"name":"hoang","age":19,"weight":165.0,"height":60.0,"gpa":5.0}
     print(studentA);
   }catch(e) {
     print(e.toString());
