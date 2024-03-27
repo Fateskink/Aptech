@@ -37,16 +37,21 @@ int main() {
     students[4].maths = 100;
     strcpy(students[4].name, "Marry");
     int max = 0;
+    int min = 500;
     int numberOfStudents = 5;
     for(int i = 0; i < numberOfStudents; i++) {
         if(students[i].maths + students[i].eng > max) {
             max = students[i].maths + students[i].eng;
         }
+        if(students[i].maths + students[i].eng < min) {
+            min = students[i].maths + students[i].eng;
+        }
     }
     cout << "max = " << max<< endl;
+    cout << "min = " << min<< endl;
     
     for(int i = 0; i < numberOfStudents; i++) {
-        if(students[i].maths + students[i].eng == max) {
+        if(students[i].maths + students[i].eng == max || students[i].maths + students[i].eng == min) {
             cout << "Student " << i + 1 << ":\n";
             cout << "Name: " << students[i].name << endl;
             cout << "English Grade: " << students[i].eng << endl;
