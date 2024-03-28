@@ -8,12 +8,22 @@ class BaseService {
     required String apiUrl,
     required HttpMethod method,
     Map<String, dynamic>? requestData,
+    String? token, // Optional token parameter
   }) async {
     try {
       late http.Response response;
-      const headers = <String, String>{
+
+      // Define default headers
+      final headers = <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       };
+
+      // Add Bearer token to headers if provided
+      if (token != null) {
+        headers['Authorization'] = 'Bearer $token';
+      }
+
+      // Perform HTTP request based on method
       switch (method) {
         case HttpMethod.GET:
           response = await http.get(
@@ -45,10 +55,14 @@ class BaseService {
 
       if (response.statusCode == 200) {
         // Parse the response JSON
-        final ApiResponse responseData = ApiResponse.fromJson(convert.jsonDecode(response.body));
+        final ApiResponse responseData = ApiResponse.fromJson(
+          convert.jsonDecode(response.body),
+        );
         return responseData;
       } else {
-        throw Exception(convert.jsonDecode(response.body)['message']?.toUtf8() ?? '');
+        throw Exception(
+          convert.jsonDecode(response.body)['message']?.toUtf8() ?? '',
+        );
       }
     } catch (e) {
       throw Exception('An error occurred: $e');

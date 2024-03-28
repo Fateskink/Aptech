@@ -1,6 +1,7 @@
 import 'package:foodapp/dtos/requests/user/login_request.dart';
 import 'package:foodapp/dtos/requests/user/register_request.dart';
 import 'package:foodapp/dtos/responses/api_response.dart';
+import 'package:foodapp/dtos/responses/user/user_response.dart';
 import 'package:foodapp/models/http_method.dart';
 import 'package:foodapp/services/api_constants.dart';
 import 'package:foodapp/services/base_service.dart';
@@ -27,5 +28,14 @@ class UserService extends BaseService {
       requestData: registerRequest.toJson(),
     );
     return response;
+  }
+  Future<UserResponse> getUserDetails(String jwtToken) async {
+    final String apiUrl = '${APIConstants.baseUrl}/users/details';
+    final ApiResponse response = await request(
+      apiUrl: apiUrl,
+      method: HttpMethod.POST,
+      token: jwtToken,
+    );
+    return UserResponse.fromJson(response.data);
   }
 }

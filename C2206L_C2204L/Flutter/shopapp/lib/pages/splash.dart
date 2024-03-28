@@ -1,7 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:foodapp/dtos/responses/user/user_response.dart';
 import 'package:foodapp/services/token_service.dart';
+import 'package:foodapp/services/user_service.dart';
 import 'package:foodapp/token.dart';
 import 'package:foodapp/utils/app_colors.dart';
 import 'package:foodapp/widgets/uibutton.dart';
@@ -18,7 +20,7 @@ class Splash extends StatefulWidget {
 }
 
 class _SplashState extends State<Splash> {
-  final List<Map<String, String?>> functionalities = [
+  final List<Map<String, String>> functionalities = [
     {
       'title': 'Quản lý Hàng Tồn Kho',
       'image': 'inventory.png',
@@ -46,6 +48,7 @@ class _SplashState extends State<Splash> {
     },
   ];
   int _currentPage = 0; //private variable
+
   Widget buildDots() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -57,7 +60,7 @@ class _SplashState extends State<Splash> {
               height: 10,
               width: _currentPage == index ? 20 : 10,
               decoration: BoxDecoration(
-                color: _currentPage == index ? Colors.blue : Colors.grey,
+                color: _currentPage == index ? AppColors.primaryColor : Colors.grey,
                 borderRadius: BorderRadius.circular(5),
               ),
             ),
@@ -65,17 +68,29 @@ class _SplashState extends State<Splash> {
     );
   }
   bool get _isLastItem => _currentPage == functionalities.length - 1;
+  late UserService userService;
+
+  @override
+  void initState() {
+    //33445566, pass: 123456789
+    super.initState();
+    //inject service
+    userService = GetIt.instance<UserService>();
+  }
+
   @override
   //like render() in React Class Component
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     final tokenService = GetIt.instance<TokenService>();
+    PageController _pageController = PageController(initialPage: 0);
 
     return Scaffold(
       body: Stack(
         children: [
           PageView.builder(
+            controller: _pageController,
             onPageChanged: (int page) {
               setState(() {
                 _currentPage = page;
@@ -144,25 +159,24 @@ class _SplashState extends State<Splash> {
                           if (_isLastItem == true) {
                             // Get the JWT token from SharedPreferences
                             Token tokens = await tokenService.getTokens();
-                            String jwtToken = tokens.token;
-                            // Check if the token exists and is not empty
-                            if (jwtToken.isNotEmpty) {
-                             bool isExpired = true;
-                              //call api to get isExpired from server(write api later
-                              // Check if the token is expired
-                              if (isExpired == true) {
-                                // Token is expired, clear tokens and redirect to login
-                                tokenService.clearTokens();
-                                context.go('/login');
-                                // Redirect to login page
-                              } else {
-                                // Token is not expired
-                                context.go('/main');
-                              }
+                            if(tokens.token.isEmpty) {
+                              context.go('/login');
+                              return;
+                            }
+                            UserResponse userResponse = await userService.getUserDetails(tokens.token);
+                            if (!userResponse.isEmpty) {
+                              context.go('/apptab');
                             } else {
                               // Token is empty or not found
+                              tokenService.clearTokens();
                               context.go('/login');
                             }
+                          } else {
+                            _pageController.animateToPage(
+                              _currentPage + 1,
+                              duration: Duration(milliseconds: 300), // Animation duration
+                              curve: Curves.easeInOut, // Animation curve
+                            );
                           }
                         },
                     )

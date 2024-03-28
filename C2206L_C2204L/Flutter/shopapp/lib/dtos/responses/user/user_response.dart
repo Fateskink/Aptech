@@ -1,4 +1,5 @@
 import 'package:foodapp/extensions/custon_string.dart';
+import 'package:foodapp/models/role.dart';
 
 class UserResponse {
   final int? id;
@@ -9,7 +10,7 @@ class UserResponse {
   final DateTime? dateOfBirth;
   final int? facebookAccountId;
   final int? googleAccountId;
-  final String? role; // Assuming role is a String. Adjust based on actual type.
+  final Role? role; // Assuming role is a String. Adjust based on actual type.
 
   UserResponse({
     this.id,
@@ -24,18 +25,19 @@ class UserResponse {
   });
 
   factory UserResponse.fromJson(Map<String, dynamic> json) {
+
     return UserResponse(
       id: json['id'] as int?,
-      fullName: json['fullname'] as String?,
+      fullName:  (json['fullname'] as String?)?.toUtf8() ?? '',
       phoneNumber: json['phone_number'] as String,
       address: (json['address'] as String?)?.toUtf8() ?? '',
       isActive: json['is_active'] as bool,
       dateOfBirth: json['date_of_birth'] == null
           ? null
-          : DateTime.parse(json['date_of_birth']),
+          : DateTime.fromMillisecondsSinceEpoch(json['date_of_birth']),
       facebookAccountId: json['facebook_account_id'] as int?,
       googleAccountId: json['google_account_id'] as int?,
-      role: json['role'], // This depends on how role is represented in your JSON
+      role: Role.fromJson(json['role']), // This depends on how role is represented in your JSON
     );
   }
 
@@ -51,6 +53,9 @@ class UserResponse {
       'google_account_id': googleAccountId,
       'role': role,
     };
+  }
+  bool get isEmpty {
+    return isActive && (phoneNumber.isNotEmpty || (fullName ?? '').isNotEmpty);
   }
 }
 

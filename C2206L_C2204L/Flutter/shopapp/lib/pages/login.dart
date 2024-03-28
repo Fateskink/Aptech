@@ -170,6 +170,7 @@ class _LoginState extends State<Login> {
                               phoneNumber: phoneNumberController.text,
                               password: passwordController.text);
                         }
+                        context.go('/apptab');
                       },
                     ),
                   ),
