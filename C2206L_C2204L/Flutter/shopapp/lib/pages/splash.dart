@@ -2,9 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:foodapp/dtos/responses/user/user_response.dart';
-import 'package:foodapp/services/token_service.dart';
 import 'package:foodapp/services/user_service.dart';
-import 'package:foodapp/token.dart';
 import 'package:foodapp/utils/app_colors.dart';
 import 'package:foodapp/widgets/uibutton.dart';
 import 'package:get_it/get_it.dart';
@@ -83,7 +81,6 @@ class _SplashState extends State<Splash> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-    final tokenService = GetIt.instance<TokenService>();
     PageController _pageController = PageController(initialPage: 0);
 
     return Scaffold(
@@ -157,18 +154,11 @@ class _SplashState extends State<Splash> {
                         onTap: () async {
                           //last item
                           if (_isLastItem == true) {
-                            // Get the JWT token from SharedPreferences
-                            Token tokens = await tokenService.getTokens();
-                            if(tokens.token.isEmpty) {
-                              context.go('/login');
-                              return;
-                            }
-                            UserResponse userResponse = await userService.getUserDetails(tokens.token);
+                            UserResponse userResponse = await userService.getUserDetails();
                             if (!userResponse.isEmpty) {
                               context.go('/apptab');
                             } else {
                               // Token is empty or not found
-                              tokenService.clearTokens();
                               context.go('/login');
                             }
                           } else {

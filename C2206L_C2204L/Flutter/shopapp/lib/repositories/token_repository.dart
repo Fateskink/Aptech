@@ -1,11 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:foodapp/token.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert' as convert;
-import 'package:http/http.dart' as http;
 
-
-class TokenService {
+class TokenRepository {
   static const String _tokenKey = 'token';
   static const String _refreshTokenKey = 'refreshToken';
 
@@ -17,11 +13,14 @@ class TokenService {
   }
 
   // Retrieve tokens from local storage
-  Future<Token> getTokens() async {
+  Future<Map<String, String>> getTokens() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString(_tokenKey) ?? '';
     String? refreshToken = prefs.getString(_refreshTokenKey) ?? '';
-    return Token(token: token, refreshToken: refreshToken);
+    return {
+      token: token,
+      refreshToken: refreshToken
+    };
   }
   // Clear tokens from local storage
   Future<void> clearTokens() async {

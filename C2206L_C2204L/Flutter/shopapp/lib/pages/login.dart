@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:foodapp/dtos/requests/user/login_request.dart';
 import 'package:foodapp/dtos/responses/api_response.dart';
 import 'package:foodapp/services/auth_service.dart';
-import 'package:foodapp/services/token_service.dart';
 import 'package:foodapp/services/user_service.dart';
 import 'package:foodapp/utils/app_colors.dart';
 import 'package:foodapp/widgets/uibutton.dart';
@@ -24,7 +23,6 @@ class _LoginState extends State<Login> {
   bool rememberPassword = false;
 
   late UserService userService;
-  late TokenService tokenService;
   late AuthService authService;
 
   @override
@@ -33,7 +31,6 @@ class _LoginState extends State<Login> {
     super.initState();
     //inject service
     userService = GetIt.instance<UserService>();
-    tokenService = GetIt.instance<TokenService>();
     authService = GetIt.instance<AuthService>();
     // Retrieve credentials
     authService.getCredentials().then((credentials) { //promise
@@ -160,11 +157,7 @@ class _LoginState extends State<Login> {
                                 password: passwordController.text
                             )
                         );
-                        Map<String, dynamic> data = response.data;
-                        String token = data['token'];
-                        String refreshToken = data['refresh_token'];
-                        //save to local
-                        await tokenService.saveTokens(token: token, refreshToken: refreshToken);
+
                         if(rememberPassword == true) {
                           await authService.saveCredentials(
                               phoneNumber: phoneNumberController.text,

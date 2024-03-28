@@ -1,9 +1,16 @@
 import 'package:foodapp/dtos/responses/api_response.dart';
 import 'package:foodapp/models/http_method.dart';
+import 'package:foodapp/repositories/token_repository.dart';
+import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 
 class BaseService {
+  late TokenRepository tokenRepository;
+  BaseService() {
+    GetIt.instance.registerLazySingleton<TokenRepository>(() => TokenRepository());
+    tokenRepository = GetIt.instance<TokenRepository>();
+  }
   Future<ApiResponse> request({
     required String apiUrl,
     required HttpMethod method,

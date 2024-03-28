@@ -3,7 +3,6 @@ import 'package:foodapp/pages/login.dart';
 import 'package:foodapp/pages/register.dart';
 import 'package:foodapp/pages/tab/apptab.dart';
 import 'package:foodapp/services/auth_service.dart';
-import 'package:foodapp/services/token_service.dart';
 import 'package:foodapp/services/user_service.dart';
 import 'package:get_it/get_it.dart';
 import 'package:foodapp/pages/splash.dart';
@@ -24,7 +23,6 @@ flutter pub add json_annotation json_serializable
 void main() {
   //register services
   GetIt.instance.registerLazySingleton<UserService>(() => UserService());
-  GetIt.instance.registerLazySingleton<TokenService>(() => TokenService());
   GetIt.instance.registerLazySingleton<AuthService>(() => AuthService());
   GetIt.instance.registerLazySingleton<ProductService>(() => ProductService());
   GetIt.instance.registerLazySingleton<CategoryService>(() => CategoryService());
