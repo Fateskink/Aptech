@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:foodapp/dtos/requests/user/register_request.dart';
 import 'package:foodapp/dtos/responses/api_response.dart';
 import 'package:foodapp/dtos/responses/user/user_response.dart';
-import 'package:foodapp/services/auth_service.dart';
 import 'package:foodapp/services/user_service.dart';
 import 'package:foodapp/utils/app_colors.dart';
 import 'package:foodapp/utils/utility.dart';
@@ -33,7 +32,6 @@ class _RegisterState extends State<Register> {
   bool rememberPassword = false;
 
   late UserService userService;
-  late AuthService authService;
   DateTime selectedDate = DateTime.now();
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? pickedDate;
@@ -64,12 +62,6 @@ class _RegisterState extends State<Register> {
     super.initState();
     //inject service
     userService = GetIt.instance<UserService>();
-    authService = GetIt.instance<AuthService>();
-    // Retrieve credentials
-    authService.getCredentials().then((credentials) { //promise
-      phoneNumberController.text = credentials['phoneNumber'] ?? '';
-      passwordController.text = credentials['password'] ?? '';
-    });
   }
   @override
   Widget build(BuildContext context) {

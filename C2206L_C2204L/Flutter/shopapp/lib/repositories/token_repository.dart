@@ -18,8 +18,8 @@ class TokenRepository {
     String? token = prefs.getString(_tokenKey) ?? '';
     String? refreshToken = prefs.getString(_refreshTokenKey) ?? '';
     return {
-      token: token,
-      refreshToken: refreshToken
+      'token': token,
+      'refreshToken': refreshToken
     };
   }
   // Clear tokens from local storage

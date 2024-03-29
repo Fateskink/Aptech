@@ -14,11 +14,12 @@ class LoginRequest {
 
   Map<String, dynamic> toJson() {
     return {
-      'phone_number': phoneNumber,
-      'password': password,
-      'role_id': roleId,
+      'phone_number': phoneNumber ?? '',
+      'password': password ?? '',
+      'role_id': roleId ?? 1,
     };
   }
+
 }
 
 

@@ -1,6 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
-class AuthService {
+class AuthRepository{
   String _phoneNumberKey = 'phoneNumber';
   String _passwordKey = 'password';
 

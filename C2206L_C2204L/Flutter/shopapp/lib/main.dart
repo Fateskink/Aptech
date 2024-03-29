@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:foodapp/pages/login.dart';
 import 'package:foodapp/pages/register.dart';
 import 'package:foodapp/pages/tab/apptab.dart';
-import 'package:foodapp/services/auth_service.dart';
 import 'package:foodapp/services/user_service.dart';
 import 'package:get_it/get_it.dart';
 import 'package:foodapp/pages/splash.dart';
@@ -17,13 +16,11 @@ flutter pub add http shared_preferences get_it
 flutter pub add go_router
 flutter pub add intl
 flutter pub add build_runner
-flutter pub add json_annotation json_serializable
 
 * */
 void main() {
   //register services
   GetIt.instance.registerLazySingleton<UserService>(() => UserService());
-  GetIt.instance.registerLazySingleton<AuthService>(() => AuthService());
   GetIt.instance.registerLazySingleton<ProductService>(() => ProductService());
   GetIt.instance.registerLazySingleton<CategoryService>(() => CategoryService());
   runApp(const MyApp());
