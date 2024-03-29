@@ -61,7 +61,7 @@ class _HomeState extends State<Home> {
               ),
               Row(
                 children: [
-                  FutureBuilder<dynamic>(
+                  FutureBuilder<List<Category>>(
                     future: categoryService.getCategories(
                         GetCategoryRequest(page: page, limit: limit)
                     ), // Assuming getCategories() returns a Future<List<Category>>
@@ -71,10 +71,7 @@ class _HomeState extends State<Home> {
                       } else if (snapshot.hasError) {
                         return Text('Error: ${snapshot.error}');
                       } else {
-                        ApiResponse apiResponse = snapshot.data! as ApiResponse;
-                        final categories = (apiResponse.data as List).map((jsonItem) {
-                          return Category.fromJson(jsonItem);
-                        }).toList();
+                        final categories = snapshot.data! as List<Category>;
                         return ListView(
                           scrollDirection: Axis.horizontal,
                           children: [
