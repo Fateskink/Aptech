@@ -13,7 +13,7 @@ struct Student {
     int eng; //English grade [0, 100]
     int maths; //maths grade [0, 100]
 };
-int main() {
+int main12() {
     Student* students = new Student[5];
     // For example, you can assign values to the fields of each student
     students[0].eng = 90;
@@ -59,4 +59,5 @@ int main() {
             cout << endl;
         }
     }
+    return 0;
 }

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FA5DD27C2BB6B0D300AE88AE /* bai013.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FA5DD27B2BB6B0D300AE88AE /* bai013.cpp */; };
+		FA5DD27E2BB6B2C000AE88AE /* bai014.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FA5DD27D2BB6B2C000AE88AE /* bai014.cpp */; };
 		FA6D8B192BAD85A000A7C9A2 /* bai001.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FA6D8B182BAD85A000A7C9A2 /* bai001.cpp */; };
 		FA728F872BB3F8DD005B3AED /* bai009.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FA728F862BB3F8DD005B3AED /* bai009.cpp */; };
 		FA728F892BB3FC54005B3AED /* bai010.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FA728F882BB3FC54005B3AED /* bai010.cpp */; };
@@ -34,6 +36,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		FA5DD27B2BB6B0D300AE88AE /* bai013.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = bai013.cpp; sourceTree = "<group>"; };
+		FA5DD27D2BB6B2C000AE88AE /* bai014.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = bai014.cpp; sourceTree = "<group>"; };
 		FA6D8B152BAD85A000A7C9A2 /* myapp */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = myapp; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA6D8B182BAD85A000A7C9A2 /* bai001.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = bai001.cpp; sourceTree = "<group>"; };
 		FA728F862BB3F8DD005B3AED /* bai009.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = bai009.cpp; sourceTree = "<group>"; };
@@ -91,6 +95,8 @@
 				FA728F882BB3FC54005B3AED /* bai010.cpp */,
 				FA728F8A2BB404DF005B3AED /* bai011.cpp */,
 				FA728F8C2BB40B26005B3AED /* bai012.cpp */,
+				FA5DD27B2BB6B0D300AE88AE /* bai013.cpp */,
+				FA5DD27D2BB6B2C000AE88AE /* bai014.cpp */,
 			);
 			path = myapp;
 			sourceTree = "<group>";
@@ -156,9 +162,11 @@
 				FAB770962BB16DF300C92227 /* bai006.cpp in Sources */,
 				FAB770902BB15C0000C92227 /* bai003.cpp in Sources */,
 				FAB770982BB1798100C92227 /* bai007.cpp in Sources */,
+				FA5DD27C2BB6B0D300AE88AE /* bai013.cpp in Sources */,
 				FA728F892BB3FC54005B3AED /* bai010.cpp in Sources */,
 				FA728F872BB3F8DD005B3AED /* bai009.cpp in Sources */,
 				FA728F8D2BB40B26005B3AED /* bai012.cpp in Sources */,
+				FA5DD27E2BB6B2C000AE88AE /* bai014.cpp in Sources */,
 				FA728F8B2BB404DF005B3AED /* bai011.cpp in Sources */,
 				FA7C749C2BAD8974002F2F17 /* bai002.cpp in Sources */,
 				FAB770922BB1603400C92227 /* bai004.cpp in Sources */,
