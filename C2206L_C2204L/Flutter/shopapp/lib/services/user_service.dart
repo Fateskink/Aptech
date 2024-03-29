@@ -46,4 +46,12 @@ class UserService extends BaseService {
     );
     return UserResponse.fromJson(response.data);
   }
+  Future<void> saveCredentials({required String phoneNumber, required String password}) async {
+    authRepository.saveCredentials(phoneNumber: phoneNumber, password: password);
+  }
+
+  // Retrieve credentials from local storage
+  Future<Map<String, String>> getCredentials() async {
+    return authRepository.getCredentials();
+  }
 }

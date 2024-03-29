@@ -54,7 +54,7 @@ class UserResponse {
       'role': role,
     };
   }
-  bool get isEmpty {
+  bool get isNotEmpty {
     return isActive && (phoneNumber.isNotEmpty || (fullName ?? '').isNotEmpty);
   }
 }

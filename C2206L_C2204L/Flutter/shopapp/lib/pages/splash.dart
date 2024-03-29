@@ -154,11 +154,15 @@ class _SplashState extends State<Splash> {
                         onTap: () async {
                           //last item
                           if (_isLastItem == true) {
-                            UserResponse userResponse = await userService.getUserDetails();
-                            if (!userResponse.isEmpty) {
-                              context.go('/apptab');
-                            } else {
-                              // Token is empty or not found
+                            try {
+                              UserResponse userResponse = await userService.getUserDetails();
+                              if (userResponse.isNotEmpty) {
+                                context.go('/apptab');
+                              } else {
+                                // Token is empty or not found
+                                context.go('/login');
+                              }
+                            } catch (e) {
                               context.go('/login');
                             }
                           } else {

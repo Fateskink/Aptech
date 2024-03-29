@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foodapp/dtos/requests/user/login_request.dart';
 import 'package:foodapp/dtos/responses/api_response.dart';
-import 'package:foodapp/services/auth_service.dart';
 import 'package:foodapp/services/user_service.dart';
 import 'package:foodapp/utils/app_colors.dart';
 import 'package:foodapp/widgets/uibutton.dart';
@@ -23,7 +22,6 @@ class _LoginState extends State<Login> {
   bool rememberPassword = false;
 
   late UserService userService;
-  late AuthService authService;
 
   @override
   void initState() {
@@ -31,9 +29,8 @@ class _LoginState extends State<Login> {
     super.initState();
     //inject service
     userService = GetIt.instance<UserService>();
-    authService = GetIt.instance<AuthService>();
     // Retrieve credentials
-    authService.getCredentials().then((credentials) { //promise
+    userService.getCredentials().then((credentials) { //promise
       phoneNumberController.text = credentials['phoneNumber'] ?? '';
       passwordController.text = credentials['password'] ?? '';
     });
@@ -151,7 +148,7 @@ class _LoginState extends State<Login> {
                       backgroundColor: AppColors.primaryColor,
                       onTap: () async {
                         print('Login');
-                        ApiResponse response = await userService.login(
+                        await userService.login(
                             LoginRequest(
                                 phoneNumber: phoneNumberController.text,
                                 password: passwordController.text
@@ -159,7 +156,7 @@ class _LoginState extends State<Login> {
                         );
 
                         if(rememberPassword == true) {
-                          await authService.saveCredentials(
+                          await userService.saveCredentials(
                               phoneNumber: phoneNumberController.text,
                               password: passwordController.text);
                         }
