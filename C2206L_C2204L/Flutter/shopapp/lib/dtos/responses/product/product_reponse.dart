@@ -1,4 +1,5 @@
 import 'package:foodapp/models/product_image.dart';
+import 'package:foodapp/extensions/custon_string.dart';
 
 class ProductResponse  {
   late int id;
@@ -28,10 +29,10 @@ class ProductResponse  {
             (imageJson) => ProductImage.fromJson(imageJson)).toList();
     return ProductResponse(
       id: json['id'] ?? 0,
-      name: json['name'] ?? '',
+      name: (json['name'] as String?)?.toUtf8() ?? '',
       price: json['price'] != null ? json['price'].toDouble() : 0.0,
       thumbnail: json['thumbnail'] ?? '',
-      description: json['description'] ?? '',
+      description: (json['description'] as String?)?.toUtf8() ?? '',
       totalPages: json['totalPages'] ?? 0,
       productImages: productImages ?? [],
       categoryId: json['category_id'] ?? 0,

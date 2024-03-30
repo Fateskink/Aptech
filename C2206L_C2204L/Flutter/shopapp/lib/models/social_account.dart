@@ -1,3 +1,5 @@
+import 'package:foodapp/extensions/custon_string.dart';
+
 class SocialAccount {
   final int id;
   final String provider;
@@ -18,7 +20,7 @@ class SocialAccount {
       id: json['id'],
       provider: json['provider'],
       providerId: json['providerId'],
-      name: json['name'],
+      name: (json['name'] as String?)?.toUtf8() ?? '',
       email: json['email'],
     );
   }

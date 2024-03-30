@@ -1,6 +1,7 @@
 import 'package:foodapp/models/role.dart';
 
 import 'comment.dart';
+import 'package:foodapp/extensions/custon_string.dart';
 
 class User {
   final int id;
@@ -32,9 +33,9 @@ class User {
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
       id: json['id'],
-      fullName: json['fullName'],
+      fullName: (json['fullName'] as String?)?.toUtf8() ?? '',
       phoneNumber: json['phoneNumber'],
-      address: json['address'],
+      address: (json['address'] as String?)?.toUtf8() ?? '',
       password: json['password'],
       active: json['active'],
       dateOfBirth: json['dateOfBirth'],

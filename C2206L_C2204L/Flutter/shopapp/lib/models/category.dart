@@ -1,3 +1,4 @@
+import 'package:foodapp/extensions/custon_string.dart';
 class Category {
   final int id;
   final String name;
@@ -10,7 +11,7 @@ class Category {
   factory Category.fromJson(Map<String, dynamic> json) {
     return Category(
       id: json['id'],
-      name: json['name'],
+      name: (json['name'] as String?)?.toUtf8() ?? '',
     );
   }
 }

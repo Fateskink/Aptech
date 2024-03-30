@@ -2,6 +2,7 @@
 import 'package:foodapp/models/category.dart';
 import 'package:foodapp/models/comment.dart';
 import 'package:foodapp/models/product_image.dart';
+import 'package:foodapp/extensions/custon_string.dart';
 
 class Product {
   final int id;
@@ -30,7 +31,7 @@ class Product {
       name: json['name'],
       price: json['price'],
       thumbnail: json['thumbnail'],
-      description: json['description'],
+      description: (json['description'] as String?)?.toUtf8() ?? '',
       category: Category.fromJson(json['category']),
       productImages: (json['productImages'] as List<dynamic>)
           .map((e) => ProductImage.fromJson(e))

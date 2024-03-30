@@ -1,5 +1,6 @@
 import 'package:foodapp/extensions/custon_string.dart';
 import 'package:foodapp/models/order_detail.dart';
+
 class OrderResponse {
   final int id;
   final int userId;

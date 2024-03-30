@@ -71,7 +71,7 @@ class _HomeState extends State<Home> {
                       } else if (snapshot.hasError) {
                         return Text('Error: ${snapshot.error}');
                       } else {
-                        final categories = snapshot.data! as List<Category>;
+                        final List<Category> categories = snapshot.data as List<Category>;
                         return ListView(
                           scrollDirection: Axis.horizontal,
                           children: [

@@ -1,4 +1,5 @@
 import 'package:foodapp/models/coupon.dart';
+import 'package:foodapp/extensions/custon_string.dart';
 
 class CouponCondition {
   final int id;
@@ -21,7 +22,7 @@ class CouponCondition {
     return CouponCondition(
       id: json['id'],
       coupon: Coupon.fromJson(json['coupon']),
-      attribute: json['attribute'],
+      attribute: (json['attribute'] as String?)?.toUtf8() ?? '',
       operator: json['operator'],
       value: json['value'],
       discountAmount: json['discount_amount'].toDouble(),

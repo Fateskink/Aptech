@@ -1,3 +1,4 @@
+import 'package:foodapp/extensions/custon_string.dart';
 class ApiResponse {
   final String message;
   final String status;
@@ -11,9 +12,10 @@ class ApiResponse {
 
   factory ApiResponse.fromJson(Map<String, dynamic> json) {
     return ApiResponse(
-      message: json['message'] ?? '',
+      message: (json['message'] as String?)?.toUtf8() ?? '',
       status: json['status'] ?? '',
       data: json['data'] ?? {},
     );
   }
 }
+
