@@ -1,11 +1,12 @@
 import 'package:foodapp/dtos/responses/api_response.dart';
+import 'package:foodapp/exceptions/custom_exception.dart';
 import 'package:foodapp/models/http_method.dart';
 import 'package:foodapp/repositories/auth_repository.dart';
 import 'package:foodapp/repositories/token_repository.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
-
+import 'package:foodapp/extensions/custon_string.dart';
 class BaseService {
   final TokenRepository tokenRepository = TokenRepository();
   final AuthRepository authRepository = AuthRepository();
@@ -16,6 +17,7 @@ class BaseService {
     Map<String, dynamic>? requestData,
     String? token, // Optional token parameter
   }) async {
+    int errorStatusCode = 200;
     try {
       late http.Response response;
 
@@ -33,7 +35,7 @@ class BaseService {
       switch (method) {
         case HttpMethod.GET:
           response = await http.get(
-            Uri.parse(apiUrl),
+            Uri.parse(apiUrl).replace(queryParameters: requestData),
             headers: headers,
           );
           break;
@@ -66,12 +68,19 @@ class BaseService {
         );
         return responseData;
       } else {
-        throw Exception(
-          convert.jsonDecode(response.body)['message']?.toUtf8() ?? '',
+        errorStatusCode = response.statusCode;
+        throw CustomException(
+            statusCode: errorStatusCode,
+            message: convert.jsonDecode(response.body)['message']?.toUtf8() ?? ''
         );
       }
     } catch (e) {
-      throw Exception('An error occurred: $e');
+      throw CustomException(
+          statusCode: (e is CustomException && e.statusCode == errorStatusCode) ?
+          errorStatusCode:
+          CustomException.INTERNAL_SERVER_ERROR,
+          message: e.toString()
+      );
     }
   }
 }

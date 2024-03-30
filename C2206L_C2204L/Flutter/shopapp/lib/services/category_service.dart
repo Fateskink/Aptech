@@ -11,7 +11,6 @@ import 'base_service.dart';
 class CategoryService extends BaseService {
   Future<List<Category>> getCategories(GetCategoryRequest getCategoryRequest) async {
     final String apiUrl = '${APIConstants.baseUrl}/categories';
-    final Map<String, String> requestData = getCategoryRequest.toJson();
     final ApiResponse response = await request(
       apiUrl: apiUrl,
       method: HttpMethod.GET,
