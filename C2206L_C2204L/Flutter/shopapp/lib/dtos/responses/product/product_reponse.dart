@@ -1,5 +1,6 @@
 import 'package:foodapp/models/product_image.dart';
 import 'package:foodapp/extensions/custon_string.dart';
+import 'package:foodapp/services/api_constants.dart';
 
 class ProductResponse  {
   late int id;
@@ -27,11 +28,20 @@ class ProductResponse  {
     List<dynamic> productImagesJson = json['product_images'];
     List<ProductImage> productImages = productImagesJson.map(
             (imageJson) => ProductImage.fromJson(imageJson)).toList();
+
+    String? thumbnailUrl = json['thumbnail'] as String?;
+    if (thumbnailUrl != null && !thumbnailUrl.contains('http')) {
+      thumbnailUrl = '${APIConstants.baseUrl}/products/images/$thumbnailUrl';
+    }
+    if(thumbnailUrl == null || thumbnailUrl.isEmpty) {
+      thumbnailUrl = '${APIConstants.baseUrl}/products/images/notfound.jpeg';
+    }
+
     return ProductResponse(
       id: json['id'] ?? 0,
       name: (json['name'] as String?)?.toUtf8() ?? '',
       price: json['price'] != null ? json['price'].toDouble() : 0.0,
-      thumbnail: json['thumbnail'] ?? '',
+      thumbnail: thumbnailUrl ?? '',
       description: (json['description'] as String?)?.toUtf8() ?? '',
       totalPages: json['totalPages'] ?? 0,
       productImages: productImages ?? [],

@@ -15,7 +15,7 @@ class ProductListResponse {
             (productJson) => ProductResponse.fromJson(productJson)).toList();
     return ProductListResponse(
       products: products,
-      totalPages: json['totalPages'],
+      totalPages: json['totalPages'] as int ,
     );
   }
 }

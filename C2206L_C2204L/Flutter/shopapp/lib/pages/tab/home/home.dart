@@ -32,17 +32,10 @@ class _HomeState extends State<Home> {
     super.initState();
     productService = GetIt.instance<ProductService>();
     categoryService = GetIt.instance<CategoryService>();
-    productService.getProducts(GetProductRequest(
-        page: page,
-        limit: limit,
-        keyword: keyword,
-        categoryId: selectedCategory?.id ?? 0
-    ));
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container();
     return Container(
       child: Stack(
         children: [
@@ -144,15 +137,64 @@ class _HomeState extends State<Home> {
                 } else {
                   // Data fetched successfully, display ListView
                   List<ProductResponse> productResponses = snapshot.data!.products; // Extract products from the response
-                  return ListView.builder(
+                  return GridView.builder(
+                    shrinkWrap: true, // Allow the GridView to occupy only the space it needs
+                    //physics: NeverScrollableScrollPhysics(), // Disable GridView scrolling
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2, // Number of columns
+                      crossAxisSpacing: 10, // Spacing between columns
+                      mainAxisSpacing: 10, // Spacing between rows
+                    ),
                     itemCount: productResponses.length,
                     itemBuilder: (context, index) {
                       ProductResponse productResponse = productResponses[index];
-                      return ListTile(
-                        leading: Image.network(productResponse.thumbnail), // Display product thumbnail
-                        title: Text(productResponse.name),
-                        subtitle: Text(productResponse.description),
-                        trailing: Text('\$${productResponse.price.toStringAsFixed(2)}'),
+                      return Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0), // Apply border radius
+                        ),
+                        elevation: 3, // Add elevation for card effect
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.vertical(top: Radius.circular(10)), // Apply border radius to top corners
+                              child: Image.network(
+                                productResponse.thumbnail,
+                                fit: BoxFit.cover,
+                                width: double.infinity, // Make image fill the width of the card
+                                height: 150, // Set height for the image
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    productResponse.name,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  SizedBox(height: 4),
+                                  Text(
+                                    productResponse.description,
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  SizedBox(height: 4),
+                                  Text(
+                                    '\$${productResponse.price.toStringAsFixed(2)}',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.green,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       );
                     },
                   );
