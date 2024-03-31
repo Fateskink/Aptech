@@ -32,10 +32,17 @@ class _HomeState extends State<Home> {
     super.initState();
     productService = GetIt.instance<ProductService>();
     categoryService = GetIt.instance<CategoryService>();
+    productService.getProducts(GetProductRequest(
+        page: page,
+        limit: limit,
+        keyword: keyword,
+        categoryId: selectedCategory?.id ?? 0
+    ));
   }
 
   @override
   Widget build(BuildContext context) {
+    return Container();
     return Container(
       child: Stack(
         children: [
