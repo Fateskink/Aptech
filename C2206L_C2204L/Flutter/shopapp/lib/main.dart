@@ -16,7 +16,7 @@ flutter pub add http shared_preferences get_it
 flutter pub add go_router
 flutter pub add intl
 flutter pub add build_runner
-
+flutter pub add flutter_layout_grid
 * */
 void main() {
   //register services
