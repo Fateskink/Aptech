@@ -35,6 +35,7 @@ class ProductResponse  {
     }
     if(thumbnailUrl == null || thumbnailUrl.isEmpty) {
       thumbnailUrl = '${APIConstants.baseUrl}/products/images/notfound.jpeg';
+      print('id = ${json['id']}');
     }
 
     return ProductResponse(

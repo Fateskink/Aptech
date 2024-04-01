@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_layout_grid/flutter_layout_grid.dart';
 import 'package:foodapp/dtos/requests/category/get_category_request.dart';
 import 'package:foodapp/dtos/requests/product/get_product_request.dart';
 import 'package:foodapp/dtos/responses/api_response.dart';
@@ -11,6 +10,7 @@ import 'package:foodapp/pages/tab/home/grid_item.dart';
 import 'package:foodapp/services/category_service.dart';
 import 'package:foodapp/services/product_service.dart';
 import 'package:foodapp/utils/app_colors.dart';
+import 'package:foodapp/widgets/loading.dart';
 import 'package:go_router/go_router.dart';
 import 'package:get_it/get_it.dart';
 import 'dart:convert' as convert;
@@ -78,7 +78,7 @@ class _HomeState extends State<Home> {
                           ), // Assuming getCategories() returns a Future<List<Category>>
                           builder: (context, snapshot) {
                             if (snapshot.connectionState == ConnectionState.waiting) {
-                              return CircularProgressIndicator(); // Show loading indicator while fetching data
+                              return Loading(); // Show loading indicator while fetching data
                             } else if (snapshot.hasError) {
                               return Text('Error: ${snapshot.error}');
                             } else {
@@ -150,12 +150,27 @@ class _HomeState extends State<Home> {
                 )), // Call your API here
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(child: CircularProgressIndicator()); // Show loading indicator while waiting for data
+                    return Loading(); // Show loading indicator while waiting for data
                   } else if (snapshot.hasError) {
                     return Center(child: Text('Error: ${snapshot.error}')); // Show error message if there's an error`
                   } else {
                     // Data fetched successfully, display ListView
                     List<ProductResponse> productResponses = snapshot.data!.products; // Extract products from the response
+                    if (productResponses.isEmpty) {
+                      return Container(
+                        color: Colors.white, // Set container color
+                        child: Center(
+                          child: Text(
+                            'No data found',
+                            style: TextStyle(
+                              color: Colors.red, // Set text color to red
+                              fontSize: 24, // Set font size to 24 (adjust as needed)
+                              fontWeight: FontWeight.bold, // Optionally, set font weight to bold
+                            ),
+                          ),
+                        ),
+                      );
+                    }
                     return Container(
                       padding: EdgeInsets.symmetric(horizontal: 10),
                       child: GridView.builder(
