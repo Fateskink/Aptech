@@ -3,6 +3,10 @@
 const Koa = require('koa');
 const bodyParser = require('koa-bodyparser');
 const usersRouter = require('./routes/usersRouter');
+const {substract, sum} = require('../src/utilities/calculation');
+console.log(`5 + 2 = ${sum(5,2)}`);
+console.log(`5 - 2 = ${substract(5,2)}`);
+//const {sum, substract} = require('../src/utilities/calculation');
 
 //yarn add @types/koa @types/koa-router @types/koa-bodyparser mongodb
 //yarn add koa-bodyparser koa koa-router
@@ -20,7 +24,7 @@ app.use(usersRouter.allowedMethods());
 
 
 // Start the server
-//http://localhost:3099/users
+//http://localhost:3003/users
 const PORT = process.env.PORT || 3003;
 app.listen(PORT, () => {  
   console.log(`Server is running on port ${PORT}`);
