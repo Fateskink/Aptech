@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foodapp/dtos/requests/category/get_category_request.dart';
 import 'package:foodapp/dtos/requests/product/get_product_request.dart';
-import 'package:foodapp/dtos/responses/api_response.dart';
-import 'package:foodapp/dtos/responses/product/product_list_response.dart';
 import 'package:foodapp/dtos/responses/product/product_reponse.dart';
 import 'package:foodapp/models/category.dart';
 import 'package:foodapp/models/product.dart';

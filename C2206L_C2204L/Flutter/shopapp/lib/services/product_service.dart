@@ -25,4 +25,15 @@ class ProductService extends BaseService {
       method: HttpMethod.GET,
     );
   }
+  Future<ProductListResponse> findProductsByUserId() async {
+    final String apiUrl = '${APIConstants.baseUrl}/products/favorites';
+    Map<String, String> tokens  = await tokenRepository.getTokens();
+    String jwtToken = tokens['token'] ?? '';
+    final ApiResponse response = await request(
+      apiUrl: apiUrl,
+      method: HttpMethod.POST,
+      token: jwtToken
+    );
+    return ProductListResponse.fromJson(response.data);
+  }
 }
