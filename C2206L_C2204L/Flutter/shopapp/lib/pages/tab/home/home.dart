@@ -78,7 +78,7 @@ class _HomeState extends State<Home> {
                           ), // Assuming getCategories() returns a Future<List<Category>>
                           builder: (context, snapshot) {
                             if (snapshot.connectionState == ConnectionState.waiting) {
-                              return Loading(); // Show loading indicator while fetching data
+                              return Expanded(child: Loading(size: 50,));
                             } else if (snapshot.hasError) {
                               return Text('Error: ${snapshot.error}');
                             } else {
