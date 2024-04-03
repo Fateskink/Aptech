@@ -8,6 +8,13 @@ router.get('/', (req, res) => {
     message: 'Chao ban, day la danh sach product'
   });
 });
+router.get('/:id', (req, res) => {
+    //curl -i http://localhost:3001/students
+    debugger
+    res.json({
+      message: 'Chao ban, day la danh sach product'
+    });
+  });
 router.post('/', (req, res) => {
     //curl -i http://localhost:3001/students
     debugger
@@ -15,7 +22,7 @@ router.post('/', (req, res) => {
         message: 'This is post'
     });
 });
-router.put('/', (req, res) => {
+router.put('/:id', (req, res) => {
     //curl -i http://localhost:3001/students
     debugger
     res.json({
