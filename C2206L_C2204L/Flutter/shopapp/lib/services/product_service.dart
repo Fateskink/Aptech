@@ -3,9 +3,12 @@ import 'package:foodapp/dtos/requests/user/login_request.dart';
 import 'package:foodapp/dtos/requests/user/register_request.dart';
 import 'package:foodapp/dtos/responses/api_response.dart';
 import 'package:foodapp/dtos/responses/product/product_list_response.dart';
+import 'package:foodapp/dtos/responses/product/product_reponse.dart';
 import 'package:foodapp/models/http_method.dart';
+import 'package:foodapp/models/product.dart';
 import 'package:foodapp/services/api_constants.dart';
 import 'package:foodapp/services/base_service.dart';
+import 'package:flutter/foundation.dart';
 
 class ProductService extends BaseService {
   Future<ProductListResponse> getProducts(GetProductRequest getProductRequest) async {
@@ -25,8 +28,8 @@ class ProductService extends BaseService {
       method: HttpMethod.GET,
     );
   }
-  Future<ProductListResponse> findProductsByUserId() async {
-    final String apiUrl = '${APIConstants.baseUrl}/products/favorites';
+  Future<List<ProductResponse>> findFavoriteProductsByUserId() async {
+    final String apiUrl = '${APIConstants.baseUrl}/products/favorite-products';
     Map<String, String> tokens  = await tokenRepository.getTokens();
     String jwtToken = tokens['token'] ?? '';
     final ApiResponse response = await request(
@@ -34,6 +37,9 @@ class ProductService extends BaseService {
       method: HttpMethod.POST,
       token: jwtToken
     );
-    return ProductListResponse.fromJson(response.data);
+    List<ProductResponse> productResponses = (response.data as List)
+        .map<ProductResponse>((productJson) => ProductResponse.fromJson(productJson))
+        .toList();
+    return productResponses;
   }
 }

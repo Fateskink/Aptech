@@ -7,7 +7,7 @@ class Loading extends StatelessWidget {
   final Color leftDotColor;
   final Color rightDotColor;
 
-  const Loading({
+  const Loading({super.key,
     this.size = 100, // Set default value for size
     this.leftDotColor = AppColors.primaryColor, // Set default value for leftDotColor
     this.rightDotColor = Colors.blue, // Set default value for rightDotColor
