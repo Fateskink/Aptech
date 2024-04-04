@@ -37,10 +37,12 @@
                         <td>${product.quantity}</td>
                         <td>
                             <form action="ProductServlet" method="POST">
+                                <input type="hidden" name="action" value="delete"> <!-- Add action parameter -->
                                 <input type="hidden" name="productId" value="${product.id}">
                                 <button type="submit" onclick="return confirm('Are you sure you want to delete ${product.name}?')">Delete</button>
                             </form>
                         </td>
+
                         
                     </tr>
                 </c:forEach>

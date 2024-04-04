@@ -15,6 +15,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import jakarta.ws.rs.POST;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -61,25 +62,28 @@ public class ProductServlet extends HttpServlet {
     RequestDispatcher dispatcher = request.getRequestDispatcher("productlist.jsp");
     dispatcher.forward(request, response);
 }
-
-
     
-   @Override
-protected void doPost(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
-    // Retrieve product information from request parameters
-    int id = Integer.valueOf(request.getParameter("productId"));
-    String productName = request.getParameter("productName");
     
-    BigDecimal price = BigDecimal.valueOf(Double.parseDouble(request.getParameter("price")));
-    int quantity = Integer.parseInt(request.getParameter("quantity"));
+     @Override
+     protected void doPost(HttpServletRequest request, HttpServletResponse response)
+             throws ServletException, IOException {
+         // Retrieve product information from request parameters
+          String action = request.getParameter("action");
 
-    // Create a new Product entity object
-    Product product = new Product();
-    product.setId(id);
-    product.setName(productName);
-    product.setPrice(price);
-    product.setQuantity(quantity);
+        if ("insert".equals(action)) {
+            // Insert action
+            insertProduct(request, response);
+        } else if ("delete".equals(action)) {
+            // Delete action
+            deleteProduct(request, response);
+        } else {
+            // Invalid action or no action specified
+            // Handle error or redirect to an appropriate page
+            response.sendRedirect("error.jsp");
+        }         
+     }
+    private void deleteProduct(HttpServletRequest request, HttpServletResponse response) {
+        String productId = request.getParameter("productId");
 
     EntityManager entityManager = null;
     try {
@@ -89,29 +93,74 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
         // Begin transaction
         entityManager.getTransaction().begin();
 
-        // Persist the product entity object to the database
-        entityManager.persist(product);
+        // Find the product entity by ID
+        Product product = entityManager.find(Product.class, productId);
+
+        // If the product exists, delete it from the database
+        if (product != null) {
+            entityManager.remove(product);
+        }
 
         // Commit transaction
         entityManager.getTransaction().commit();
 
-        // Redirect to product list page or display a success message
+        // Redirect to the product list page after successful deletion
         response.sendRedirect("productlist.jsp");
     } catch (Exception e) {
         // Handle exceptions
         e.printStackTrace();
         // Redirect to an error page or display an error message
-        response.sendRedirect("error.jsp");
+        //response.sendRedirect("error.jsp");
     } finally {
         if (entityManager != null && entityManager.isOpen()) {
             entityManager.close();
         }
     }
+    }
+    private void insertProduct(HttpServletRequest request, HttpServletResponse response) {
+    int id = Integer.valueOf(request.getParameter("productId"));
+         String productName = request.getParameter("productName");
+
+         BigDecimal price = BigDecimal.valueOf(Double.parseDouble(request.getParameter("price")));
+         int quantity = Integer.parseInt(request.getParameter("quantity"));
+
+         // Create a new Product entity object
+         Product product = new Product();
+         product.setId(id);
+         product.setName(productName);
+         product.setPrice(price);
+         product.setQuantity(quantity);
+
+         EntityManager entityManager = null;
+         try {
+             // Get EntityManager instance
+             entityManager = EntityManagerFactoryProvider.getEntityManagerFactory().createEntityManager();
+
+             // Begin transaction
+             entityManager.getTransaction().begin();
+
+             // Persist the product entity object to the database
+             entityManager.persist(product);
+
+             // Commit transaction
+             entityManager.getTransaction().commit();
+
+             // Redirect to product list page or display a success message
+             response.sendRedirect("productlist.jsp");
+         } catch (Exception e) {
+             // Handle exceptions
+             e.printStackTrace();
+             // Redirect to an error page or display an error message
+             //response.sendRedirect("error.jsp");
+         } finally {
+             if (entityManager != null && entityManager.isOpen()) {
+                 entityManager.close();
+             }
+         }
+    } 
+
 }
 
-
-
-}
 /*
 -- Create the products table
 CREATE TABLE tbl_product (
