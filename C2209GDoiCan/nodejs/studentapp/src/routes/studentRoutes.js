@@ -15,6 +15,13 @@ router.get('/:id', (req, res) => {
       message: 'Chao ban, day la danh sach product'
     });
   });
+  router.get('/:id/classes', (req, res) => {
+    //curl -i http://localhost:3001/students
+    debugger
+    res.json({
+      message: 'Chao ban, day la danh sach product'
+    });
+  });
 router.post('/', (req, res) => {
     //curl -i http://localhost:3001/students
     debugger
