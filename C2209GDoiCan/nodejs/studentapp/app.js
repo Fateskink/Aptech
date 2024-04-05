@@ -5,6 +5,7 @@ console.log(`5 + 2 = ${sum(5,2)}`)
 debugger
 */
 //npm install --save express mongoose express-validator dotenv
+//express-validator
 //npm install --save-dev nodemon
 const express = require('express');
 const bodyParser = require('body-parser');

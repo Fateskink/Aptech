@@ -52,6 +52,9 @@
         $person = $persons[$i];        
         //var_dump($person);    
     }
+    $number_of_students = 100;
+    $z                  = 20;
+    $choice12           = 3;
     //better
     foreach($persons as $person) {
         echo $person["name"] . " "

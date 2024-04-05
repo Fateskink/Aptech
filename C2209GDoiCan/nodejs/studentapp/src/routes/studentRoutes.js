@@ -1,33 +1,49 @@
 const express = require('express');
 const router = express.Router();
+const { query, body, validationResult } = require('express-validator');
+const {emailValidation} = require('../validations/inputValidations');
 
 router.get('/', (req, res) => {
   //curl -i http://localhost:3001/students
   debugger
   res.json({
-    message: 'Chao ban, day la danh sach product'
+    message: 'Chao ban, day la danh sach student'
   });
 });
 router.get('/:id', (req, res) => {
     //curl -i http://localhost:3001/students
     debugger
     res.json({
-      message: 'Chao ban, day la danh sach product'
+      message: 'Chao ban, day la danh sach student'
     });
   });
   router.get('/:id/classes', (req, res) => {
     //curl -i http://localhost:3001/students
     debugger
     res.json({
-      message: 'Chao ban, day la danh sach product'
+      message: 'Chao ban, day la danh sach student'
     });
   });
-router.post('/', (req, res) => {
-    //curl -i http://localhost:3001/students
-    debugger
-    res.json({
-        message: 'This is post'
-    });
+
+
+/**
+curl -i -X POST http://localhost:3001/students \
+  -H "Content-Type: application/json" \
+  -d '{"name": "John Doe", "age": 20, "phone_number": "11223344", "code": "C1245", "email": "hdhd"}'
+
+*/  
+  router.post('/', 
+    emailValidation,         
+    (req, res) => {
+      debugger            
+      const result = validationResult(req);
+      if (result.isEmpty()) {        
+        res.json({
+          message: 'This is post'
+        });
+      }    
+      res.send({ errors: result.array() });            
+      
 });
 router.put('/:id', (req, res) => {
     //curl -i http://localhost:3001/students
