@@ -8,6 +8,7 @@ import 'package:foodapp/pages/splash.dart';
 import 'package:go_router/go_route'
     'r.dart';
 
+import 'pages/detail_product/detail_product.dart';
 import 'services/category_service.dart';
 import 'services/product_service.dart';
 
@@ -17,6 +18,7 @@ flutter pub add go_router
 flutter pub add intl
 flutter pub add build_runner
 flutter pub add loading_animation_widget
+flutter pub add carousel_slider
 * */
 void main() {
   //register services
@@ -62,15 +64,33 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-
+    var theme = ThemeData(
+      textTheme: const TextTheme(
+          bodySmall: TextStyle(
+            fontSize: 14, // Normal text size
+            // You can also set other properties like fontFamily, fontWeight, etc.
+          ),
+          bodyMedium: TextStyle(
+            fontSize: 16, // Normal text size
+          ),
+          bodyLarge: TextStyle(
+            fontSize: 20, // Normal text size
+            // You can also set other properties like fontFamily, fontWeight, etc.
+        )
+      ),
+    );
+    /*
     return MaterialApp.router(
       routerConfig: _router,
+      theme: theme
     );
-
+    */
     return MaterialApp(
       title: 'Flutter Demo',
-      home: AppTab(),
+        theme: theme,
+      //home: AppTab(),
       //home: Login()
+      home:DetailProduct()
     );
   }
 }
