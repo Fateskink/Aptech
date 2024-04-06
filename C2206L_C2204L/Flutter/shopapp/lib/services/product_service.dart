@@ -21,12 +21,13 @@ class ProductService extends BaseService {
     return ProductListResponse.fromJson(response.data);
   }
 
-  Future<ApiResponse> getProductById(int id) async {
+  Future<ProductResponse> getProductById(int id) async {
     final String apiUrl = '${APIConstants.baseUrl}/products/$id';
-    return request(
+    final ApiResponse response = await request(
       apiUrl: apiUrl,
       method: HttpMethod.GET,
     );
+    return ProductResponse.fromJson(response.data);
   }
   Future<List<ProductResponse>> findFavoriteProductsByUserId() async {
     final String apiUrl = '${APIConstants.baseUrl}/products/favorite-products';
