@@ -5,7 +5,20 @@ public class Main {
         for (int r; (r = x % y) != 0; x = y, y = r) { }
         return y;//ớc chung lớn nhất của x và y.
     }
+    public static String switchCallMethod(DaysOfWeek day) {
+        return(switch(day) {
+            case Monday -> "first";
+            default -> "rest";
+        });
+    }
     public static void main(String[] args) {
+        System.out.println (
+                switchCallMethod(DaysOfWeek.day1)
+                        + " " +
+                        switchCallMethod(DaysOfWeek.day2)
+        );
+
+
         //khoi tao doi tuong
         /*
         Element element1 = new Element("element 01", 15);
