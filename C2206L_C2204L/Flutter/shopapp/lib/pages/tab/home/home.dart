@@ -184,7 +184,12 @@ class _HomeState extends State<Home> {
                         itemCount: productResponses.length,
                         itemBuilder: (context, index) {
                           ProductResponse productResponse = productResponses[index];
-                          return GridItem(productResponse: productResponses[index]);
+                          return GridItem(
+                              productResponse: productResponses[index],
+                              onTap: () {
+                                context.go('detail_product', extra: {'productId': productResponse.id});
+                              },
+                          );
                         },
                       ),
                     );
