@@ -11,8 +11,14 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const studentRoutes = require('./src/routes/studentRoutes');
 const klassRoutes = require('./src/routes/klassRoutes');
+const connectDB = require('./src/databases/db');
+
 require('dotenv').config();
 const app = express();
+
+
+connectDB();
+
 
 const { PORT } = process.env;
 

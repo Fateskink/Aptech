@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { validationResult } = require('express-validator');
-const {emailValidation} = require('../validations/inputValidations');
+const {emailValidation, nameValidation} = require('../validations/inputValidations');
 
 router.get('/', (req, res) => {
   //curl -i http://localhost:3001/students
@@ -33,7 +33,8 @@ curl -i -X POST http://localhost:3001/students \
 
 */  
   router.post('/', 
-    emailValidation,         
+    emailValidation,   
+    nameValidation,      
     (req, res) => {
       debugger            
       const result = validationResult(req);
