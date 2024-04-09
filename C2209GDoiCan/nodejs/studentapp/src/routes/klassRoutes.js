@@ -1,8 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const klassController = require('../controllers/klassController');
+const {emailValidation, nameValidation} = require('../validations/inputValidations');
+const { validationResult } = require('express-validator');
 
-router.get('/', klassController.getKlasses);
+router.get('/', klassController.getKlasses);//no validation
 router.get('/:id', klassController.getKlassById);
 
 router.get('/:id/students', (req, res) => {
@@ -12,8 +14,18 @@ router.get('/:id/students', (req, res) => {
     message: 'This is GET Klass'
   });
 });
-router.post('/klasses', klassController.createKlass); 
-router.put('/klasses/:id', klassController.updateKlass); 
+router.post('/',     
+    nameValidation,      
+    (req, res) => {      
+      const result = validationResult(req);
+      if (result.isEmpty()) {        
+       //if validation is ok, call controller's function
+       return klassController.createKlass(req, res);       
+      }    
+      res.send({ errors: result.array() });                  
+});
+
+router.put('/:id', klassController.updateKlass); 
 
 router.post('/:id/classes/:id', (req, res) => {
     //curl -i http://localhost:3001/classes

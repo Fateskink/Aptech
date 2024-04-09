@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { validationResult } = require('express-validator');
+const studentController = require('../controllers/studentController');
 const {emailValidation, nameValidation} = require('../validations/inputValidations');
 
 router.get('/', (req, res) => {
@@ -29,19 +30,16 @@ router.get('/:id', (req, res) => {
 /**
 curl -i -X POST http://localhost:3001/students \
   -H "Content-Type: application/json" \
-  -d '{"name": "John Doe", "age": 20, "phone_number": "11223344", "code": "C1245", "email": "hdhd"}'
-
+  -d '{"name": "John Doe", "age": 20, "phone_number": "11223344", "email": "hdhd"}'
 */  
   router.post('/', 
     emailValidation,   
     nameValidation,      
-    (req, res) => {
-      debugger            
+    (req, res) => {      
       const result = validationResult(req);
       if (result.isEmpty()) {        
-        res.json({
-          message: 'This is post'
-        });
+       //if validation is ok, call controller's function
+       return studentController.createStudent(req, res);       
       }    
       res.send({ errors: result.array() });            
       

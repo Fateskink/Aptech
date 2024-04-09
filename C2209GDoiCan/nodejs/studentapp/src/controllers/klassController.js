@@ -17,6 +17,7 @@ const getKlassById = async (req, res) => {
 };
 
 const createKlass = async (req, res) => {
+    debugger
     const { name, description } = req.body;
     const klass = await Klass.create({ name, description });
     res.status(201).json(klass);

@@ -16,9 +16,7 @@ const connectDB = require('./src/databases/db');
 require('dotenv').config();
 const app = express();
 
-
 connectDB();
-
 
 const { PORT } = process.env;
 
@@ -28,6 +26,7 @@ app.use(bodyParser.json());
 // Routes for each entity
 app.use('/students', studentRoutes);
 app.use('/classes', klassRoutes);
+
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
