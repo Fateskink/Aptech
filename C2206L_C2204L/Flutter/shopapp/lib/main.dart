@@ -79,18 +79,18 @@ class MyApp extends StatelessWidget {
         )
       ),
     );
-    /*
+
     return MaterialApp.router(
       routerConfig: _router,
       theme: theme
     );
-    */
+
     return MaterialApp(
       title: 'Flutter Demo',
         theme: theme,
       //home: AppTab(),
       //home: Login()
-      home:DetailProduct()
+      //home:DetailProduct()
     );
   }
 }

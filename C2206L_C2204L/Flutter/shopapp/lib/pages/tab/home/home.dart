@@ -8,6 +8,7 @@ import 'package:foodapp/pages/tab/home/grid_item.dart';
 import 'package:foodapp/services/category_service.dart';
 import 'package:foodapp/services/product_service.dart';
 import 'package:foodapp/utils/app_colors.dart';
+import 'package:foodapp/utils/utility.dart';
 import 'package:foodapp/widgets/loading.dart';
 import 'package:go_router/go_router.dart';
 import 'package:get_it/get_it.dart';
@@ -36,6 +37,11 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = Utility.screenWidth(context);
+    final screenHeight = Utility.screenHeight(context);
+    /*24 is for notification bar on Android*/
+    final double itemHeight = (screenHeight - kToolbarHeight - 24) / 2.7;
+    final double itemWidth = screenWidth / 2;
     return Container(
       child: SafeArea(
         child: Stack(
@@ -172,11 +178,12 @@ class _HomeState extends State<Home> {
                     return Container(
                       padding: EdgeInsets.symmetric(horizontal: 10),
                       child: GridView.builder(
-                        //shrinkWrap: true, // Allow the GridView to occupy only the space it needs
+                        shrinkWrap: true, // Allow the GridView to occupy only the space it needs
                         //physics: NeverScrollableScrollPhysics(), // Disable GridView scrolling
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          childAspectRatio: 2/2.7,
-                          //mainAxisExtent: 250,// Height of each grid cell in a vertical scrolling grid
+                          //childAspectRatio: 2/2.7,
+                          childAspectRatio: (itemWidth / itemHeight),
+                          //mainAxisExtent: screenHeight,
                           crossAxisCount: 2, // Number of columns
                           crossAxisSpacing: 10, // Spacing between columns
                           mainAxisSpacing: 10, // Spacing between rows

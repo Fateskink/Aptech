@@ -23,6 +23,7 @@ class Register extends StatefulWidget {
 
 class _RegisterState extends State<Register> {
   final TextEditingController phoneNumberController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController retypedPasswordController = TextEditingController();
   final TextEditingController fullNameController = TextEditingController();
@@ -128,6 +129,31 @@ class _RegisterState extends State<Register> {
                           ),
                         ),
                         child: TextField(
+                          controller: emailController, // Pass your TextEditingController here
+                          decoration: InputDecoration(
+                            hintText: 'Enter email', // Placeholder text
+                            border: InputBorder.none, // Remove default TextField border
+                            contentPadding: EdgeInsets.symmetric(horizontal: 15), // Padding
+                          ),
+                          keyboardType: TextInputType.emailAddress, // Set keyboard type to phone
+                          style: TextStyle(color: Colors.black), // Text color
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Container(
+                        height: 54,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.7),
+                          borderRadius: BorderRadius.circular(22), // Border radius
+                          border: Border.all(
+                            color: AppColors.primaryColor, // Border color
+                            width: 1, // Border width
+                          ),
+                        ),
+                        child: TextField(
                           controller: fullNameController, // Pass your TextEditingController here
                           decoration: InputDecoration(
                             hintText: 'Enter fullName', // Placeholder text
@@ -198,7 +224,7 @@ class _RegisterState extends State<Register> {
                             border: InputBorder.none, // Remove default TextField border
                             contentPadding: EdgeInsets.symmetric(horizontal: 15), // Padding
                           ),
-                          keyboardType: TextInputType.text, // Set keyboard type to phone
+                          keyboardType: TextInputType.text,
                           style: TextStyle(color: Colors.black), // Text color
                         ),
                       ),
@@ -224,7 +250,7 @@ class _RegisterState extends State<Register> {
                             border: InputBorder.none, // Remove default TextField border
                             contentPadding: EdgeInsets.symmetric(horizontal: 15), // Padding
                           ),
-                          keyboardType: TextInputType.text, // Set keyboard type to phone
+                          keyboardType: TextInputType.text,
                           style: TextStyle(color: Colors.black), // Text color
                         ),
                       ),
@@ -267,6 +293,7 @@ class _RegisterState extends State<Register> {
                             userService.register(
                                 RegisterRequest(
                                   phoneNumber: phoneNumberController.text,
+                                  email: emailController.text,
                                   password: passwordController.text,
                                   retypePassword: retypedPasswordController.text,
                                   dateOfBirth: selectedDate,

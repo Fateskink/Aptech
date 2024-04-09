@@ -2,28 +2,31 @@ import 'package:intl/intl.dart';
 
 class RegisterRequest {
   final String phoneNumber;
+  final String email;
   final String password;
   final String retypePassword;
   final String fullName;
-  final String? address;
+  final String address;
   final DateTime dateOfBirth;
-  int? roleId;
+  int roleId;
 
   RegisterRequest({
-    required this.phoneNumber,
+    required this.fullName,
     required this.password,
     required this.retypePassword,
-    required this.fullName,
     required this.dateOfBirth,
-    int? roleId,
+    required String? phoneNumber,
+    required String? email,
     String? address,
-  })  : assert(phoneNumber.length >= 5, 'Phone number must be at least 5 characters'),
+    int? roleId,
+  })  : assert(phoneNumber != null || email != null, 'At least phoneNumber or email is required'),
         assert(password.isNotEmpty, 'Password cannot be blank'),
         assert(password == retypePassword, 'Passwords do not match'),
         assert(_calculateAge(dateOfBirth) >= 18, 'Age must be 18 or above'),
-        roleId = roleId ?? 1, // Assign default value if null Default value for roleId
-        address = address ?? ''; // Assign default value if null for address
-
+        roleId = roleId ?? 1,
+        phoneNumber = phoneNumber ?? '',
+        email = email ?? '',
+        address = address ?? '';
 
   // Helper method to calculate age
   static int _calculateAge(DateTime dob) {
@@ -34,15 +37,17 @@ class RegisterRequest {
     }
     return age;
   }
+
   Map<String, dynamic> toJson() {
     return {
       'fullname': fullName,
-      'address': address ?? '',
+      'address': address,
       'phone_number': phoneNumber,
+      'email': email,
       'password': password,
       'retype_password': retypePassword,
       'date_of_birth': DateFormat('yyyy-MM-dd').format(dateOfBirth), // Convert date to 'yyyy-MM-dd' format
-      'role_id': roleId ?? 1,
+      'role_id': roleId,
     };
   }
 }

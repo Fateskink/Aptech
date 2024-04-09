@@ -3,6 +3,9 @@ import 'package:foodapp/dtos/requests/user/login_request.dart';
 import 'package:foodapp/dtos/responses/api_response.dart';
 import 'package:foodapp/services/user_service.dart';
 import 'package:foodapp/utils/app_colors.dart';
+import 'package:foodapp/utils/utility.dart';
+import 'package:foodapp/utils/validations.dart';
+import 'package:foodapp/utils/validations.dart';
 import 'package:foodapp/widgets/uibutton.dart';
 import 'package:get_it/get_it.dart';
 import 'dart:convert' as convert;
@@ -17,7 +20,7 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  final phoneNumberController = TextEditingController();
+  final emailOrPhoneNumberController = TextEditingController();
   final passwordController = TextEditingController();
   bool rememberPassword = false;
 
@@ -31,9 +34,18 @@ class _LoginState extends State<Login> {
     userService = GetIt.instance<UserService>();
     // Retrieve credentials
     userService.getCredentials().then((credentials) { //promise
-      phoneNumberController.text = credentials['phoneNumber'] ?? '';
+      emailOrPhoneNumberController.text = credentials['phoneNumber'] ?? '';
       passwordController.text = credentials['password'] ?? '';
     });
+    //fake
+    // Set default values if controllers are still empty
+
+    if (emailOrPhoneNumberController.text.isEmpty) {
+      emailOrPhoneNumberController.text = "sndadella@yahoo.com";
+    }
+    if (passwordController.text.isEmpty) {
+      passwordController.text = "123456789";
+    }
   }
   @override
   Widget build(BuildContext context) {
@@ -72,13 +84,13 @@ class _LoginState extends State<Login> {
                       ),
                     ),
                     child: TextField(
-                      controller: phoneNumberController, // Pass your TextEditingController here
+                      controller: emailOrPhoneNumberController, // Pass your TextEditingController here
                       decoration: InputDecoration(
-                        hintText: 'Enter phone number', // Placeholder text
+                        hintText: 'Enter phone number or email', // Placeholder text
                         border: InputBorder.none, // Remove default TextField border
                         contentPadding: EdgeInsets.symmetric(horizontal: 15), // Padding
                       ),
-                      keyboardType: TextInputType.phone, // Set keyboard type to phone
+                      keyboardType: TextInputType.text, // Set keyboard type to phone
                       style: TextStyle(color: Colors.black), // Text color
                     ),
                   ),
@@ -104,7 +116,7 @@ class _LoginState extends State<Login> {
                         border: InputBorder.none, // Remove default TextField border
                         contentPadding: EdgeInsets.symmetric(horizontal: 15), // Padding
                       ),
-                      keyboardType: TextInputType.phone, // Set keyboard type to phone
+                      keyboardType: TextInputType.text, // Set keyboard type to phone
                       style: TextStyle(color: Colors.black), // Text color
                     ),
                   ),
@@ -148,16 +160,20 @@ class _LoginState extends State<Login> {
                       backgroundColor: AppColors.primaryColor,
                       onTap: () async {
                         print('Login');
-                        await userService.login(
-                            LoginRequest(
-                                phoneNumber: phoneNumberController.text,
-                                password: passwordController.text
-                            )
-                        );
+                        String input = emailOrPhoneNumberController.text;
+                        String password = passwordController.text;
+
+                        if (Validations.isValidEmail(input)) {
+                          await userService.login(LoginRequest(email: input, password: password));
+                        } else if (Validations.isValidPhoneNumber(input)) {
+                          await userService.login(LoginRequest(phoneNumber: input, password: password));
+                        } else {
+                          Utility.alert(context, 'Invalid phone number or email');
+                        }
 
                         if(rememberPassword == true) {
                           await userService.saveCredentials(
-                              phoneNumber: phoneNumberController.text,
+                              phoneNumber: emailOrPhoneNumberController.text,
                               password: passwordController.text);
                         }
                         context.go('/apptab');
