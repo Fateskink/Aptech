@@ -26,7 +26,7 @@ const createKlass = async (req, res) => {
 const updateKlass = async (req, res) => {
     const { id } = req.params;
     const { name, description } = req.body;
-    const klass = await Klass.findByIdAndUpdate(id, { name, description }, { new: true });
+    const klass = await Klass.findByIdAndUpdate(id, { name, description }, { new: true }); //upsert
     if (!klass) {
        return res.status(404).json({ error: 'Klass not found' });
     }
