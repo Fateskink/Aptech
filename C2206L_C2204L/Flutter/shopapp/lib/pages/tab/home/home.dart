@@ -194,7 +194,8 @@ class _HomeState extends State<Home> {
                           return GridItem(
                               productResponse: productResponses[index],
                               onTap: () {
-                                context.go('detail_product', extra: {'productId': productResponse.id});
+                                context.go('/detail_product', extra: {'productId': productResponse.id});
+                                //context.goNamed("sample", pathParameters: {'id1': param1, 'id2': param2});
                               },
                           );
                         },

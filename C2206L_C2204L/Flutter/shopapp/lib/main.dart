@@ -36,19 +36,27 @@ final GoRouter _router = GoRouter(
       },
       routes: <RouteBase>[
         GoRoute(
-          path: 'login',
+          path: '/login',
           builder: (BuildContext context, GoRouterState state) {
             return Login();
           },
         ),
         GoRoute(
-          path: 'register',
+          path: '/register',
           builder: (BuildContext context, GoRouterState state) {
             return Register();
           },
         ),
         GoRoute(
-          path: 'apptab',
+          path: '/detail_product',
+          builder: (BuildContext context, GoRouterState state) {
+            int productId = state.extra as int; // 👈 casting is important
+            return DetailProduct(productId: productId);
+          },
+        ),
+        
+        GoRoute(
+          path: '/apptab',
           builder: (BuildContext context, GoRouterState state) {
             return AppTab();
           },

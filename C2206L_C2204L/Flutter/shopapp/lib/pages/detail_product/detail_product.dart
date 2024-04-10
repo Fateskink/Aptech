@@ -8,8 +8,8 @@ import 'package:foodapp/widgets/loading.dart';
 import 'package:get_it/get_it.dart'; // Import the carousel_slider package
 
 class DetailProduct extends StatefulWidget {
-  final int productId;
-  DetailProduct({required this.productId});
+  final int? productId;
+  DetailProduct({this.productId});
   @override
   _DetailProductState createState() => _DetailProductState();
 }
@@ -28,7 +28,7 @@ class _DetailProductState extends State<DetailProduct> {
         title: Text('Product Detail'),
       ),
       body: FutureBuilder<dynamic>(
-        future: productService.getProductById(widget.productId), // Call your API here
+        future: productService.getProductById(widget?.productId ?? 0), // Call your API here
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Loading(); // Show loading indicator while waiting for data
