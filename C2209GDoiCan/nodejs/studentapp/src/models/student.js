@@ -25,12 +25,7 @@ const studentSchema = new Schema({
     type: String,
     required: true,
     trim: true
-  },
-  klass_id: {
-    type: Schema.Types.ObjectId,
-    ref: 'Klass',
-    required: true
-  }
+  },  
 });
 
 // Create and export Student model with specified collection name

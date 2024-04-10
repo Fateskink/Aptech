@@ -7,9 +7,7 @@ const {emailValidation, nameValidation} = require('../validations/inputValidatio
 router.get('/', (req, res) => {
   //curl -i http://localhost:3001/students
   debugger
-  res.json({
-    message: 'Chao ban, day la danh sach student'
-  });
+  return studentController.getStudents();
 });
 router.get('/:id', (req, res) => {
     //curl -i http://localhost:3001/students
@@ -18,13 +16,7 @@ router.get('/:id', (req, res) => {
       message: 'Chao ban, day la danh sach student'
     });
   });
-  router.get('/:id/classes', (req, res) => {
-    //curl -i http://localhost:3001/students
-    debugger
-    res.json({
-      message: 'Chao ban, day la danh sach student'
-    });
-  });
+  router.get('/:id/classes', (req, res) => studentController.getStudentById);
 
 
 /**
@@ -41,22 +33,9 @@ curl -i -X POST http://localhost:3001/students \
        //if validation is ok, call controller's function
        return studentController.createStudent(req, res);       
       }    
-      res.send({ errors: result.array() });            
-      
+      res.send({ errors: result.array() });                  
 });
-router.put('/:id', (req, res) => {
-    //curl -i http://localhost:3001/students
-    debugger
-    res.json({
-        message: 'This is PUT'
-    });
-});
-router.delete('/', (req, res) => {
-    //curl -i http://localhost:3001/students
-    debugger
-    res.json({
-        message: 'This is DELETE'
-    });
-});
+router.put('/:id', (req, res) => studentController.updateStudent);
+router.delete('/', (req, res) => studentController.deleteStudent);
 
 module.exports = router;

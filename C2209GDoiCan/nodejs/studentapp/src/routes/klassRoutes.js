@@ -10,9 +10,7 @@ router.get('/:id', klassController.getKlassById);
 router.get('/:id/students', (req, res) => {
     //curl -i http://localhost:3001/classes
   debugger
-  res.json({
-    message: 'This is GET Klass'
-  });
+  return klassController.getKlasses();  
 });
 router.post('/',     
     nameValidation,      

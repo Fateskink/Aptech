@@ -23,8 +23,7 @@ const createStudent = async (req, res) => {
     const student = await Student.create({ 
       name, 
       email, 
-      age, 
-      klass_id: new mongoose.Types.ObjectId(klass_id),
+      age,       
       phone,
     });
     res.status(201).json(student);
