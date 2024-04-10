@@ -1,6 +1,8 @@
+import 'package:foodapp/models/comment.dart';
 import 'package:foodapp/models/product_image.dart';
 import 'package:foodapp/extensions/custon_string.dart';
 import 'package:foodapp/services/api_constants.dart';
+import 'package:foodapp/utils/utility.dart';
 
 class ProductResponse  {
   late int id;
@@ -11,6 +13,7 @@ class ProductResponse  {
   late int totalPages; // This field is not present in the provided Java class
 
   List<ProductImage> productImages = [];
+  List<Comment> comments = [];
   late int categoryId;
 
   ProductResponse({
@@ -21,6 +24,7 @@ class ProductResponse  {
     required this.description,
     required this.totalPages,
     required this.productImages,
+    required this.comments,
     required this.categoryId,
   });
 
@@ -28,24 +32,17 @@ class ProductResponse  {
     List<dynamic> productImagesJson = json['product_images'];
     List<ProductImage> productImages = productImagesJson.map(
             (imageJson) => ProductImage.fromJson(imageJson)).toList();
-
-    String? thumbnailUrl = json['thumbnail'] as String?;
-    if (thumbnailUrl != null && !thumbnailUrl.contains('http')) {
-      thumbnailUrl = '${APIConstants.baseUrl}/products/images/$thumbnailUrl';
-    }
-    if(thumbnailUrl == null || thumbnailUrl.isEmpty) {
-      thumbnailUrl = '${APIConstants.baseUrl}/products/images/notfound.jpeg';
-      print('haha22 = ${json['id']}');
-    }
-
+    List<Comment> comments = (json['comments'] ?? []).map(
+            (commentJson) => Comment.fromJson(commentJson)).toList();
     return ProductResponse(
       id: json['id'] ?? 0,
       name: (json['name'] as String?)?.toUtf8() ?? '',
       price: json['price'] != null ? json['price'].toDouble() : 0.0,
-      thumbnail: thumbnailUrl ?? '',
+      thumbnail: Utility.getImageUrl(json['thumbnail'] ?? ''),
       description: (json['description'] as String?)?.toUtf8() ?? '',
       totalPages: json['totalPages'] ?? 0,
       productImages: productImages ?? [],
+      comments: comments ?? [],
       categoryId: json['category_id'] ?? 0,
     );
   }

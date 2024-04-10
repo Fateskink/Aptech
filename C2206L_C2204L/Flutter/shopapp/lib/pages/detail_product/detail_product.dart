@@ -8,8 +8,8 @@ import 'package:foodapp/widgets/loading.dart';
 import 'package:get_it/get_it.dart'; // Import the carousel_slider package
 
 class DetailProduct extends StatefulWidget {
-  final int? productId;
-  DetailProduct({this.productId});
+  final int productId;
+  DetailProduct({required this.productId});
   @override
   _DetailProductState createState() => _DetailProductState();
 }

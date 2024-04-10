@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:foodapp/services/api_constants.dart';
 
 class Utility {
   static double screenWidth(BuildContext context) => MediaQuery.of(context).size.width;
@@ -20,6 +21,15 @@ class Utility {
     } else {
       return 'unknown';
     }
+  }
+  static String getImageUrl(String imageUrl) {
+    if (imageUrl != null && !imageUrl.contains('http')) {
+      return '${APIConstants.baseUrl}/products/images/$imageUrl';
+    }
+    if(imageUrl.isEmpty) {
+      return '${APIConstants.baseUrl}/products/images/notfound.jpeg';
+    }
+    return imageUrl;
   }
   static void alert(BuildContext context, String message) {
     showDialog(
