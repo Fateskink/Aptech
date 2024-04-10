@@ -32,8 +32,10 @@ class ProductResponse  {
     List<dynamic> productImagesJson = json['product_images'];
     List<ProductImage> productImages = productImagesJson.map(
             (imageJson) => ProductImage.fromJson(imageJson)).toList();
-    List<Comment> comments = (json['comments'] ?? []).map(
-            (commentJson) => Comment.fromJson(commentJson)).toList();
+    List<Comment> comments = (json['comments'] as List<dynamic>? ?? []).map(
+            (commentJson) => Comment.fromJson(commentJson as Map<String, dynamic>)
+    ).toList();
+
     return ProductResponse(
       id: json['id'] ?? 0,
       name: (json['name'] as String?)?.toUtf8() ?? '',
