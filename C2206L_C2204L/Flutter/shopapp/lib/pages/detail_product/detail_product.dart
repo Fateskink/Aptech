@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:foodapp/dtos/responses/product/product_reponse.dart';
+import 'package:foodapp/models/comment.dart';
 import 'package:foodapp/models/product_image.dart';
 import 'package:foodapp/services/product_service.dart';
 import 'package:foodapp/utils/app_colors.dart';
 import 'package:foodapp/widgets/loading.dart';
+import 'package:foodapp/widgets/transparent_appbar.dart';
 import 'package:get_it/get_it.dart'; // Import the carousel_slider package
 
 class DetailProduct extends StatefulWidget {
@@ -20,12 +22,17 @@ class _DetailProductState extends State<DetailProduct> {
   void initState() {
     super.initState();
     productService = GetIt.instance<ProductService>();
+
   }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Product Detail'),
+      appBar: TransparentAppBar(
+        title: 'Detail product',
+        onBack: () {
+          // Handle back button press
+          Navigator.of(context).pop();
+        },
       ),
       body: FutureBuilder<dynamic>(
         future: productService.getProductById(widget?.productId ?? 0), // Call your API here
@@ -44,7 +51,7 @@ class _DetailProductState extends State<DetailProduct> {
                 children: [
                   CarouselSlider(
                     items: productImages.map((productImage) {
-                      return Image.asset(
+                      return Image.network(
                         productImage.imageUrl,
                         fit: BoxFit.cover,
                       );
@@ -57,6 +64,7 @@ class _DetailProductState extends State<DetailProduct> {
                       autoPlayAnimationDuration: Duration(milliseconds: 800),
                       autoPlayCurve: Curves.fastOutSlowIn,
                     ),
+
                   ),
                   Padding(
                     padding: const EdgeInsets.all(16.0),
@@ -64,14 +72,14 @@ class _DetailProductState extends State<DetailProduct> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Product Name',
+                          productResponse.name,
                           style: TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         Text(
-                          'Price: \$100',
+                          'Price: \$'+'${productResponse.price}',
                           style: TextStyle(
                             fontSize: 18,
                             color: Colors.green,
@@ -79,7 +87,7 @@ class _DetailProductState extends State<DetailProduct> {
                         ),
                         SizedBox(height: 8),
                         Text(
-                          'Description: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+                          productResponse.description,
                           style: TextStyle(fontSize: 16),
                         ),
                         SizedBox(height: 16),
@@ -106,56 +114,11 @@ class _DetailProductState extends State<DetailProduct> {
                           ),
                         ),
                         SizedBox(height: 8),
-                        ListTile(
-                          title: Text('User 1'),
-                          subtitle: Text('Nice product!'),
-                        ),
-                        ListTile(
-                          title: Text('User 2'),
-                          subtitle: Text('Great quality.'),
-                        ),
-                        ListTile(
-                          title: Text('User 2'),
-                          subtitle: Text('Great quality.'),
-                        ),
-                        ListTile(
-                          title: Text('User 2'),
-                          subtitle: Text('Great quality.'),
-                        ),
-                        ListTile(
-                          title: Text('User 2'),
-                          subtitle: Text('Great quality.'),
-                        ),
-                        ListTile(
-                          title: Text('User 2'),
-                          subtitle: Text('Great quality.'),
-                        ),
-                        ListTile(
-                          title: Text('User 2'),
-                          subtitle: Text('Great quality.'),
-                        ),
-                        ListTile(
-                          title: Text('User 2'),
-                          subtitle: Text('Great quality.'),
-                        ),
-                        ListTile(
-                          title: Text('User 2'),
-                          subtitle: Text('Great quality.'),
-                        ),
-                        ListTile(
-                          title: Text('User 2'),
-                          subtitle: Text('Great quality.'),
-                        ),
-                        ListTile(
-                          title: Text('User 2'),
-                          subtitle: Text('Great quality.'),
-                        ),
-                        ListTile(
-                          title: Text('User 2'),
-                          subtitle: Text('Great quality.'),
-                        ),
+                        ...productResponse.comments.map((comment) => ListTile(
+                          title: Text('User ${comment.content}'),
+                          subtitle: Text(comment.createdAt.toString()),
+                        )),
 
-                        // Add more ListTile widgets for other comments
                       ],
                     ),
                   ),
@@ -175,6 +138,7 @@ class _DetailProductState extends State<DetailProduct> {
             label: Text('Buy Now', style: Theme.of(context).textTheme.bodyMedium?.copyWith(
               color: Colors.white, // Set text color to white
             ),),
+            heroTag: 'buy',
             icon: Icon(Icons.shopping_cart),
             backgroundColor: AppColors.primaryColor,
             foregroundColor: Colors.white, // Text and icon color
@@ -187,6 +151,7 @@ class _DetailProductState extends State<DetailProduct> {
             label: Text('Cart', style: Theme.of(context).textTheme.bodyMedium?.copyWith(
               color: Colors.white, // Set text color to white
             )),
+            heroTag: 'btnCart',
             icon: Icon(Icons.add_shopping_cart),
             backgroundColor: AppColors.primaryColor,
             foregroundColor: Colors.white, // Text and icon color
