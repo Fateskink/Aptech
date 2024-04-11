@@ -108,17 +108,18 @@ class _DetailProductState extends State<DetailProduct> {
                         SizedBox(height: 16),
                         Text(
                           'User Comments:',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
+                          style: Theme.of(context).textTheme?.bodyMedium?.copyWith(
+                              fontWeight: FontWeight.bold
                           ),
                         ),
                         SizedBox(height: 8),
                         ...productResponse.comments.map((comment) => ListTile(
-                          title: Text('User ${comment.content}'),
+                          title: Text('User ${comment.content}',
+                              style: Theme.of(context).textTheme?.bodySmall?.copyWith(
+                              fontWeight: FontWeight.bold
+                          )),
                           subtitle: Text(comment.createdAt.toString()),
                         )),
-
                       ],
                     ),
                   ),
