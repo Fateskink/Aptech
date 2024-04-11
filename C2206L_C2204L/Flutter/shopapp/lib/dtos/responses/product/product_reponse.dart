@@ -27,7 +27,17 @@ class ProductResponse  {
     required this.comments,
     required this.categoryId,
   });
-
+  static ProductResponse get empty => ProductResponse(
+    id: 0,
+    name: '',
+    price: 0.0,
+    thumbnail: '',
+    description: '',
+    totalPages: 0,
+    productImages: [],
+    comments: [],
+    categoryId: 0,
+  );
   factory ProductResponse.fromJson(Map<String, dynamic> json) {
     List<dynamic> productImagesJson = json['product_images'];
     List<ProductImage> productImages = productImagesJson.map(

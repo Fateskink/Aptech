@@ -8,6 +8,7 @@ import 'package:foodapp/utils/app_colors.dart';
 import 'package:foodapp/widgets/loading.dart';
 import 'package:foodapp/widgets/transparent_appbar.dart';
 import 'package:get_it/get_it.dart'; // Import the carousel_slider package
+import 'package:go_router/go_router.dart';
 
 class DetailProduct extends StatefulWidget {
   final int productId;
@@ -30,8 +31,7 @@ class _DetailProductState extends State<DetailProduct> {
       appBar: TransparentAppBar(
         title: 'Detail product',
         onBack: () {
-          // Handle back button press
-          Navigator.of(context).pop();
+          context.go('/apptab');
         },
       ),
       body: FutureBuilder<dynamic>(
@@ -82,7 +82,7 @@ class _DetailProductState extends State<DetailProduct> {
                           'Price: \$'+'${productResponse.price}',
                           style: TextStyle(
                             fontSize: 18,
-                            color: Colors.green,
+                            color: AppColors.primaryColor,
                           ),
                         ),
                         SizedBox(height: 8),

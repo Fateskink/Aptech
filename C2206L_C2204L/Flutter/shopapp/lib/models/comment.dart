@@ -14,14 +14,12 @@ class Comment {
   });
 
   factory Comment.fromJson(Map<String, dynamic> json) {
-    print('hah');
-    DateTime createdAt = DateTime.parse(json['created_at']) ?? DateTime.now();
     return Comment(
       id: json['id'] as int,
       productId: json['product_id'] ?? 0, // Map to the product_id field in Java
       userId: json['user_id'] ?? 0, // Map to the user_id field in Java
       content: json['content'] ?? '',
-      createdAt: createdAt
+      createdAt: DateTime.parse(json['created_at']) ?? DateTime.now()
     );
   }
 }
