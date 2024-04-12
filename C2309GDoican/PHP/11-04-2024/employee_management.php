@@ -29,13 +29,24 @@ class EmployeeManagement {
     public function getEmployeeById($id) {
         $stmt = $this->pdo->prepare("SELECT * FROM employees WHERE id = ?");
         $stmt->execute([$id]);
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        $employee = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $employee;
+        //return $employee ? $employee : null;
     }
 
     // Update
     public function updateEmployee($id, $name, $position, $salary) {
         try {
-            $stmt = $this->pdo->prepare("UPDATE employees SET name = ?, position = ?, salary = ? WHERE id = ?");
+            $stmt = $this->pdo->prepare("
+                UPDATE employees 
+                SET 
+                    name = ?, 
+                    position = ?, 
+                    salary = ? 
+                WHERE 
+                    id = ?
+            ");
             $stmt->execute([$name, $position, $salary, $id]);
             return true;
         } catch (PDOException $e) {
@@ -43,7 +54,7 @@ class EmployeeManagement {
             return false;
         }
     }
-
+    
     // Delete
     public function deleteEmployee($id) {
         try {
