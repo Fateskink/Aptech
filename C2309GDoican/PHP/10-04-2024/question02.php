@@ -22,7 +22,8 @@
     */
     require_once "./employee_management.php";
     $employeeManagement = new EmployeeManagement();
-    $employeeManagement->createEmployee("Nguyen vAn xx 12", "sales", 12345);
+    //$employeeManagement->createEmployee("Nguyen vAn xx 12", "sales", 12345);
+    $students = $employeeManagement->getAllEmployees();
 ?>
 
 </body>
