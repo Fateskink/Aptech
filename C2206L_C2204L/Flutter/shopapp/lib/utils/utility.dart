@@ -22,15 +22,18 @@ class Utility {
       return 'unknown';
     }
   }
-  static String getImageUrl(String imageUrl) {
-    if (imageUrl != null && !imageUrl.contains('http')) {
-      return '${APIConstants.baseUrl}/products/images/$imageUrl';
-    }
-    if(imageUrl.isEmpty) {
+  static String getImageUrl(String? imageUrl) {
+    if (imageUrl == null || imageUrl.isEmpty) {
       return '${APIConstants.baseUrl}/products/images/notfound.jpeg';
     }
+
+    if (!imageUrl.contains('http')) {
+      return '${APIConstants.baseUrl}/products/images/$imageUrl';
+    }
+
     return imageUrl;
   }
+
   static void alert(BuildContext context, String message) {
     showDialog(
       context: context,

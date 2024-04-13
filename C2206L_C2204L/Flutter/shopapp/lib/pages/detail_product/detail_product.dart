@@ -165,69 +165,79 @@ class _DetailProductState extends State<DetailProduct> {
                 }
               },
             ),
-            ProductDetailsSheet(
-                product: _product ?? Product.empty,
-                isBottomSheetVisible: isBottomSheetVisible,
-                toggleBottomSheet: _toggleBottomSheet,
-                decreaseCount: _decreaseCount,
-                increaseCount: _increaseCount,
-                itemCount: itemCount
+            isBottomSheetVisible == true ? Container() : Positioned(
+                left: 0,
+                right: 0,
+                bottom: 0,
+                child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                InkWell(
+                  onTap: () {
+                    // Action for Buy Now button
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: AppColors.primaryColor.withOpacity(0.8), // 50% opacity
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 15),
+                    child: Row(
+                      children: [
+                        Icon(Icons.shopping_cart, color: Colors.white), // Icon
+                        SizedBox(width: 8),
+                        Text('Buy Now', style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: Colors.white, // Set text color to white
+                            fontWeight: FontWeight.bold
+                        ),),
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(width: 8),
+                InkWell(
+                  onTap: _toggleBottomSheet,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: AppColors.primaryColor.withOpacity(0.8), // 50% opacity
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 15),
+                    child: Row(
+                      children: [
+                        Icon(Icons.add_shopping_cart, color: Colors.white), // Icon
+                        SizedBox(width: 8),
+                        Text('Cart', style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: Colors.white, // Set text color to white
+                            fontWeight: FontWeight.bold
+                        ),),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            )),
+            isBottomSheetVisible == true ? Positioned.fill(
+              child: Container(
+                color: AppColors.primaryColor.withAlpha(50),
+              ),
+            ):Container(),
+            Positioned(
+                left: 0,
+                right: 0,
+                bottom: 0,
+                child: ProductDetailsSheet(
+                    product: _product ?? Product.empty,
+                    isBottomSheetVisible: isBottomSheetVisible,
+                    toggleBottomSheet: _toggleBottomSheet,
+                    decreaseCount: _decreaseCount,
+                    increaseCount: _increaseCount,
+                    itemCount: itemCount
+                )
             )
           ],
         ),
       ),
-      floatingActionButton: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          InkWell(
-            onTap: () {
-              // Action for Buy Now button
-            },
-            child: Container(
-              decoration: BoxDecoration(
-                color: AppColors.primaryColor.withOpacity(0.8), // 50% opacity
-                borderRadius: BorderRadius.circular(10),
-              ),
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 15),
-              child: Row(
-                children: [
-                  Icon(Icons.shopping_cart, color: Colors.white), // Icon
-                  SizedBox(width: 8),
-                  Text('Buy Now', style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: Colors.white, // Set text color to white
-                    fontWeight: FontWeight.bold
-                  ),),
-                ],
-              ),
-            ),
-          ),
-          SizedBox(width: 8),
-          InkWell(
-            onTap: () {
-
-            },
-            child: Container(
-              decoration: BoxDecoration(
-                color: AppColors.primaryColor.withOpacity(0.8), // 50% opacity
-                borderRadius: BorderRadius.circular(10),
-              ),
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 15),
-              child: Row(
-                children: [
-                  Icon(Icons.add_shopping_cart, color: Colors.white), // Icon
-                  SizedBox(width: 8),
-                  Text('Cart', style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Colors.white, // Set text color to white
-                      fontWeight: FontWeight.bold
-                  ),),
-                ],
-              ),
-            ),
-          ),
-        ],
-      )
-
-      ,
     );
   }
 }
