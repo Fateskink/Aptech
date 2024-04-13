@@ -1,7 +1,7 @@
 import 'package:foodapp/extensions/custon_string.dart';
 import 'package:foodapp/models/role.dart';
 
-class UserResponse {
+class User {
   final int? id;
   final String? fullName;
   final String phoneNumber;
@@ -12,7 +12,7 @@ class UserResponse {
   final int? googleAccountId;
   final Role? role; // Assuming role is a String. Adjust based on actual type.
 
-  UserResponse({
+  User({
     this.id,
     this.fullName,
     required this.phoneNumber,
@@ -24,9 +24,9 @@ class UserResponse {
     this.role,
   });
 
-  factory UserResponse.fromJson(Map<String, dynamic> json) {
+  factory User.fromJson(Map<String, dynamic> json) {
 
-    return UserResponse(
+    return User(
       id: json['id'] as int?,
       fullName:  (json['fullname'] as String?)?.toUtf8() ?? '',
       phoneNumber: json['phone_number'] as String,

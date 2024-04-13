@@ -1,4 +1,5 @@
-import 'package:foodapp/models/user.dart';
+
+import 'package:foodapp/dtos/responses/user/user.dart';
 
 class Token {
   final int id;

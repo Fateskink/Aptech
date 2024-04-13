@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:foodapp/dtos/responses/user/user_response.dart';
+import 'package:foodapp/dtos/responses/user/user.dart';
 import 'package:foodapp/services/user_service.dart';
 import 'package:foodapp/utils/app_colors.dart';
 import 'package:foodapp/widgets/uibutton.dart';
@@ -155,8 +155,8 @@ class _SplashState extends State<Splash> {
                           //last item
                           if (_isLastItem == true) {
                             try {
-                              UserResponse userResponse = await userService.getUserDetails();
-                              if (userResponse.isNotEmpty) {
+                              User user = await userService.getUserDetails();
+                              if (user.isNotEmpty) {
                                 context.go('/apptab');
                               } else {
                                 // Token is empty or not found

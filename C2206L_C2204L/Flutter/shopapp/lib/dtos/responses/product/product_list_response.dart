@@ -1,7 +1,7 @@
-import 'package:foodapp/dtos/responses/product/product_reponse.dart';
+import 'package:foodapp/dtos/responses/product/product.dart';
 
 class ProductListResponse {
-  List<ProductResponse> products;
+  List<Product> products;
   int totalPages;
 
   ProductListResponse({
@@ -11,8 +11,8 @@ class ProductListResponse {
 
   factory ProductListResponse.fromJson(Map<String, dynamic> json) {
     List<dynamic> productsJson = json['products'];
-    List<ProductResponse> products = productsJson.map(
-            (productJson) => ProductResponse.fromJson(productJson)).toList();
+    List<Product> products = productsJson.map(
+            (productJson) => Product.fromJson(productJson)).toList();
     return ProductListResponse(
       products: products,
       totalPages: json['totalPages'] as int ,

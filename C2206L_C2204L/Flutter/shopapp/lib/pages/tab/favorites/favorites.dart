@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foodapp/dtos/responses/product/product_list_response.dart';
-import 'package:foodapp/dtos/responses/product/product_reponse.dart';
+import 'package:foodapp/dtos/responses/product/product.dart';
 import 'package:foodapp/services/product_service.dart';
 import 'package:foodapp/utils/app_colors.dart';
 import 'package:foodapp/widgets/loading.dart';
@@ -23,7 +23,7 @@ class _FavoritesState extends State<Favorites> {
   }
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<ProductResponse>>(
+    return FutureBuilder<List<Product>>(
       future: productService.findFavoriteProductsByUserId(), // Call the productService to fetch data
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -31,13 +31,13 @@ class _FavoritesState extends State<Favorites> {
         } else if (snapshot.hasError) {
           return Center(child: Text('Error: ${snapshot.error}')); // Show an error message if fetching data fails
         } else {
-          List<ProductResponse> productResponses = snapshot.data as List<ProductResponse> ; // Extract products from the response
+          List<Product> productResponses = snapshot.data as List<Product> ; // Extract products from the response
           if (productResponses.isNotEmpty) {
             // If products exist, return a ListView to display them
             return ListView.builder(
               itemCount: productResponses.length,
               itemBuilder: (context, index) {
-                ProductResponse product = productResponses[index];
+                Product product = productResponses[index];
                 // Return a ListTile for each product
                 return Container(
                   padding: EdgeInsets.all(8), // Add padding for spacing

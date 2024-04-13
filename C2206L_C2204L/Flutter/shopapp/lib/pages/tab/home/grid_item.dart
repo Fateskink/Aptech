@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:foodapp/dtos/responses/product/product_reponse.dart';
+import 'package:foodapp/dtos/responses/product/product.dart';
 import 'package:foodapp/utils/app_colors.dart';
 
 class GridItem extends StatelessWidget {
-  final ProductResponse productResponse;
+  final Product productResponse;
   final onTap;
   const GridItem({
     Key? key,

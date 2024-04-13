@@ -1,7 +1,6 @@
 import 'package:foodapp/extensions/custon_string.dart';
-import 'package:foodapp/models/order_detail.dart';
 
-class OrderResponse {
+class Order {
   final int id;
   final int userId;
   final String fullName;
@@ -16,9 +15,9 @@ class OrderResponse {
   final String shippingAddress;
   final String shippingDate; // Use String for date representation
   final String paymentMethod;
-  final List<OrderDetail> orderDetails;
+  //final List<OrderDetail> orderDetails;
 
-  OrderResponse({
+  Order({
     required this.id,
     required this.userId,
     required this.fullName,
@@ -33,11 +32,11 @@ class OrderResponse {
     required this.shippingAddress,
     required this.shippingDate,
     required this.paymentMethod,
-    required this.orderDetails,
+    //required this.orderDetails,
   });
 
-  factory OrderResponse.fromJson(Map<String, dynamic> json) {
-    return OrderResponse(
+  factory Order.fromJson(Map<String, dynamic> json) {
+    return Order(
       id: json['id'] as int,
       userId: json['user_id'] as int,
       fullName: (json['fullName'] as String?)?.toUtf8() ?? '',
@@ -52,9 +51,11 @@ class OrderResponse {
       shippingAddress: (json['shipping_address'] as String?)?.toUtf8() ?? '',
       shippingDate: json['shipping_date'] as String,
       paymentMethod: (json['payment_method'] as String?)?.toUtf8() ?? '',
+      /*
       orderDetails: (json['order_details'] as List<dynamic>)
           .map((e) => OrderDetail.fromJson(e as Map<String, dynamic>))
           .toList(),
+       */
     );
   }
 }

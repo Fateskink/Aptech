@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:foodapp/dtos/requests/user/register_request.dart';
 import 'package:foodapp/dtos/responses/api_response.dart';
-import 'package:foodapp/dtos/responses/user/user_response.dart';
+import 'package:foodapp/dtos/responses/user/user.dart';
 import 'package:foodapp/services/user_service.dart';
 import 'package:foodapp/utils/app_colors.dart';
 import 'package:foodapp/utils/utility.dart';
@@ -302,7 +302,7 @@ class _RegisterState extends State<Register> {
                                 )
                             ).then((ApiResponse response) {
                               Map<String, dynamic> data = response.data;
-                              UserResponse userResponse = UserResponse.fromJson(data);
+                              User user = User.fromJson(data);
                               // Navigate to login page
                               context.go("/login");
                             }).catchError((error) {

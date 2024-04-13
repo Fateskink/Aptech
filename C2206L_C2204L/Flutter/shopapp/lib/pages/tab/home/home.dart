@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:foodapp/dtos/requests/category/get_category_request.dart';
 import 'package:foodapp/dtos/requests/product/get_product_request.dart';
-import 'package:foodapp/dtos/responses/product/product_reponse.dart';
-import 'package:foodapp/models/category.dart';
-import 'package:foodapp/models/product.dart';
+import 'package:foodapp/dtos/responses/product/product.dart';
+import 'package:foodapp/dtos/responses/category/category.dart';
+import 'package:foodapp/dtos/responses/product/product.dart';
 import 'package:foodapp/pages/tab/home/grid_item.dart';
 import 'package:foodapp/services/category_service.dart';
 import 'package:foodapp/services/product_service.dart';
@@ -159,7 +159,7 @@ class _HomeState extends State<Home> {
                     return Center(child: Text('Error: ${snapshot.error}')); // Show error message if there's an error`
                   } else {
                     // Data fetched successfully, display ListView
-                    List<ProductResponse> productResponses = snapshot.data!.products; // Extract products from the response
+                    List<Product> productResponses = snapshot.data!.products; // Extract products from the response
                     if (productResponses.isEmpty) {
                       return Container(
                         color: Colors.white, // Set container color
@@ -190,7 +190,7 @@ class _HomeState extends State<Home> {
                         ),
                         itemCount: productResponses.length,
                         itemBuilder: (context, index) {
-                          ProductResponse productResponse = productResponses[index];
+                          Product productResponse = productResponses[index];
                           return GridItem(
                               productResponse: productResponses[index],
                               onTap: () {

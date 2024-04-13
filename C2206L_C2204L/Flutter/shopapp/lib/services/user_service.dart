@@ -1,7 +1,7 @@
 import 'package:foodapp/dtos/requests/user/login_request.dart';
 import 'package:foodapp/dtos/requests/user/register_request.dart';
 import 'package:foodapp/dtos/responses/api_response.dart';
-import 'package:foodapp/dtos/responses/user/user_response.dart';
+import 'package:foodapp/dtos/responses/user/user.dart';
 import 'package:foodapp/models/http_method.dart';
 import 'package:foodapp/repositories/token_repository.dart';
 import 'package:foodapp/services/api_constants.dart';
@@ -35,7 +35,7 @@ class UserService extends BaseService {
     );
     return response;
   }
-  Future<UserResponse> getUserDetails() async {
+  Future<User> getUserDetails() async {
     final String apiUrl = '${APIConstants.baseUrl}/users/details';
     Map<String, String> tokens  = await tokenRepository.getTokens();
     String jwtToken = tokens['token'] ?? '';
@@ -44,7 +44,7 @@ class UserService extends BaseService {
       method: HttpMethod.POST,
       token: jwtToken,
     );
-    return UserResponse.fromJson(response.data);
+    return User.fromJson(response.data);
   }
   Future<void> saveCredentials({required String phoneNumber, required String password}) async {
     authRepository.saveCredentials(phoneNumber: phoneNumber, password: password);

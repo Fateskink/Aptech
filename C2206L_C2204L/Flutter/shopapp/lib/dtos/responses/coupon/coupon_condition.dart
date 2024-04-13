@@ -1,4 +1,4 @@
-import 'package:foodapp/models/coupon.dart';
+import 'package:foodapp/dtos/responses/coupon/coupon.dart';
 import 'package:foodapp/extensions/custon_string.dart';
 
 class CouponCondition {

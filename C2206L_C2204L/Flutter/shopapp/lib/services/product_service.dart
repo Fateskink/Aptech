@@ -3,9 +3,9 @@ import 'package:foodapp/dtos/requests/user/login_request.dart';
 import 'package:foodapp/dtos/requests/user/register_request.dart';
 import 'package:foodapp/dtos/responses/api_response.dart';
 import 'package:foodapp/dtos/responses/product/product_list_response.dart';
-import 'package:foodapp/dtos/responses/product/product_reponse.dart';
+import 'package:foodapp/dtos/responses/product/product.dart';
 import 'package:foodapp/models/http_method.dart';
-import 'package:foodapp/models/product.dart';
+import 'package:foodapp/dtos/responses/product/product.dart';
 import 'package:foodapp/services/api_constants.dart';
 import 'package:foodapp/services/base_service.dart';
 import 'package:flutter/foundation.dart';
@@ -21,15 +21,15 @@ class ProductService extends BaseService {
     return ProductListResponse.fromJson(response.data);
   }
 
-  Future<ProductResponse> getProductById(int id) async {
+  Future<Product> getProductById(int id) async {
     final String apiUrl = '${APIConstants.baseUrl}/products/$id';
     final ApiResponse response = await request(
       apiUrl: apiUrl,
       method: HttpMethod.GET,
     );
-    return ProductResponse.fromJson(response.data);
+    return Product.fromJson(response.data);
   }
-  Future<List<ProductResponse>> findFavoriteProductsByUserId() async {
+  Future<List<Product>> findFavoriteProductsByUserId() async {
     final String apiUrl = '${APIConstants.baseUrl}/products/favorite-products';
     Map<String, String> tokens  = await tokenRepository.getTokens();
     String jwtToken = tokens['token'] ?? '';
@@ -38,8 +38,8 @@ class ProductService extends BaseService {
       method: HttpMethod.POST,
       token: jwtToken
     );
-    List<ProductResponse> productResponses = (response.data as List)
-        .map<ProductResponse>((productJson) => ProductResponse.fromJson(productJson))
+    List<Product> productResponses = (response.data as List)
+        .map<Product>((productJson) => Product.fromJson(productJson))
         .toList();
     return productResponses;
   }
