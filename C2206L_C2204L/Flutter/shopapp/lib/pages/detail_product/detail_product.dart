@@ -35,6 +35,9 @@ class _DetailProductState extends State<DetailProduct> {
       isBottomSheetVisible = !isBottomSheetVisible;
     });
   }
+  void _addToCart() {
+    productService.addToCart(productId: _product.id, itemCount: itemCount);
+  }
 
   void _increaseCount() {
     setState(() {
@@ -232,6 +235,7 @@ class _DetailProductState extends State<DetailProduct> {
                     toggleBottomSheet: _toggleBottomSheet,
                     decreaseCount: _decreaseCount,
                     increaseCount: _increaseCount,
+                    addToCart: _addToCart,
                     itemCount: itemCount
                 )
             )

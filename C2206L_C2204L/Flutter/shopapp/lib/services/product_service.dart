@@ -7,10 +7,12 @@ import 'package:foodapp/dtos/responses/product/product.dart';
 import 'package:foodapp/models/http_method.dart';
 import 'package:foodapp/dtos/responses/product/product.dart';
 import 'package:foodapp/services/api_constants.dart';
+import 'package:foodapp/repositories/cart_repository.dart';
 import 'package:foodapp/services/base_service.dart';
 import 'package:flutter/foundation.dart';
 
 class ProductService extends BaseService {
+  final CartRepository cartRepository = CartRepository();
   Future<ProductListResponse> getProducts(GetProductRequest getProductRequest) async {
     final String apiUrl = '${APIConstants.baseUrl}/products';
     final ApiResponse response = await request(
@@ -42,5 +44,16 @@ class ProductService extends BaseService {
         .map<Product>((productJson) => Product.fromJson(productJson))
         .toList();
     return productResponses;
+  }
+  Future<void> addToCart({required int productId, required int itemCount}) async {
+    if (productId > 0 && itemCount > 0) {
+      await cartRepository.saveCart(productId, itemCount);
+    } else if (itemCount == 0) {
+      await cartRepository.clearCart();
+    }
+  }
+
+  Future<int?> getItemCountFromCart(int productId) async {
+    return await cartRepository.getProductCountById(productId);
   }
 }

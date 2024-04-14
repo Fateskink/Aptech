@@ -24,7 +24,7 @@ void main() {
   //register services
   GetIt.instance.registerLazySingleton<UserService>(() => UserService());
   GetIt.instance.registerLazySingleton<ProductService>(() => ProductService());
-  GetIt.instance.registerLazySingleton<CategoryService>(() => CategoryService());
+  GetIt.instance.registerLazySingleton<CategoryService>(() => CategoryService());  
   runApp(const MyApp());
 }
 final GoRouter _router = GoRouter(

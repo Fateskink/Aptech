@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:foodapp/dtos/responses/product/product.dart';
+import 'package:foodapp/utils/app_colors.dart';
 import 'package:foodapp/utils/utility.dart';
 
 class ProductDetailsSheet extends StatefulWidget {
   final Product product;
   final bool isBottomSheetVisible;
   final VoidCallback toggleBottomSheet;
+  final VoidCallback addToCart;
+
   final VoidCallback decreaseCount;
   final VoidCallback increaseCount;
   final int itemCount;
@@ -14,6 +17,7 @@ class ProductDetailsSheet extends StatefulWidget {
     required this.product,
     required this.isBottomSheetVisible,
     required this.toggleBottomSheet,
+    required this.addToCart,
     required this.decreaseCount,
     required this.increaseCount,
     required this.itemCount,
@@ -52,7 +56,17 @@ class _ProductDetailsSheetState extends State<ProductDetailsSheet> {
               ],
             ),
             // Product image
-            Image.network(widget.product.thumbnail), // Replace with your product image URL
+            Container(
+              width: MediaQuery.of(context).size.width * 0.8, // 80% of screen width
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15), // Border radius
+              ),
+              child: Image.network(
+                widget.product.thumbnail,
+                fit: BoxFit.cover, // To cover the container
+              ),
+            ),
+            // Replace with your product image URL
             // Count buttons
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -61,7 +75,7 @@ class _ProductDetailsSheetState extends State<ProductDetailsSheet> {
                   icon: Icon(Icons.remove),
                   onPressed: widget.decreaseCount,
                 ),
-                Text('${widget.itemCount}'),
+                Text('${widget.itemCount}', style: Theme.of(context).textTheme.bodyMedium),
                 IconButton(
                   icon: Icon(Icons.add),
                   onPressed: widget.increaseCount,
@@ -69,11 +83,19 @@ class _ProductDetailsSheetState extends State<ProductDetailsSheet> {
               ],
             ),
             // Add to Cart button
-            ElevatedButton(
-              onPressed: () {
-                // Add to Cart action
-              },
-              child: Text('Add to Cart'),
+            InkWell(
+              onTap: widget.addToCart,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: AppColors.primaryColor, // 50% opacity
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 15),
+                child: Text('Add to Cart', style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: Colors.white, // Set text color to white
+                    fontWeight: FontWeight.bold
+                ),),
+              ),
             ),
           ],
         ),
