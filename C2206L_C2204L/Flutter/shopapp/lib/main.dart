@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:foodapp/pages/login.dart';
+import 'package:foodapp/pages/login/login.dart';
 import 'package:foodapp/pages/order/confirm_order.dart';
-import 'package:foodapp/pages/register.dart';
+import 'package:foodapp/pages/order_list/order_list.dart';
+import 'package:foodapp/pages/register/register.dart';
 import 'package:foodapp/pages/tab/apptab.dart';
 import 'package:foodapp/services/user_service.dart';
 import 'package:get_it/get_it.dart';
-import 'package:foodapp/pages/splash.dart';
+import 'package:foodapp/pages/splash/splash.dart';
 import 'package:go_router/go_route'
     'r.dart';
 
@@ -57,6 +58,19 @@ final GoRouter _router = GoRouter(
         ),
         
         GoRoute(
+          path: 'order_list',
+          builder: (BuildContext context, GoRouterState state) {
+            return OrderList();
+          },
+        ),
+        GoRoute(
+          path: 'confirm_order',
+          builder: (BuildContext context, GoRouterState state) {
+            return ConfirmOrder();
+          },
+        ),
+        
+        GoRoute(
           path: 'apptab',
           builder: (BuildContext context, GoRouterState state) {
             return AppTab();
@@ -97,7 +111,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: theme,
-      home: ConfirmOrder(),
+      home: OrderList(),
+      //home: ConfirmOrder(),
       //home: AppTab(),
       //home: Login()
       //home:DetailProduct()
