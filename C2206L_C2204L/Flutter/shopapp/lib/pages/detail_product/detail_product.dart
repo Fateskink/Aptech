@@ -182,7 +182,7 @@ class _DetailProductState extends State<DetailProduct> {
               children: [
                 InkWell(
                   onTap: () {
-                    // Action for Buy Now button
+                    context.go('/confirm_order');
                   },
                   child: Container(
                     decoration: BoxDecoration(

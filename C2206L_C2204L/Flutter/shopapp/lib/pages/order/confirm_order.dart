@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:foodapp/enums/popup_type.dart';
 import 'package:foodapp/utils/app_colors.dart';
+import 'package:foodapp/utils/utility.dart';
 import 'package:foodapp/widgets/info_popup.dart';
+import 'package:go_router/go_router.dart';
 
 class ConfirmOrder extends StatefulWidget {
   @override
@@ -221,6 +223,13 @@ class _ConfirmOrderState extends State<ConfirmOrder> {
         color: Colors.transparent,
         child: InkWell(
           onTap: () {
+            Utility.alert(
+                context: context,
+                message: 'Order successfully',
+                popupType: PopupType.success,
+                onOkPressed: () {
+                  context.go('/apptab');
+                });
             showDialog(
               context: context,
               builder: (BuildContext context) {
