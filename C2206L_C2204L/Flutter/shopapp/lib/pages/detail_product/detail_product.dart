@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:foodapp/dtos/responses/product/product.dart';
-import 'package:foodapp/dtos/responses/comment/comment.dart';
 import 'package:foodapp/dtos/responses/product_image/product_image.dart';
 import 'package:foodapp/pages/detail_product/detail_product_sheet.dart';
 import 'package:foodapp/services/product_service.dart';
@@ -14,10 +13,16 @@ import 'package:intl/intl.dart';
 
 class DetailProduct extends StatefulWidget {
   final int productId;
-  DetailProduct({required this.productId});
+
+  const DetailProduct({
+    super.key,
+    required this.productId,
+  });
+
   @override
   _DetailProductState createState() => _DetailProductState();
 }
+
 
 class _DetailProductState extends State<DetailProduct> {
   late ProductService productService;
@@ -65,10 +70,10 @@ class _DetailProductState extends State<DetailProduct> {
         child: Stack(
           children: [
             FutureBuilder<dynamic>(
-              future: productService.getProductById(widget?.productId ?? 0), // Call your API here
+              future: productService.getProductById(widget.productId), // Call your API here
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Loading(); // Show loading indicator while waiting for data
+                  return const Loading(); // Show loading indicator while waiting for data
                 } else if (snapshot.hasError) {
                   return Center(child: Text('Error: ${snapshot.error}')); // Show error message if there's an error`
                 } else {
@@ -138,7 +143,7 @@ class _DetailProductState extends State<DetailProduct> {
                               SizedBox(height: 16),
                               Text(
                                 'User Comments:',
-                                style: Theme.of(context).textTheme?.bodyMedium?.copyWith(
+                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                                     fontWeight: FontWeight.bold
                                 ),
                               ),
@@ -150,11 +155,11 @@ class _DetailProductState extends State<DetailProduct> {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text('${comment.user.fullName}',
-                                          style: Theme.of(context).textTheme?.bodySmall?.copyWith(
+                                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
                                               fontWeight: FontWeight.bold
                                           )),
                                       Text('${comment.content}',
-                                          style: Theme.of(context).textTheme?.bodySmall),
+                                          style: Theme.of(context).textTheme.bodySmall),
                                       Text(DateFormat('dd-MM-yyyy HH:mm:ss').format(comment.createdAt)),
                                     ]
                                 ),
@@ -230,7 +235,7 @@ class _DetailProductState extends State<DetailProduct> {
                 right: 0,
                 bottom: 0,
                 child: ProductDetailsSheet(
-                    product: _product ?? Product.empty,
+                    product: _product,
                     isBottomSheetVisible: isBottomSheetVisible,
                     toggleBottomSheet: _toggleBottomSheet,
                     decreaseCount: _decreaseCount,

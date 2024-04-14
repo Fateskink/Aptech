@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:foodapp/dtos/requests/user/register_request.dart';
 import 'package:foodapp/dtos/responses/api_response.dart';
 import 'package:foodapp/dtos/responses/user/user.dart';
+import 'package:foodapp/enums/popup_type.dart';
 import 'package:foodapp/services/user_service.dart';
 import 'package:foodapp/utils/app_colors.dart';
 import 'package:foodapp/utils/utility.dart';
@@ -51,7 +52,16 @@ class _RegisterState extends State<Register> {
         int age = DateTime.now().difference(selectedDate!).inDays ~/ 365;
         // Check if age is less than 18
         if (age < 18) {
-          Utility.alert(context, 'Age must be 18 or above.');
+          Utility.alert(
+            context: context,
+            message: 'Age must be 18 or above.',
+            popupType: PopupType.failure,
+            onOkPressed: () {
+              print('OK button pressed');
+              // Additional actions can be added here
+            },
+          );
+
         }
       });
     }
@@ -306,7 +316,15 @@ class _RegisterState extends State<Register> {
                               // Navigate to login page
                               context.go("/login");
                             }).catchError((error) {
-                              Utility.alert(context, error.message ?? '');
+                              Utility.alert(
+                                context: context,
+                                message: error.message ?? '',
+                                popupType: PopupType.info,
+                                onOkPressed: () {
+                                  // Additional actions can be added here
+                                },
+                              );
+
                             });
                           }
                           ,

@@ -2,7 +2,7 @@ import 'package:foodapp/dtos/requests/user/login_request.dart';
 import 'package:foodapp/dtos/requests/user/register_request.dart';
 import 'package:foodapp/dtos/responses/api_response.dart';
 import 'package:foodapp/dtos/responses/user/user.dart';
-import 'package:foodapp/models/http_method.dart';
+import 'package:foodapp/enums/http_method.dart';
 import 'package:foodapp/repositories/token_repository.dart';
 import 'package:foodapp/services/api_constants.dart';
 import 'package:foodapp/services/base_service.dart';

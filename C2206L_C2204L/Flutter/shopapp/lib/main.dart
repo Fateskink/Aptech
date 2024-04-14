@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foodapp/pages/login.dart';
+import 'package:foodapp/pages/order/confirm_order.dart';
 import 'package:foodapp/pages/register.dart';
 import 'package:foodapp/pages/tab/apptab.dart';
 import 'package:foodapp/services/user_service.dart';
@@ -87,15 +88,16 @@ class MyApp extends StatelessWidget {
         )
       ),
     );
-
+  /*
     return MaterialApp.router(
       routerConfig: _router,
       theme: theme
     );
-
+  */
     return MaterialApp(
       title: 'Flutter Demo',
-        theme: theme,
+      theme: theme,
+      home: ConfirmOrder(),
       //home: AppTab(),
       //home: Login()
       //home:DetailProduct()

@@ -1,7 +1,7 @@
 import 'package:foodapp/dtos/requests/category/get_category_request.dart';
 import 'package:foodapp/dtos/requests/order/insert_order_request.dart';
 import 'package:foodapp/dtos/responses/api_response.dart';
-import 'package:foodapp/models/http_method.dart';
+import 'package:foodapp/enums/http_method.dart';
 import 'package:foodapp/services/api_constants.dart';
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;

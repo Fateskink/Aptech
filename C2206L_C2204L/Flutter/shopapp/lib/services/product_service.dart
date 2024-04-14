@@ -4,7 +4,7 @@ import 'package:foodapp/dtos/requests/user/register_request.dart';
 import 'package:foodapp/dtos/responses/api_response.dart';
 import 'package:foodapp/dtos/responses/product/product_list_response.dart';
 import 'package:foodapp/dtos/responses/product/product.dart';
-import 'package:foodapp/models/http_method.dart';
+import 'package:foodapp/enums/http_method.dart';
 import 'package:foodapp/dtos/responses/product/product.dart';
 import 'package:foodapp/services/api_constants.dart';
 import 'package:foodapp/repositories/cart_repository.dart';

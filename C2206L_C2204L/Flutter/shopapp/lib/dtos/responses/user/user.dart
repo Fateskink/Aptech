@@ -1,5 +1,5 @@
 import 'package:foodapp/extensions/custon_string.dart';
-import 'package:foodapp/models/role.dart';
+import 'package:foodapp/dtos/responses/role/role.dart';
 
 class User {
   final int? id;

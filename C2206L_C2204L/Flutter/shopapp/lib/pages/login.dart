@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:foodapp/dtos/requests/user/login_request.dart';
 import 'package:foodapp/dtos/responses/api_response.dart';
+import 'package:foodapp/enums/popup_type.dart';
 import 'package:foodapp/services/user_service.dart';
 import 'package:foodapp/utils/app_colors.dart';
 import 'package:foodapp/utils/utility.dart';
@@ -168,7 +169,15 @@ class _LoginState extends State<Login> {
                         } else if (Validations.isValidPhoneNumber(input)) {
                           await userService.login(LoginRequest(phoneNumber: input, password: password));
                         } else {
-                          Utility.alert(context, 'Invalid phone number or email');
+                          Utility.alert(
+                            context: context,
+                            message: 'Invalid phone number or email',
+                            popupType: PopupType.failure,
+                            onOkPressed: () {
+                              print('OK button pressed');
+                              // Perform any other actions here
+                            },
+                          );
                         }
 
                         if(rememberPassword == true) {

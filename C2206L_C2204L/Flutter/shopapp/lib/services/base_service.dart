@@ -1,6 +1,6 @@
 import 'package:foodapp/dtos/responses/api_response.dart';
 import 'package:foodapp/exceptions/custom_exception.dart';
-import 'package:foodapp/models/http_method.dart';
+import 'package:foodapp/enums/http_method.dart';
 import 'package:foodapp/repositories/auth_repository.dart';
 import 'package:foodapp/repositories/token_repository.dart';
 import 'package:get_it/get_it.dart';

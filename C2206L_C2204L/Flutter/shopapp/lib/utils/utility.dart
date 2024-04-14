@@ -1,7 +1,9 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:foodapp/enums/popup_type.dart';
 import 'package:foodapp/services/api_constants.dart';
+import 'package:foodapp/widgets/info_popup.dart';
 
 class Utility {
   static double screenWidth(BuildContext context) => MediaQuery.of(context).size.width;
@@ -34,21 +36,19 @@ class Utility {
     return imageUrl;
   }
 
-  static void alert(BuildContext context, String message) {
+  static void alert({
+    required BuildContext context,
+    required String message,
+    required PopupType popupType,
+    required Function onOkPressed // action when press ok
+  }) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Alert'),
-          content: Text(message),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('OK'),
-            ),
-          ],
+        return InfoPopup(
+          popupType: popupType,
+          message: message,
+          onOkPressed: onOkPressed,
         );
       },
     );
