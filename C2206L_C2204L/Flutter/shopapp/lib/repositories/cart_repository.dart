@@ -4,31 +4,31 @@ import 'package:shared_preferences/shared_preferences.dart';
 class CartRepository {
   static const String _cartKey = 'cartItems';
 
-  Future<Map<String, int>> getCart() async {
+  Future<Map<int, int>> getCart() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    Map<String, int>? cartItemsMap = prefs.getString(_cartKey) != null
-        ? Map<String, int>.from(json.decode(prefs.getString(_cartKey)!))
+    Map<String, dynamic>? cartItemsMap = prefs.getString(_cartKey) != null
+        ? json.decode(prefs.getString(_cartKey)!) as Map<String, dynamic>
         : {};
 
-    return cartItemsMap;
+    // Convert keys from String to int and values from dynamic to int
+    Map<int, int> typedCartItemsMap = cartItemsMap.map((key, value) => MapEntry(int.parse(key), value as int));
+
+    return typedCartItemsMap;
   }
 
   // Function to read number of product by product Id
   Future<int?> getProductCountById(int productId) async {
-    Map<String, int> cartItemsMap = await getCart();
-    return cartItemsMap[productId.toString()];
+    Map<int, int> cartItemsMap = await getCart();
+    return cartItemsMap[productId];
   }
 
   Future<void> saveCart(int productId, int itemCount) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-
     // Fetch existing cart items map from local storage
-    Map<String, int> cartItemsMap = await getCart();
-
+    Map<int, int> cartItemsMap = await getCart();
     // Update the item count for the given product ID
-    cartItemsMap[productId.toString()] = itemCount;
-
+    cartItemsMap[productId] = itemCount;
     // Save the updated cart items map back to local storage
     prefs.setString(_cartKey, json.encode(cartItemsMap));
   }

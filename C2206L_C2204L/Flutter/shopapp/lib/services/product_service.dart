@@ -2,7 +2,7 @@ import 'package:foodapp/dtos/requests/product/get_product_request.dart';
 import 'package:foodapp/dtos/requests/user/login_request.dart';
 import 'package:foodapp/dtos/requests/user/register_request.dart';
 import 'package:foodapp/dtos/responses/api_response.dart';
-import 'package:foodapp/dtos/responses/product/product_list_response.dart';
+import 'package:foodapp/dtos/responses/product/product_list.dart';
 import 'package:foodapp/dtos/responses/product/product.dart';
 import 'package:foodapp/enums/http_method.dart';
 import 'package:foodapp/dtos/responses/product/product.dart';
@@ -13,14 +13,14 @@ import 'package:flutter/foundation.dart';
 
 class ProductService extends BaseService {
   final CartRepository cartRepository = CartRepository();
-  Future<ProductListResponse> getProducts(GetProductRequest getProductRequest) async {
+  Future<ProductList> getProducts(GetProductRequest getProductRequest) async {
     final String apiUrl = '${APIConstants.baseUrl}/products';
     final ApiResponse response = await request(
       apiUrl: apiUrl,
       method: HttpMethod.GET,
       requestData: getProductRequest.toJson(),
     );
-    return ProductListResponse.fromJson(response.data);
+    return ProductList.fromJson(response.data);
   }
 
   Future<Product> getProductById(int id) async {
@@ -30,6 +30,20 @@ class ProductService extends BaseService {
       method: HttpMethod.GET,
     );
     return Product.fromJson(response.data);
+  }
+  Future<List<Product>> getProductByIds(List<int> ids) async {
+    // Chuyển đổi List<int> ids sang chuỗi và nối chúng bằng dấu ','
+    String idsString = ids.join(',');
+    final String apiUrl = '${APIConstants.baseUrl}/products/ids?$idsString';
+
+    final ApiResponse response = await request(
+      apiUrl: apiUrl,
+      method: HttpMethod.GET,
+    );
+    List<Product> products = (response.data as List)
+        .map<Product>((productJson) => Product.fromJson(productJson))
+        .toList();
+    return products;
   }
   Future<List<Product>> findFavoriteProductsByUserId() async {
     final String apiUrl = '${APIConstants.baseUrl}/products/favorite-products';
@@ -55,5 +69,8 @@ class ProductService extends BaseService {
 
   Future<int?> getItemCountFromCart(int productId) async {
     return await cartRepository.getProductCountById(productId);
+  }
+  Future<Map<int, int>> getCart() async {
+    return await cartRepository.getCart();
   }
 }

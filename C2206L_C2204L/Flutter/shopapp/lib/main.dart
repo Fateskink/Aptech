@@ -5,6 +5,7 @@ import 'package:foodapp/pages/order_list/order_list.dart';
 import 'package:foodapp/pages/register/register.dart';
 import 'package:foodapp/pages/tab/apptab.dart';
 import 'package:foodapp/services/user_service.dart';
+import 'package:foodapp/services/coupon_service.dart';
 import 'package:get_it/get_it.dart';
 import 'package:foodapp/pages/splash/splash.dart';
 import 'package:go_router/go_route'
@@ -27,6 +28,7 @@ void main() {
   GetIt.instance.registerLazySingleton<UserService>(() => UserService());
   GetIt.instance.registerLazySingleton<ProductService>(() => ProductService());
   GetIt.instance.registerLazySingleton<CategoryService>(() => CategoryService());  
+  GetIt.instance.registerLazySingleton<CouponService>(() => CouponService());  
   runApp(const MyApp());
 }
 final GoRouter _router = GoRouter(
@@ -103,15 +105,17 @@ class MyApp extends StatelessWidget {
       ),
     );
 
+    /*
     return MaterialApp.router(
       routerConfig: _router,
       theme: theme
     );
+    */
     return MaterialApp(
       title: 'Flutter Demo',
       theme: theme,
       //home: OrderList(),
-      //home: ConfirmOrder(),
+      home: ConfirmOrder(),
       //home: AppTab(),
       //home: Login()
       //home:DetailProduct()

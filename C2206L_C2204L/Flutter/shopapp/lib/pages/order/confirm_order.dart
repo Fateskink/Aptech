@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:foodapp/dtos/responses/product/product.dart';
 import 'package:foodapp/enums/popup_type.dart';
+import 'package:foodapp/services/coupon_service.dart';
+import 'package:foodapp/services/product_service.dart';
 import 'package:foodapp/utils/app_colors.dart';
 import 'package:foodapp/utils/utility.dart';
 import 'package:foodapp/widgets/info_popup.dart';
+import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 
 class ConfirmOrder extends StatefulWidget {
@@ -11,10 +15,35 @@ class ConfirmOrder extends StatefulWidget {
 }
 
 class _ConfirmOrderState extends State<ConfirmOrder> {
+  late CouponService couponService;
+  late ProductService productService;
+
+  final TextEditingController _couponController = TextEditingController();
+
   String shippingMethod = 'Express';
   String paymentMethod = 'COD';
-  String coupon = '';
   String address = '';
+  List<Product> products = [];
+  Map<int, int> cartMap = {};
+  @override
+  void initState() {
+    super.initState();
+    couponService = GetIt.instance<CouponService>();
+    productService = GetIt.instance<ProductService>();
+    initData();
+  }
+
+  void initData() async {
+    cartMap = await productService.getCart();
+    List<int> productIds = cartMap.keys.toList();
+    List<Product> products = await productService.getProductByIds(productIds);
+
+    setState(() {
+      this.products = products;
+    });
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,23 +88,24 @@ class _ConfirmOrderState extends State<ConfirmOrder> {
             Divider(height: 1, color: Colors.grey),
             Padding(
               padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Danh sách sản phẩm',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 8),
-                  ListTile(
-                    title: Text('Tên sản phẩm 1'),
-                    subtitle: Text('Giá: 100,000 VND'),
-                  ),
-                  ListTile(
-                    title: Text('Tên sản phẩm 2'),
-                    subtitle: Text('Giá: 200,000 VND'),
-                  ),
-                ],
+              child: ListView.builder(
+                physics: NeverScrollableScrollPhysics(), // Disable scrolling
+                shrinkWrap: true, // Important to set this to true
+                itemCount: products.length,
+                itemBuilder: (context, index) {
+                  Product product = products[index];
+                  return ListTile(
+                    leading: Image.network(product.thumbnail), // Ảnh sản phẩm
+                    title: Text(product.name), // Tên sản phẩm
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Giá: ${product.price}'), // Giá sản phẩm
+                        Text('Số lượng đã đặt: ${cartMap[product.id]}'),
+                      ],
+                    ),
+                  );
+                },
               ),
             ),
             Divider(height: 1, color: Colors.grey),
@@ -101,6 +131,7 @@ class _ConfirmOrderState extends State<ConfirmOrder> {
                 children: [
                   Expanded(
                     child: TextField(
+                      controller: _couponController,
                       decoration: InputDecoration(
                         hintText: 'Nhập mã coupon',
                         border: OutlineInputBorder(),

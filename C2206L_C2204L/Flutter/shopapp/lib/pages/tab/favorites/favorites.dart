@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:foodapp/dtos/responses/product/product_list_response.dart';
+import 'package:foodapp/dtos/responses/product/product_list.dart';
 import 'package:foodapp/dtos/responses/product/product.dart';
 import 'package:foodapp/services/product_service.dart';
 import 'package:foodapp/utils/app_colors.dart';
