@@ -84,7 +84,10 @@ class _ProductDetailsSheetState extends State<ProductDetailsSheet> {
             ),
             // Add to Cart button
             InkWell(
-              onTap: widget.addToCart,
+              onTap: () {
+                widget.addToCart();
+                widget.toggleBottomSheet();
+              },
               child: Container(
                 decoration: BoxDecoration(
                   color: AppColors.primaryColor, // 50% opacity

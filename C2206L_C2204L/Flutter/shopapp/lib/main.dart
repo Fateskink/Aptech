@@ -105,12 +105,11 @@ class MyApp extends StatelessWidget {
       ),
     );
 
-    /*
     return MaterialApp.router(
       routerConfig: _router,
       theme: theme
     );
-    */
+
     return MaterialApp(
       title: 'Flutter Demo',
       theme: theme,

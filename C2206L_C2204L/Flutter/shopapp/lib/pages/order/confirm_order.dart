@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodapp/dtos/requests/coupon/coupon_request.dart';
 import 'package:foodapp/dtos/responses/product/product.dart';
 import 'package:foodapp/enums/popup_type.dart';
 import 'package:foodapp/services/coupon_service.dart';
@@ -42,7 +43,13 @@ class _ConfirmOrderState extends State<ConfirmOrder> {
       this.products = products;
     });
   }
-
+  double get totalPrice {
+    return products.fold(0.0, (sum, product) {
+      int numberOfProducts = cartMap[product.id] ?? 1;
+      return sum + (product.price * numberOfProducts);
+    });
+  }
+  double totalPriceWithCoupon = -1;
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +59,8 @@ class _ConfirmOrderState extends State<ConfirmOrder> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.of(context).pop();
+            //Navigator.of(context).pop();
+            context.go('detail_product');
           },
         ),
       ),
@@ -94,14 +102,49 @@ class _ConfirmOrderState extends State<ConfirmOrder> {
                 itemCount: products.length,
                 itemBuilder: (context, index) {
                   Product product = products[index];
-                  return ListTile(
-                    leading: Image.network(product.thumbnail), // Ảnh sản phẩm
-                    title: Text(product.name), // Tên sản phẩm
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                  return Container(
+                    padding: EdgeInsets.symmetric(vertical: 10),
+                    child: Row(
                       children: [
-                        Text('Giá: ${product.price}'), // Giá sản phẩm
-                        Text('Số lượng đã đặt: ${cartMap[product.id]}'),
+                        // Product Image
+                        Container(
+                          width: 80,
+                          height: 80,
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: AppColors.primaryColor,
+                              width: 1,
+                            ),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Image.network(
+                              product.thumbnail,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 16), // Spacer
+
+                        // Product Details
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                product.name,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
+                              ),
+                              SizedBox(height: 8), // Spacer
+                              Text('Price: \$${product.price.toStringAsFixed(2)}'),
+                              Text('Ordered quantity: ${cartMap[product.id] ?? 0}'),
+                            ],
+                          ),
+                        ),
                       ],
                     ),
                   );
@@ -119,7 +162,7 @@ class _ConfirmOrderState extends State<ConfirmOrder> {
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   Text(
-                    '\$32.34 USD',
+                    '\$${totalPrice} USD',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                 ],
@@ -147,8 +190,11 @@ class _ConfirmOrderState extends State<ConfirmOrder> {
                     child: Material(
                       color: Colors.transparent,
                       child: InkWell(
-                        onTap: () {
-                          // Your onPressed logic here
+                        onTap: () async {
+                          totalPriceWithCoupon = await couponService.calculateCoupon(CouponRequest(
+                              couponCode: _couponController.text,
+                              totalAmount: totalPrice)
+                          );
                         },
                         child: Container(
                           padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24),

@@ -34,7 +34,7 @@ class ProductService extends BaseService {
   Future<List<Product>> getProductByIds(List<int> ids) async {
     // Chuyển đổi List<int> ids sang chuỗi và nối chúng bằng dấu ','
     String idsString = ids.join(',');
-    final String apiUrl = '${APIConstants.baseUrl}/products/ids?$idsString';
+    final String apiUrl = '${APIConstants.baseUrl}/products/by-ids?ids=$idsString';
 
     final ApiResponse response = await request(
       apiUrl: apiUrl,
@@ -63,7 +63,7 @@ class ProductService extends BaseService {
     if (productId > 0 && itemCount > 0) {
       await cartRepository.saveCart(productId, itemCount);
     } else if (itemCount == 0) {
-      await cartRepository.clearCart();
+      await cartRepository.removeCartWithProduct(productId);
     }
   }
 
