@@ -34,44 +34,60 @@ void main() {
   GetIt.instance.registerLazySingleton<OrderService>(() => OrderService());
   runApp(const MyApp());
 }
+/*
+ GoRoute(
+      path: '/',
+      builder: (BuildContext context, GoRouterState state) {
+        return Splash();
+      },
+    ),
+* */
 final GoRouter _router = GoRouter(
   routes: <RouteBase>[
     GoRoute(
-      path: AppRoutes.login,
+      path: '/',
       builder: (BuildContext context, GoRouterState state) {
-        return Login();
+        return Splash();
       },
-    ),
-    GoRoute(
-      path: AppRoutes.register,
-      builder: (BuildContext context, GoRouterState state) {
-        return Register();
-      },
-    ),
-    GoRoute(
-      path: AppRoutes.detailProduct,
-      builder: (BuildContext context, GoRouterState state) {
-        int productId = ((state.extra as Map)['productId'] as int?) ?? 0;
-        return DetailProduct(productId: productId); //receive
-      },
-    ),
-    GoRoute(
-      path: AppRoutes.orderList,
-      builder: (BuildContext context, GoRouterState state) {
-        return OrderList();
-      },
-    ),
-    GoRoute(
-      path: AppRoutes.confirmOrder,
-      builder: (BuildContext context, GoRouterState state) {
-        return ConfirmOrder();
-      },
-    ),
-    GoRoute(
-      path: AppRoutes.appTab,
-      builder: (BuildContext context, GoRouterState state) {
-        return AppTab();
-      },
+      routes: <RouteBase>[
+        GoRoute(
+          path: AppRoutes.login,
+          builder: (BuildContext context, GoRouterState state) {
+            return Login();
+          },
+        ),
+        GoRoute(
+          path: AppRoutes.register,
+          builder: (BuildContext context, GoRouterState state) {
+            return Register();
+          },
+        ),
+        GoRoute(
+          path: AppRoutes.detailProduct,
+          builder: (BuildContext context, GoRouterState state) {
+            int productId = ((state.extra as Map)['productId'] as int?) ?? 0;
+            return DetailProduct(productId: productId); //receive
+          },
+        ),
+        GoRoute(
+          path: AppRoutes.orderList,
+          builder: (BuildContext context, GoRouterState state) {
+            return OrderList();
+          },
+        ),
+        GoRoute(
+          path: AppRoutes.confirmOrder,
+          builder: (BuildContext context, GoRouterState state) {
+            return ConfirmOrder();
+          },
+        ),
+        GoRoute(
+          path: AppRoutes.appTab,
+          builder: (BuildContext context, GoRouterState state) {
+            return AppTab();
+          },
+        ),
+      ],
     ),
   ],
 );
