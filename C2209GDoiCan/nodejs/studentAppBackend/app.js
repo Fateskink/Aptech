@@ -7,15 +7,18 @@ debugger
 //npm install --save express mongoose express-validator dotenv
 //npm install --save express-validator
 //npm install --save-dev nodemon
+//npm install cors
 const express = require('express');
 const bodyParser = require('body-parser');
 const studentRoutes = require('./src/routes/studentRoutes');
 const klassRoutes = require('./src/routes/klassRoutes');
 const connectDB = require('./src/databases/db');
+const cors = require('cors')
 
 require('dotenv').config();
-const app = express();
 
+const app = express();
+app.use(cors())
 connectDB();
 
 const { PORT } = process.env;
