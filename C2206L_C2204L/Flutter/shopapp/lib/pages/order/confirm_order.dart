@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:foodapp/dtos/requests/cart_item/cart_item_request.dart';
 import 'package:foodapp/dtos/requests/coupon/coupon_request.dart';
+import 'package:foodapp/dtos/requests/order/insert_order_request.dart';
 import 'package:foodapp/dtos/responses/product/product.dart';
 import 'package:foodapp/enums/popup_type.dart';
+import 'package:foodapp/pages/app_routes.dart';
 import 'package:foodapp/services/coupon_service.dart';
+import 'package:foodapp/services/order_service.dart';
 import 'package:foodapp/services/product_service.dart';
 import 'package:foodapp/utils/app_colors.dart';
 import 'package:foodapp/utils/utility.dart';
@@ -18,10 +22,16 @@ class ConfirmOrder extends StatefulWidget {
 class _ConfirmOrderState extends State<ConfirmOrder> {
   late CouponService couponService;
   late ProductService productService;
+  late OrderService orderService;
 
   final TextEditingController _couponController = TextEditingController();
+  final TextEditingController _phoneNumberController = TextEditingController();
+  final TextEditingController _fullNameController = TextEditingController();
+  final TextEditingController _noteController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
 
-  String shippingMethod = 'Express';
+
+  String _shippingMethod = 'Express';
   String paymentMethod = 'COD';
   String address = '';
   List<Product> products = [];
@@ -31,6 +41,7 @@ class _ConfirmOrderState extends State<ConfirmOrder> {
     super.initState();
     couponService = GetIt.instance<CouponService>();
     productService = GetIt.instance<ProductService>();
+    orderService = GetIt.instance<OrderService>();
     initData();
   }
 
@@ -168,6 +179,37 @@ class _ConfirmOrderState extends State<ConfirmOrder> {
                 ],
               ),
             ),
+            Divider(height: 1, color: Colors.grey),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: TextField(
+                controller: _phoneNumberController,
+                decoration: InputDecoration(
+                  hintText: 'Phone Number',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: TextField(
+                controller: _emailController,
+                decoration: InputDecoration(
+                  hintText: 'Email',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: TextField(
+                controller: _fullNameController,
+                decoration: InputDecoration(
+                  hintText: 'Full Name',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+            ),
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Row(
@@ -215,6 +257,16 @@ class _ConfirmOrderState extends State<ConfirmOrder> {
             ),
             Padding(
               padding: const EdgeInsets.all(16.0),
+              child: TextField(
+                controller: _noteController,
+                decoration: InputDecoration(
+                  hintText: 'Note',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -227,10 +279,10 @@ class _ConfirmOrderState extends State<ConfirmOrder> {
                     children: [
                       Radio(
                         value: 'Express',
-                        groupValue: shippingMethod,
+                        groupValue: _shippingMethod,
                         onChanged: (value) {
                           setState(() {
-                            shippingMethod = value.toString();
+                            _shippingMethod = value.toString();
                           });
                         },
                       ),
@@ -238,10 +290,10 @@ class _ConfirmOrderState extends State<ConfirmOrder> {
                       SizedBox(width: 16),
                       Radio(
                         value: 'Normal',
-                        groupValue: shippingMethod,
+                        groupValue: _shippingMethod,
                         onChanged: (value) {
                           setState(() {
-                            shippingMethod = value.toString();
+                            _shippingMethod = value.toString();
                           });
                         },
                       ),
@@ -300,27 +352,29 @@ class _ConfirmOrderState extends State<ConfirmOrder> {
         color: Colors.transparent,
         child: InkWell(
           onTap: () {
+            List<CartItemRequest> cartItemRequests = cartMap.entries.map((entry) => CartItemRequest(
+              productId: entry.key,
+              quantity: entry.value,
+            )).toList();
+            orderService.createOrder(InsertOrderRequest(
+                fullname: _fullNameController.text,
+                email: _emailController.text,
+                phoneNumber: _phoneNumberController.text,
+                note: _noteController.text,
+                address: address,
+                shippingMethod: _shippingMethod,
+                totalMoney: totalPriceWithCoupon > 0 ? totalPriceWithCoupon : totalPrice,
+                paymentMethod: paymentMethod,
+                couponCode: _couponController.text,
+                cartItems: cartItemRequests)
+            );
             Utility.alert(
                 context: context,
                 message: 'Order successfully',
                 popupType: PopupType.success,
                 onOkPressed: () {
-                  context.go('/apptab');
+                  context.go('/${AppRoutes.appTab}');
                 });
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return InfoPopup(
-                  popupType: PopupType.success,
-                  message: 'Order successfully',
-                  onOkPressed: () {
-                    // Xử lý khi bấm nút OK
-                    print('Đã bấm nút OK');
-                  },
-                );
-              },
-            );
-
           },
           child: Container(
             decoration: BoxDecoration(

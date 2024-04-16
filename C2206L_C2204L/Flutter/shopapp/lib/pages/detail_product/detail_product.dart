@@ -10,6 +10,7 @@ import 'package:foodapp/widgets/transparent_appbar.dart';
 import 'package:get_it/get_it.dart'; // Import the carousel_slider package
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:foodapp/pages/app_routes.dart';
 
 class DetailProduct extends StatefulWidget {
   final int productId;
@@ -63,7 +64,8 @@ class _DetailProductState extends State<DetailProduct> {
       appBar: TransparentAppBar(
         title: 'Detail product',
         onBack: () {
-          context.go('/apptab');
+          context.go('/${AppRoutes.appTab}');
+;
         },
       ),
       body: SafeArea(
@@ -182,7 +184,8 @@ class _DetailProductState extends State<DetailProduct> {
               children: [
                 InkWell(
                   onTap: () {
-                    context.go('/confirm_order');
+                    context.go('/${AppRoutes.confirmOrder}');
+;
                   },
                   child: Container(
                     decoration: BoxDecoration(

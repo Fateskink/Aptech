@@ -47,6 +47,7 @@ class EmployeeManagement {
                 WHERE 
                     id = ?
             ");
+            
             $stmt->execute([$name, $position, $salary, $id]);
             return true;
         } catch (PDOException $e) {

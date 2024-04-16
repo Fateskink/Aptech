@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:foodapp/dtos/requests/user/login_request.dart';
-import 'package:foodapp/dtos/responses/api_response.dart';
 import 'package:foodapp/enums/popup_type.dart';
+import 'package:foodapp/pages/app_routes.dart';
 import 'package:foodapp/services/user_service.dart';
 import 'package:foodapp/utils/app_colors.dart';
 import 'package:foodapp/utils/utility.dart';
-import 'package:foodapp/utils/validations.dart';
 import 'package:foodapp/utils/validations.dart';
 import 'package:foodapp/widgets/uibutton.dart';
 import 'package:get_it/get_it.dart';
@@ -185,14 +184,16 @@ class _LoginState extends State<Login> {
                               phoneNumber: emailOrPhoneNumberController.text,
                               password: passwordController.text);
                         }
-                        context.go('/apptab');
+                        context.go('/${AppRoutes.appTab}');
+;
                       },
                     ),
                   ),
                   GestureDetector(
                     onTap: () {
                       print('Register');
-                      context.go('/register');
+                      context.go('/${AppRoutes.register}');
+;
                     },
                     child: Container(
                       padding: EdgeInsets.symmetric(vertical: 10),

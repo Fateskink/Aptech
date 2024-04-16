@@ -13,7 +13,7 @@ import 'package:foodapp/widgets/loading.dart';
 import 'package:go_router/go_router.dart';
 import 'package:get_it/get_it.dart';
 import 'dart:convert' as convert;
-
+import 'package:foodapp/pages/app_routes.dart';
 
 class Home extends StatefulWidget {
   @override

@@ -9,6 +9,7 @@ import 'package:get_it/get_it.dart';
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
 import 'package:go_router/go_router.dart';
+import 'package:foodapp/pages/app_routes.dart';
 
 class Splash extends StatefulWidget {
   Splash({super.key});
@@ -157,13 +158,16 @@ class _SplashState extends State<Splash> {
                             try {
                               User user = await userService.getUserDetails();
                               if (user.isNotEmpty) {
-                                context.go('/apptab');
+                                context.go('/${AppRoutes.appTab}');
+;
                               } else {
                                 // Token is empty or not found
-                                context.go('/login');
+                                context.go('/${AppRoutes.login}');
+;
                               }
                             } catch (e) {
-                              context.go('/login');
+                              context.go('/${AppRoutes.login}');
+;
                             }
                           } else {
                             _pageController.animateToPage(

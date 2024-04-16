@@ -1,23 +1,25 @@
 import 'package:foodapp/dtos/requests/cart_item/cart_item_request.dart';
 
 class InsertOrderRequest {
-  final int userId;
   final String fullname;
+  final String email;
   final String phoneNumber;
-  final String status;
   final String address;
+  final String note;
   final double totalMoney;
+  final String shippingMethod;
   final String paymentMethod;
   final String couponCode;
   final List<CartItemRequest> cartItems;
 
   InsertOrderRequest({
-    required this.userId,
     required this.fullname,
+    required this.email,
     required this.phoneNumber,
-    required this.status,
     required this.address,
+    required this.note,
     required this.totalMoney,
+    required this.shippingMethod,
     required this.paymentMethod,
     required this.couponCode,
     required this.cartItems,
@@ -25,15 +27,17 @@ class InsertOrderRequest {
 
   Map<String, dynamic> toJson() {
     return {
-      'userId': userId.toString(),
       'fullname': fullname,
+      'email': email,
       'phone_number': phoneNumber,
-      'status': status,
       'address': address,
-      'total_money': totalMoney.toString(),
+      'note': note,
+      'total_money': totalMoney.toStringAsFixed(2),
+      'shipping_method': shippingMethod,
       'payment_method': paymentMethod,
       'coupon_code': couponCode,
       'cart_items': cartItems.map((item) => item.toJson()).toList(),
     };
   }
 }
+

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:foodapp/pages/app_routes.dart';
 import 'package:foodapp/pages/login/login.dart';
 import 'package:foodapp/pages/order/confirm_order.dart';
 import 'package:foodapp/pages/order_list/order_list.dart';
 import 'package:foodapp/pages/register/register.dart';
 import 'package:foodapp/pages/tab/apptab.dart';
+import 'package:foodapp/services/order_service.dart';
 import 'package:foodapp/services/user_service.dart';
 import 'package:foodapp/services/coupon_service.dart';
 import 'package:get_it/get_it.dart';
@@ -28,57 +30,48 @@ void main() {
   GetIt.instance.registerLazySingleton<UserService>(() => UserService());
   GetIt.instance.registerLazySingleton<ProductService>(() => ProductService());
   GetIt.instance.registerLazySingleton<CategoryService>(() => CategoryService());  
-  GetIt.instance.registerLazySingleton<CouponService>(() => CouponService());  
+  GetIt.instance.registerLazySingleton<CouponService>(() => CouponService());
+  GetIt.instance.registerLazySingleton<OrderService>(() => OrderService());
   runApp(const MyApp());
 }
 final GoRouter _router = GoRouter(
   routes: <RouteBase>[
     GoRoute(
-      path: '/',
+      path: AppRoutes.login,
       builder: (BuildContext context, GoRouterState state) {
-        return Splash();
+        return Login();
       },
-      routes: <RouteBase>[
-        GoRoute(
-          path: 'login',
-          builder: (BuildContext context, GoRouterState state) {
-            return Login();
-          },
-        ),
-        GoRoute(
-          path: 'register',
-          builder: (BuildContext context, GoRouterState state) {
-            return Register();
-          },
-        ),
-        GoRoute(
-          path: 'detail_product',
-          builder: (BuildContext context, GoRouterState state) {
-            int productId = ((state.extra as Map)['productId'] as int?) ?? 0;
-            return DetailProduct(productId: productId); //receive
-          },
-        ),
-        
-        GoRoute(
-          path: 'order_list',
-          builder: (BuildContext context, GoRouterState state) {
-            return OrderList();
-          },
-        ),
-        GoRoute(
-          path: 'confirm_order',
-          builder: (BuildContext context, GoRouterState state) {
-            return ConfirmOrder();
-          },
-        ),
-        
-        GoRoute(
-          path: 'apptab',
-          builder: (BuildContext context, GoRouterState state) {
-            return AppTab();
-          },
-        ),
-      ],
+    ),
+    GoRoute(
+      path: AppRoutes.register,
+      builder: (BuildContext context, GoRouterState state) {
+        return Register();
+      },
+    ),
+    GoRoute(
+      path: AppRoutes.detailProduct,
+      builder: (BuildContext context, GoRouterState state) {
+        int productId = ((state.extra as Map)['productId'] as int?) ?? 0;
+        return DetailProduct(productId: productId); //receive
+      },
+    ),
+    GoRoute(
+      path: AppRoutes.orderList,
+      builder: (BuildContext context, GoRouterState state) {
+        return OrderList();
+      },
+    ),
+    GoRoute(
+      path: AppRoutes.confirmOrder,
+      builder: (BuildContext context, GoRouterState state) {
+        return ConfirmOrder();
+      },
+    ),
+    GoRoute(
+      path: AppRoutes.appTab,
+      builder: (BuildContext context, GoRouterState state) {
+        return AppTab();
+      },
     ),
   ],
 );
