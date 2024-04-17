@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { fetchStudents } from '../api/studentApi';
+import { Link } from 'react-router-dom';
 
 function StudentList(props) {
     const [students, setStudents] = useState([]);        
@@ -15,6 +16,11 @@ function StudentList(props) {
 
         fetchData();
     }, []);
+    const handleDelete = async (id) => {
+        // Implement delete logic here
+        console.log(`Delete student with ID: ${id}`);
+    };
+
 
     return (
         <>
@@ -27,6 +33,7 @@ function StudentList(props) {
                         <th>Age</th>
                         <th>Email</th>
                         <th>Phone</th>
+                        <th>Actions</th> 
                     </tr>
                 </thead>
                 <tbody>
@@ -36,10 +43,19 @@ function StudentList(props) {
                         <td>{student.age}</td>
                         <td>{student.email}</td>
                         <td>{student.phone}</td>
+                        <td>
+                            <button onClick={() => handleDelete(student.id)}>Delete</button>
+                            <Link to={`/update/${student.id}`}>
+                                <button>Update</button>
+                            </Link>
+                        </td>
                     </tr>
                 ))}
                 </tbody>
             </table>
+            <Link to="/add-new">
+                <button>Add New</button>
+            </Link>
         </>
     );
 }
