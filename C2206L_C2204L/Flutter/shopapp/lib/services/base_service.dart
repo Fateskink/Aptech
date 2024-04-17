@@ -30,7 +30,6 @@ class BaseService {
       if (token != null) {
         headers['Authorization'] = 'Bearer $token';
       }
-
       // Perform HTTP request based on method
       switch (method) {
         case HttpMethod.GET:

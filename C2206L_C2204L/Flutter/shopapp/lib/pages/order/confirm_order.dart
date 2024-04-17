@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:foodapp/dtos/requests/cart_item/cart_item_request.dart';
 import 'package:foodapp/dtos/requests/coupon/coupon_request.dart';
 import 'package:foodapp/dtos/requests/order/insert_order_request.dart';
+import 'package:foodapp/dtos/responses/api_response.dart';
 import 'package:foodapp/dtos/responses/product/product.dart';
 import 'package:foodapp/enums/popup_type.dart';
 import 'package:foodapp/pages/app_routes.dart';
@@ -170,15 +171,33 @@ class _ConfirmOrderState extends State<ConfirmOrder> {
                 children: [
                   Text(
                     'Total amount:',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        fontWeight: FontWeight.bold),
                   ),
                   Text(
                     '\$${totalPrice} USD',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
             ),
+            totalPriceWithCoupon > 0 ? Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(child: Container()),
+                  Text(
+                    '\$${totalPrice} USD(with coupon)',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: AppColors.primaryColor,
+                          fontWeight: FontWeight.bold
+                      ),
+                  ),
+                ],
+              ),
+            ):Container(),
             Divider(height: 1, color: Colors.grey),
             Padding(
               padding: const EdgeInsets.all(16.0),
@@ -233,10 +252,18 @@ class _ConfirmOrderState extends State<ConfirmOrder> {
                       color: Colors.transparent,
                       child: InkWell(
                         onTap: () async {
-                          totalPriceWithCoupon = await couponService.calculateCoupon(CouponRequest(
+                          if(totalPriceWithCoupon > 0) {
+                            return;
+                          }
+                          double newValue = await couponService.calculateCoupon(CouponRequest(
                               couponCode: _couponController.text,
                               totalAmount: totalPrice)
                           );
+                          if(newValue > 0) {
+                            setState(() {
+                              totalPriceWithCoupon = newValue;
+                            });
+                          }
                         },
                         child: Container(
                           padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24),
@@ -367,14 +394,26 @@ class _ConfirmOrderState extends State<ConfirmOrder> {
                 paymentMethod: paymentMethod,
                 couponCode: _couponController.text,
                 cartItems: cartItemRequests)
-            );
-            Utility.alert(
-                context: context,
-                message: 'Order successfully',
-                popupType: PopupType.success,
-                onOkPressed: () {
-                  context.go('/${AppRoutes.appTab}');
-                });
+            ).then((apiResponse) {
+              if (apiResponse.status.toLowerCase() == 'ok') {
+                Utility.alert(
+                  context: context,
+                  message: 'Order successfully',
+                  popupType: PopupType.success,
+                  onOkPressed: () {
+                    context.go('/${AppRoutes.appTab}');
+                  },
+                );
+              } else {
+                Utility.alert(context: context,
+                    message: apiResponse.message,
+                    popupType: PopupType.failure,
+                    onOkPressed: () {
+                    context.go('/${AppRoutes.appTab}');
+                  });
+              }
+            });
+
           },
           child: Container(
             decoration: BoxDecoration(

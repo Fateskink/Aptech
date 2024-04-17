@@ -13,6 +13,7 @@ import 'package:flutter/foundation.dart';
 
 class ProductService extends BaseService {
   final CartRepository cartRepository = CartRepository();
+
   Future<ProductList> getProducts(GetProductRequest getProductRequest) async {
     final String apiUrl = '${APIConstants.baseUrl}/products';
     final ApiResponse response = await request(
@@ -31,10 +32,12 @@ class ProductService extends BaseService {
     );
     return Product.fromJson(response.data);
   }
+
   Future<List<Product>> getProductByIds(List<int> ids) async {
     // Chuyển đổi List<int> ids sang chuỗi và nối chúng bằng dấu ','
     String idsString = ids.join(',');
-    final String apiUrl = '${APIConstants.baseUrl}/products/by-ids?ids=$idsString';
+    final String apiUrl = '${APIConstants
+        .baseUrl}/products/by-ids?ids=$idsString';
 
     final ApiResponse response = await request(
       apiUrl: apiUrl,
@@ -45,21 +48,24 @@ class ProductService extends BaseService {
         .toList();
     return products;
   }
+
   Future<List<Product>> findFavoriteProductsByUserId() async {
     final String apiUrl = '${APIConstants.baseUrl}/products/favorite-products';
-    Map<String, String> tokens  = await tokenRepository.getTokens();
+    Map<String, String> tokens = await tokenRepository.getTokens();
     String jwtToken = tokens['token'] ?? '';
     final ApiResponse response = await request(
-      apiUrl: apiUrl,
-      method: HttpMethod.POST,
-      token: jwtToken
+        apiUrl: apiUrl,
+        method: HttpMethod.POST,
+        token: jwtToken
     );
     List<Product> productResponses = (response.data as List)
         .map<Product>((productJson) => Product.fromJson(productJson))
         .toList();
     return productResponses;
   }
-  Future<void> addToCart({required int productId, required int itemCount}) async {
+
+  Future<void> addToCart(
+      {required int productId, required int itemCount}) async {
     if (productId > 0 && itemCount > 0) {
       await cartRepository.saveCart(productId, itemCount);
     } else if (itemCount == 0) {
@@ -70,7 +76,13 @@ class ProductService extends BaseService {
   Future<int?> getItemCountFromCart(int productId) async {
     return await cartRepository.getProductCountById(productId);
   }
+
   Future<Map<int, int>> getCart() async {
     return await cartRepository.getCart();
+  }
+
+  Future<bool> get isCartEmpty async {
+    Map<int, int> cartItems = await cartRepository.getCart();
+    return cartItems.isEmpty;
   }
 }

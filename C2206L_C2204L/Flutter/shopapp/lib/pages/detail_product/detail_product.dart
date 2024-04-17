@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:foodapp/dtos/responses/product/product.dart';
 import 'package:foodapp/dtos/responses/product_image/product_image.dart';
+import 'package:foodapp/enums/popup_type.dart';
 import 'package:foodapp/pages/detail_product/detail_product_sheet.dart';
 import 'package:foodapp/services/product_service.dart';
 import 'package:foodapp/utils/app_colors.dart';
+import 'package:foodapp/utils/utility.dart';
 import 'package:foodapp/widgets/loading.dart';
 import 'package:foodapp/widgets/transparent_appbar.dart';
 import 'package:get_it/get_it.dart'; // Import the carousel_slider package
@@ -183,9 +185,19 @@ class _DetailProductState extends State<DetailProduct> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 InkWell(
-                  onTap: () {
-                    context.go('/${AppRoutes.confirmOrder}');
-;
+                  onTap: () async {
+                    if(!(await productService.isCartEmpty)) {
+                      context.go('/${AppRoutes.confirmOrder}');
+                    } else {
+                      Utility.alert(
+                          context: context,
+                          message: 'Your cart is empty. Please add items before proceeding.',
+                          popupType: PopupType.failure,
+                          onOkPressed: () {
+                            // Optional action on OK pressed
+                          }
+                      );
+                    }
                   },
                   child: Container(
                     decoration: BoxDecoration(
