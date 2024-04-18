@@ -10,9 +10,9 @@ class Validations {
   }
 
   static bool isValidPhoneNumber(String phoneNumber) {
-    // Regular expression for validating phone numbers (only digits allowed)
-    final RegExp phoneRegex = RegExp(r'^[0-9]+$');
-
+    final phoneRegex = RegExp(
+      r"^(?:[+0]9)?[0-9]{10}$",
+    );
     return phoneRegex.hasMatch(phoneNumber);
   }
 }

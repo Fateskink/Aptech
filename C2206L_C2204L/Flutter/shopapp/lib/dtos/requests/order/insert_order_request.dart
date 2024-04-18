@@ -39,5 +39,21 @@ class InsertOrderRequest {
       'cart_items': cartItems.map((item) => item.toJson()).toList(),
     };
   }
+  @override
+  String toString() {
+    return 'InsertOrderRequest{\n'
+        '  fullname: $fullname,\n'
+        '  email: $email,\n'
+        '  phoneNumber: $phoneNumber,\n'
+        '  address: $address,\n'
+        '  note: $note,\n'
+        '  totalMoney: $totalMoney,\n'
+        '  shippingMethod: $shippingMethod,\n'
+        '  paymentMethod: $paymentMethod,\n'
+        '  couponCode: $couponCode,\n'
+        '  cartItems: $cartItems\n'
+        '}';
+  }
+
 }
 

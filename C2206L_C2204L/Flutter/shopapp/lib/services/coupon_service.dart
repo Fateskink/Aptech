@@ -21,6 +21,7 @@ class CouponService extends BaseService {
       method: HttpMethod.GET,
       requestData: couponRequest.toJson(),
     );
-    return response.data.result ?? 0;
+    return response.data['result'] ?? 0;
   }
+
 }

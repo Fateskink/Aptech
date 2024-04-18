@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:foodapp/dtos/requests/user/login_request.dart';
 import 'package:foodapp/dtos/requests/user/register_request.dart';
 import 'package:foodapp/dtos/responses/api_response.dart';
@@ -20,9 +22,10 @@ class UserService extends BaseService {
     );
     Map<String, dynamic> data = response.data;
     String token = data['token'];
+    int userId = data["id"];
     String refreshToken = data['refresh_token'];
     //save to local
-    await tokenRepository.saveTokens(token: token, refreshToken: refreshToken);
+    await tokenRepository.saveTokens(token: token, refreshToken: refreshToken, userId: userId);
     return response;
   }
 
@@ -37,8 +40,7 @@ class UserService extends BaseService {
   }
   Future<User> getUserDetails() async {
     final String apiUrl = '${APIConstants.baseUrl}/users/details';
-    Map<String, String> tokens  = await tokenRepository.getTokens();
-    String jwtToken = tokens['token'] ?? '';
+    String jwtToken = await tokenRepository.getJwtToken();
     final ApiResponse response = await request(
       apiUrl: apiUrl,
       method: HttpMethod.POST,
@@ -53,5 +55,9 @@ class UserService extends BaseService {
   // Retrieve credentials from local storage
   Future<Map<String, String>> getCredentials() async {
     return authRepository.getCredentials();
+  }
+  Future<void> logout() async {
+    await tokenRepository.clearTokens();
+    await cartRepository.clearCart();
   }
 }

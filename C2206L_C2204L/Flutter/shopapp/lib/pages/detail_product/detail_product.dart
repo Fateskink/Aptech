@@ -185,19 +185,21 @@ class _DetailProductState extends State<DetailProduct> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 InkWell(
-                  onTap: () async {
-                    if(!(await productService.isCartEmpty)) {
-                      context.go('/${AppRoutes.confirmOrder}');
-                    } else {
-                      Utility.alert(
-                          context: context,
-                          message: 'Your cart is empty. Please add items before proceeding.',
-                          popupType: PopupType.failure,
-                          onOkPressed: () {
-                            // Optional action on OK pressed
-                          }
-                      );
-                    }
+                  onTap: () {
+                    productService.isCartEmpty.then((isEmpty) {
+                      if (!isEmpty) {
+                        context.go('/${AppRoutes.confirmOrder}');
+                      } else {
+                        Utility.alert(
+                            context: context,
+                            message: 'Your cart is empty. Please add items before proceeding.',
+                            popupType: PopupType.failure,
+                            onOkPressed: () {
+                              // Optional action on OK pressed
+                            }
+                        );
+                      }
+                    });
                   },
                   child: Container(
                     decoration: BoxDecoration(

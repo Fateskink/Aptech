@@ -11,6 +11,7 @@ import 'package:foodapp/services/order_service.dart';
 import 'package:foodapp/services/product_service.dart';
 import 'package:foodapp/utils/app_colors.dart';
 import 'package:foodapp/utils/utility.dart';
+import 'package:foodapp/utils/validations.dart';
 import 'package:foodapp/widgets/info_popup.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
@@ -30,11 +31,11 @@ class _ConfirmOrderState extends State<ConfirmOrder> {
   final TextEditingController _fullNameController = TextEditingController();
   final TextEditingController _noteController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _addressController = TextEditingController();
 
 
   String _shippingMethod = 'Express';
-  String paymentMethod = 'COD';
-  String address = '';
+  String _paymentMethod = 'COD';
   List<Product> products = [];
   Map<int, int> cartMap = {};
   @override
@@ -47,7 +48,7 @@ class _ConfirmOrderState extends State<ConfirmOrder> {
   }
 
   void initData() async {
-    cartMap = await productService.getCart();
+    cartMap = await productService.cartRepository.getCart();
     List<int> productIds = cartMap.keys.toList();
     List<Product> products = await productService.getProductByIds(productIds);
 
@@ -63,6 +64,85 @@ class _ConfirmOrderState extends State<ConfirmOrder> {
   }
   double totalPriceWithCoupon = -1;
 
+  void _placeOrder() {
+    List<CartItemRequest> cartItemRequests = cartMap.entries.map((entry) => CartItemRequest(
+      productId: entry.key,
+      quantity: entry.value,
+    )).toList();
+    // Validate before creating InsertOrderRequest
+    if (_phoneNumberController.text.isEmpty) {
+      Utility.alert(
+        context: context,
+        message: 'Please enter a phone number.',
+        popupType: PopupType.failure,
+        onOkPressed: () {},
+      );
+      return;
+    }
+
+    if (_emailController.text.isNotEmpty && !Validations.isValidEmail(_emailController.text)) {
+      Utility.alert(
+        context: context,
+        message: 'Please enter a valid email.',
+        popupType: PopupType.failure,
+        onOkPressed: () {},
+      );
+      return;
+    }
+
+    if (_phoneNumberController.text.isNotEmpty && !Validations.isValidPhoneNumber(_phoneNumberController.text)) {
+      Utility.alert(
+        context: context,
+        message: 'Please enter a valid phone number.',
+        popupType: PopupType.failure,
+        onOkPressed: () {},
+      );
+      return;
+    }
+
+    if (_addressController.text.isEmpty) {
+      Utility.alert(
+        context: context,
+        message: 'Please enter an address.',
+        popupType: PopupType.failure,
+        onOkPressed: () {},
+      );
+      return;
+    }
+    InsertOrderRequest insertOrderRequest = InsertOrderRequest(
+        fullname: _fullNameController.text,
+        email: _emailController.text,
+        phoneNumber: _phoneNumberController.text,
+        note: _noteController.text,
+        address: _addressController.text,
+        shippingMethod: _shippingMethod,
+        totalMoney: totalPriceWithCoupon > 0 ? totalPriceWithCoupon : totalPrice,
+        paymentMethod: _paymentMethod,
+        couponCode: _couponController.text,
+        cartItems: cartItemRequests);
+    print(insertOrderRequest);
+    //return;
+    orderService.createOrder(insertOrderRequest).then((apiResponse) {
+      if (apiResponse.status.toLowerCase() == 'ok') {
+        productService.cartRepository.clearCart();
+        Utility.alert(
+          context: context,
+          message: 'Order successfully',
+          popupType: PopupType.success,
+          onOkPressed: () {
+            context.go('/${AppRoutes.appTab}');
+          },
+        );
+      } else {
+        Utility.alert(context: context,
+            message: apiResponse.message,
+            popupType: PopupType.failure,
+            onOkPressed: () {
+              context.go('/${AppRoutes.appTab}');
+            });
+      }
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -72,7 +152,7 @@ class _ConfirmOrderState extends State<ConfirmOrder> {
           icon: Icon(Icons.arrow_back),
           onPressed: () {
             //Navigator.of(context).pop();
-            context.go('detail_product');
+            context.go('/${AppRoutes.appTab}');
           },
         ),
       ),
@@ -95,13 +175,21 @@ class _ConfirmOrderState extends State<ConfirmOrder> {
                       Icon(Icons.location_on, color: Colors.grey),
                       SizedBox(width: 8),
                       Expanded(
-                        child: Text(
-                          '123 Đường ABC, Quận XYZ, TP. HCM',
+                        child: TextField(
+                          controller: _addressController,
+                          decoration: InputDecoration(
+                            hintText: 'Enter your address',
+                            border: InputBorder.none,
+                            hintStyle: TextStyle(fontSize: 16, color: Colors.grey),
+                          ),
                           style: TextStyle(fontSize: 16),
+                          onChanged: (value) {
+                            // Handle address changes
+                          },
                         ),
                       ),
                     ],
-                  ),
+                  )
                 ],
               ),
             ),
@@ -189,7 +277,7 @@ class _ConfirmOrderState extends State<ConfirmOrder> {
                 children: [
                   Expanded(child: Container()),
                   Text(
-                    '\$${totalPrice} USD(with coupon)',
+                    '\$${totalPriceWithCoupon} USD(with coupon)',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: AppColors.primaryColor,
                           fontWeight: FontWeight.bold
@@ -237,7 +325,7 @@ class _ConfirmOrderState extends State<ConfirmOrder> {
                     child: TextField(
                       controller: _couponController,
                       decoration: InputDecoration(
-                        hintText: 'Nhập mã coupon',
+                        hintText: 'type: heaven',
                         border: OutlineInputBorder(),
                       ),
                     ),
@@ -252,14 +340,25 @@ class _ConfirmOrderState extends State<ConfirmOrder> {
                       color: Colors.transparent,
                       child: InkWell(
                         onTap: () async {
-                          if(totalPriceWithCoupon > 0) {
-                            return;
+                          double newValue = 0;
+                          try {
+                            newValue = await couponService.calculateCoupon(CouponRequest(
+                                couponCode: _couponController.text.trim().toLowerCase(),
+                                totalAmount: totalPrice)
+                            );
+                          } catch (e) {
+                            print('Error calculating coupon: $e');
+                            setState(() {
+                              totalPriceWithCoupon = -1;
+                            });
+                            Utility.alert(
+                              context: context,
+                              message: 'Coupon is invalid',
+                              popupType: PopupType.failure,
+                              onOkPressed: () {},
+                            );
                           }
-                          double newValue = await couponService.calculateCoupon(CouponRequest(
-                              couponCode: _couponController.text,
-                              totalAmount: totalPrice)
-                          );
-                          if(newValue > 0) {
+                          if (newValue > 0) {
                             setState(() {
                               totalPriceWithCoupon = newValue;
                             });
@@ -344,10 +443,10 @@ class _ConfirmOrderState extends State<ConfirmOrder> {
                     children: [
                       Radio(
                         value: 'COD',
-                        groupValue: paymentMethod,
+                        groupValue: _paymentMethod,
                         onChanged: (value) {
                           setState(() {
-                            paymentMethod = value.toString();
+                            _paymentMethod = value.toString();
                           });
                         },
                       ),
@@ -355,10 +454,10 @@ class _ConfirmOrderState extends State<ConfirmOrder> {
                       SizedBox(width: 16),
                       Radio(
                         value: 'Others',
-                        groupValue: paymentMethod,
+                        groupValue: _paymentMethod,
                         onChanged: (value) {
                           setState(() {
-                            paymentMethod = value.toString();
+                            _paymentMethod = value.toString();
                           });
                         },
                       ),
@@ -378,43 +477,7 @@ class _ConfirmOrderState extends State<ConfirmOrder> {
         child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: () {
-            List<CartItemRequest> cartItemRequests = cartMap.entries.map((entry) => CartItemRequest(
-              productId: entry.key,
-              quantity: entry.value,
-            )).toList();
-            orderService.createOrder(InsertOrderRequest(
-                fullname: _fullNameController.text,
-                email: _emailController.text,
-                phoneNumber: _phoneNumberController.text,
-                note: _noteController.text,
-                address: address,
-                shippingMethod: _shippingMethod,
-                totalMoney: totalPriceWithCoupon > 0 ? totalPriceWithCoupon : totalPrice,
-                paymentMethod: paymentMethod,
-                couponCode: _couponController.text,
-                cartItems: cartItemRequests)
-            ).then((apiResponse) {
-              if (apiResponse.status.toLowerCase() == 'ok') {
-                Utility.alert(
-                  context: context,
-                  message: 'Order successfully',
-                  popupType: PopupType.success,
-                  onOkPressed: () {
-                    context.go('/${AppRoutes.appTab}');
-                  },
-                );
-              } else {
-                Utility.alert(context: context,
-                    message: apiResponse.message,
-                    popupType: PopupType.failure,
-                    onOkPressed: () {
-                    context.go('/${AppRoutes.appTab}');
-                  });
-              }
-            });
-
-          },
+          onTap: _placeOrder,
           child: Container(
             decoration: BoxDecoration(
               color: Colors.purple,
@@ -423,7 +486,7 @@ class _ConfirmOrderState extends State<ConfirmOrder> {
             child: Center(
               child: Text(
                 'Payment',
-                style: TextStyle(color: Colors.white, fontSize: 18),
+                style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
               ),
             ),
           ),

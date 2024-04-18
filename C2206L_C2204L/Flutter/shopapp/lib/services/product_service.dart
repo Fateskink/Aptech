@@ -11,9 +11,7 @@ import 'package:foodapp/repositories/cart_repository.dart';
 import 'package:foodapp/services/base_service.dart';
 import 'package:flutter/foundation.dart';
 
-class ProductService extends BaseService {
-  final CartRepository cartRepository = CartRepository();
-
+class ProductService extends BaseService {  
   Future<ProductList> getProducts(GetProductRequest getProductRequest) async {
     final String apiUrl = '${APIConstants.baseUrl}/products';
     final ApiResponse response = await request(
@@ -32,6 +30,28 @@ class ProductService extends BaseService {
     );
     return Product.fromJson(response.data);
   }
+  Future<ApiResponse> like({
+    required bool isLiked,
+    required int productId
+  }) async {
+    String apiUrl;
+
+    if (isLiked) {
+      apiUrl = '${APIConstants.baseUrl}/products/like/${productId}';
+    } else {
+      apiUrl = '${APIConstants.baseUrl}/products/unlike/${productId}';
+    }
+
+    String jwtToken = await tokenRepository.getJwtToken();
+    final ApiResponse response = await request(
+        apiUrl: apiUrl,
+        method: HttpMethod.POST,
+        token: jwtToken
+    );
+
+    return response;
+  }
+
 
   Future<List<Product>> getProductByIds(List<int> ids) async {
     // Chuyển đổi List<int> ids sang chuỗi và nối chúng bằng dấu ','
@@ -51,8 +71,7 @@ class ProductService extends BaseService {
 
   Future<List<Product>> findFavoriteProductsByUserId() async {
     final String apiUrl = '${APIConstants.baseUrl}/products/favorite-products';
-    Map<String, String> tokens = await tokenRepository.getTokens();
-    String jwtToken = tokens['token'] ?? '';
+    String jwtToken = await tokenRepository.getJwtToken();
     final ApiResponse response = await request(
         apiUrl: apiUrl,
         method: HttpMethod.POST,
@@ -73,13 +92,6 @@ class ProductService extends BaseService {
     }
   }
 
-  Future<int?> getItemCountFromCart(int productId) async {
-    return await cartRepository.getProductCountById(productId);
-  }
-
-  Future<Map<int, int>> getCart() async {
-    return await cartRepository.getCart();
-  }
 
   Future<bool> get isCartEmpty async {
     Map<int, int> cartItems = await cartRepository.getCart();

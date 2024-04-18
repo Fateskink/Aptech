@@ -11,7 +11,7 @@ class CouponRequest {
   Map<String, dynamic> toJson() {
     return {
       'couponCode': couponCode,
-      'totalAmount': totalAmount,
+      'totalAmount': totalAmount.toString(),
     };
   }
 }

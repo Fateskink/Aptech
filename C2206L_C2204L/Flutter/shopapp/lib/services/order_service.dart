@@ -12,11 +12,12 @@ class OrderService extends BaseService {
   Future<ApiResponse> createOrder(InsertOrderRequest insertOrderRequest) async {
     final String apiUrl = '${APIConstants.baseUrl}/orders';
     final Map<String, dynamic> requestData = insertOrderRequest.toJson();
-
+    String jwtToken = await tokenRepository.getJwtToken();
     final ApiResponse response = await request(
       apiUrl: apiUrl,
       method: HttpMethod.POST,
       requestData: requestData,
+      token: jwtToken
     );
     return response;
   }

@@ -2,6 +2,7 @@ import 'package:foodapp/dtos/responses/api_response.dart';
 import 'package:foodapp/exceptions/custom_exception.dart';
 import 'package:foodapp/enums/http_method.dart';
 import 'package:foodapp/repositories/auth_repository.dart';
+import 'package:foodapp/repositories/cart_repository.dart';
 import 'package:foodapp/repositories/token_repository.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
@@ -10,6 +11,7 @@ import 'package:foodapp/extensions/custon_string.dart';
 class BaseService {
   final TokenRepository tokenRepository = TokenRepository();
   final AuthRepository authRepository = AuthRepository();
+  final CartRepository cartRepository = CartRepository();
 
   Future<ApiResponse> request({
     required String apiUrl,

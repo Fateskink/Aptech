@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:foodapp/pages/app_routes.dart';
+import 'package:foodapp/services/user_service.dart';
+import 'package:get_it/get_it.dart';
+import 'package:go_router/go_router.dart';
 
 class Profile extends StatefulWidget {
   @override
@@ -7,7 +11,12 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   bool _showHeader = true;
-
+  late UserService userService;
+  @override
+  void initState() {
+    super.initState();
+    userService = GetIt.instance<UserService>();
+  }
   @override
   Widget build(BuildContext context) {
     return NotificationListener<ScrollNotification>(
@@ -74,9 +83,8 @@ class _ProfileState extends State<Profile> {
             leading: Icon(Icons.exit_to_app),
             title: Text('Signout'),
             onTap: () {
-              // Đây là nơi xử lý khi bấm nút Signout
-              // Ví dụ: đăng xuất và quay lại màn hình đăng nhập
-              Navigator.pop(context);
+              userService.logout();
+              context.go('/${AppRoutes.login}');
             },
           ),
         ],

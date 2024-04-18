@@ -34,13 +34,15 @@ class _HomeState extends State<Home> {
     productService = GetIt.instance<ProductService>();
     categoryService = GetIt.instance<CategoryService>();
   }
-
+  void _like({required bool isLiked, required int productId}) {
+    productService.like(isLiked: isLiked, productId: productId);
+  }
   @override
   Widget build(BuildContext context) {
     final screenWidth = Utility.screenWidth(context);
     final screenHeight = Utility.screenHeight(context);
     /*24 is for notification bar on Android*/
-    final double itemHeight = (screenHeight - kToolbarHeight - 24) / 2.7;
+    final double itemHeight = (screenHeight - kToolbarHeight - 24) / 2.5;
     final double itemWidth = screenWidth / 2;
     return Container(
       child: SafeArea(
@@ -192,11 +194,12 @@ class _HomeState extends State<Home> {
                         itemBuilder: (context, index) {
                           Product productResponse = productResponses[index];
                           return GridItem(
-                              productResponse: productResponses[index],
+                              product: productResponses[index],
+                              like: _like,
                               onTap: () {
                                 int productId = productResponse.id;
                                 print('navigate to detail_product, productId: ${productId}');
-                                context.go('/detail_product', extra: {'productId': productId});//send
+                                context.go('/${AppRoutes.detailProduct}', extra: {'productId': productId});
                                 //context.goNamed("sample", pathParameters: {'id1': param1, 'id2': param2});
                               },
                           );
