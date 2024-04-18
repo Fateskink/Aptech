@@ -8,12 +8,12 @@ class Order {
   final String email;
   final String address;
   final String note;
-  final String orderDate; // Use String for date representation
+  final DateTime orderDate;
   final String status;
   final double totalMoney;
   final String shippingMethod;
   final String shippingAddress;
-  final String shippingDate; // Use String for date representation
+  final DateTime shippingDate;
   final String paymentMethod;
   //final List<OrderDetail> orderDetails;
 
@@ -44,12 +44,12 @@ class Order {
       email: json['email'] as String,
       address: (json['address'] as String?)?.toUtf8() ?? '',
       note: (json['note'] as String?)?.toUtf8() ?? '',
-      orderDate: json['order_date'] as String,
+      orderDate: DateTime.parse(json['order_date']) ,
       status: json['status'] as String,
       totalMoney: (json['total_money'] as num).toDouble(),
       shippingMethod: (json['shipping_method'] as String?)?.toUtf8() ?? '',
       shippingAddress: (json['shipping_address'] as String?)?.toUtf8() ?? '',
-      shippingDate: json['shipping_date'] as String,
+      shippingDate: DateTime.parse(json['shipping_date']) ,
       paymentMethod: (json['payment_method'] as String?)?.toUtf8() ?? '',
       /*
       orderDetails: (json['order_details'] as List<dynamic>)

@@ -192,7 +192,7 @@ class _DetailProductState extends State<DetailProduct> {
                       } else {
                         Utility.alert(
                             context: context,
-                            message: 'Your cart is empty. Please add items before proceeding.',
+                            message: 'Your orders is empty. Please add items before proceeding.',
                             popupType: PopupType.failure,
                             onOkPressed: () {
                               // Optional action on OK pressed

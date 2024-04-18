@@ -25,7 +25,7 @@ class CartRepository {
 
   Future<void> saveCart(int productId, int itemCount) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    // Fetch existing cart items map from local storage
+    // Fetch existing orders items map from local storage
     Map<int, int> cartItemsMap = await getCart();
     // Update the item count for the given product ID
     cartItemsMap[productId] = itemCount;
@@ -34,17 +34,17 @@ class CartRepository {
 
   Future<void> removeCartWithProduct(int productId) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    // Fetch existing cart items map from local storage
+    // Fetch existing orders items map from local storage
     Map<int, int> cartItemsMap = await getCart();
     // Remove the product with the given productId from the cartItemsMap
     cartItemsMap.remove(productId);
-    // Save the updated cart items map back to local storage
+    // Save the updated orders items map back to local storage
     await prefs.setString(_cartKey, json.encode(cartItemsMap));
   }
 
   Future<void> clearCart() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    // Remove cart items associated with _cartKey
+    // Remove orders items associated with _cartKey
     prefs.remove(_cartKey);
   }
 }

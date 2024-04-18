@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:foodapp/pages/tab/cart/cart.dart';
+import 'package:foodapp/pages/tab/orders/orders.dart';
 import 'package:foodapp/pages/tab/favorites/favorites.dart';
 import 'package:foodapp/pages/tab/home/home.dart';
 import 'package:foodapp/pages/tab/profile/profile.dart';
@@ -51,7 +51,7 @@ class _AppTabState extends State<AppTab> {
         children: [
           Home(),
           Favorites(),
-          Cart(),
+          Orders(),
           Profile(),
         ],
       ),
@@ -71,7 +71,7 @@ class _AppTabState extends State<AppTab> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.shopping_cart),
-            label: 'Cart',
+            label: 'Orders',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
