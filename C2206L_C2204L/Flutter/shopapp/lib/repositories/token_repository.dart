@@ -25,8 +25,9 @@ class TokenRepository {
     String? refreshToken = prefs.getString(_refreshTokenKey) ?? '';
     int? userId = prefs.getInt(_userIdKey);
     return {
-      'token': token,
-      'refreshToken': refreshToken
+      _tokenKey: token,
+      _refreshTokenKey: refreshToken,
+      _userIdKey: userId.toString()
     };
   }
   Future<String> getJwtToken() async {
@@ -39,5 +40,9 @@ class TokenRepository {
     await prefs.remove(_tokenKey);
     await prefs.remove(_refreshTokenKey);
     await prefs.remove(_userIdKey);
+  }
+  Future<int?> getLoginUserId() async {
+    Map<String, dynamic> tokens = await getTokens();
+    return int.parse(tokens['userId']);
   }
 }

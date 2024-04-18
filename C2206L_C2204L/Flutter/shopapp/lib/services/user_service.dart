@@ -60,4 +60,7 @@ class UserService extends BaseService {
     await tokenRepository.clearTokens();
     await cartRepository.clearCart();
   }
+  Future<int?> getLoginUserId() async {
+    return await tokenRepository.getLoginUserId();
+  }
 }

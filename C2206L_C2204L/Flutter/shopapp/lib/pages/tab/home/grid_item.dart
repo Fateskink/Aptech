@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:foodapp/dtos/responses/product/product.dart';
+import 'package:foodapp/services/user_service.dart';
 import 'package:foodapp/utils/app_colors.dart';
+import 'package:get_it/get_it.dart';
 
 class GridItem extends StatefulWidget {
   final Product product;
@@ -18,15 +20,17 @@ class GridItem extends StatefulWidget {
 }
 
 class _GridItemState extends State<GridItem> {
-  bool isLiked = false;
-
   void toggleLike() {
     setState(() {
-      isLiked = !isLiked;
-      widget.like(isLiked: isLiked, productId: widget.product.id);
+      widget.product.isLiked = !widget.product.isLiked;
+      widget.like(isLiked: widget.product.isLiked, productId: widget.product.id);
     });
   }
+  @override
+  void initState() {
+    super.initState();
 
+  }
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -81,8 +85,8 @@ class _GridItemState extends State<GridItem> {
                         ),
                         IconButton(
                           icon: Icon(
-                            isLiked ? Icons.favorite : Icons.favorite_border,
-                            color: isLiked ? Colors.red : null,
+                            widget.product.isLiked ? Icons.favorite : Icons.favorite_border,
+                            color: widget.product.isLiked ? Colors.red : null,
                           ),
                           onPressed: toggleLike,
                         ),

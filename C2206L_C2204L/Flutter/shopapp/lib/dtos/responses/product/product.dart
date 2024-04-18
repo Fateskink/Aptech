@@ -1,6 +1,8 @@
 import 'package:foodapp/dtos/responses/comment/comment.dart';
+import 'package:foodapp/dtos/responses/favorite/favorite.dart';
 import 'package:foodapp/dtos/responses/product_image/product_image.dart';
 import 'package:foodapp/extensions/custon_string.dart';
+import 'package:foodapp/pages/tab/favorites/favorites.dart';
 import 'package:foodapp/services/api_constants.dart';
 import 'package:foodapp/utils/utility.dart';
 
@@ -14,7 +16,9 @@ class Product  {
 
   List<ProductImage> productImages = [];
   List<Comment> comments = [];
+  List<Favorite> favorites = [];
   late int categoryId;
+  bool isLiked = false;
 
   Product({
     required this.id,
@@ -25,6 +29,7 @@ class Product  {
     required this.totalPages,
     required this.productImages,
     required this.comments,
+    required this.favorites,
     required this.categoryId,
   });
   static Product get empty => Product(
@@ -36,6 +41,7 @@ class Product  {
     totalPages: 0,
     productImages: [],
     comments: [],
+    favorites: [],
     categoryId: 0,
   );
   factory Product.fromJson(Map<String, dynamic> json) {
@@ -44,6 +50,9 @@ class Product  {
             (imageJson) => ProductImage.fromJson(imageJson)).toList();
     List<Comment> comments = (json['comments'] as List<dynamic>? ?? []).map(
             (commentJson) => Comment.fromJson(commentJson as Map<String, dynamic>)
+    ).toList();
+    List<Favorite> favorites = (json['favorites'] as List<dynamic>? ?? []).map(
+            (favoriteJson) => Favorite.fromJson(favoriteJson as Map<String, dynamic>)
     ).toList();
 
     return Product(
@@ -55,6 +64,7 @@ class Product  {
       totalPages: json['totalPages'] ?? 0,
       productImages: productImages ?? [],
       comments: comments ?? [],
+      favorites: favorites ?? [],
       categoryId: json['category_id'] ?? 0,
     );
   }

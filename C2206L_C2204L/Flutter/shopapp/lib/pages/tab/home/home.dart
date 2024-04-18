@@ -7,6 +7,7 @@ import 'package:foodapp/dtos/responses/product/product.dart';
 import 'package:foodapp/pages/tab/home/grid_item.dart';
 import 'package:foodapp/services/category_service.dart';
 import 'package:foodapp/services/product_service.dart';
+import 'package:foodapp/services/user_service.dart';
 import 'package:foodapp/utils/app_colors.dart';
 import 'package:foodapp/utils/utility.dart';
 import 'package:foodapp/widgets/loading.dart';
@@ -23,16 +24,26 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   late ProductService productService;
   late CategoryService categoryService;
+  late UserService userService;
+
   int page = 0;
   int limit = 20;
   Category? selectedCategory;
   String keyword = '';
   final int crossAxisCount = 2;
+  late int? userId;
+
   @override
   void initState() {
     super.initState();
     productService = GetIt.instance<ProductService>();
     categoryService = GetIt.instance<CategoryService>();
+    userService = GetIt.instance<UserService>();
+    userService.getLoginUserId().then((userIdValue) {
+      setState(() {
+        userId = userIdValue;
+      });
+    });
   }
   void _like({required bool isLiked, required int productId}) {
     productService.like(isLiked: isLiked, productId: productId);
@@ -161,8 +172,8 @@ class _HomeState extends State<Home> {
                     return Center(child: Text('Error: ${snapshot.error}')); // Show error message if there's an error`
                   } else {
                     // Data fetched successfully, display ListView
-                    List<Product> productResponses = snapshot.data!.products; // Extract products from the response
-                    if (productResponses.isEmpty) {
+                    List<Product> products = snapshot.data!.products; // Extract products from the response
+                    if (products.isEmpty) {
                       return Container(
                         color: Colors.white, // Set container color
                         child: Center(
@@ -190,17 +201,24 @@ class _HomeState extends State<Home> {
                           crossAxisSpacing: 10, // Spacing between columns
                           mainAxisSpacing: 10, // Spacing between rows
                         ),
-                        itemCount: productResponses.length,
+                        itemCount: products.length,
                         itemBuilder: (context, index) {
-                          Product productResponse = productResponses[index];
+                          Product product = products[index];
+                          bool isLiked = false;
+                          product.favorites.forEach((favorite) {
+                            if (favorite.userId == userId) {
+                              isLiked = true;
+                              return;  // Kết thúc vòng lặp nếu tìm thấy
+                            }
+                          });
+                          product.isLiked = isLiked;
                           return GridItem(
-                              product: productResponses[index],
+                              product: products[index],
                               like: _like,
                               onTap: () {
-                                int productId = productResponse.id;
+                                int productId = product.id;
                                 print('navigate to detail_product, productId: ${productId}');
                                 context.go('/${AppRoutes.detailProduct}', extra: {'productId': productId});
-                                //context.goNamed("sample", pathParameters: {'id1': param1, 'id2': param2});
                               },
                           );
                         },
