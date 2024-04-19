@@ -33,4 +33,14 @@ export const insertStudent = async ({ name, age, email, phone }) => {
         throw error; // Re-throw the error to handle it in the component
     }
 };
-
+export const getStudentById = async (id) => {
+    debugger
+    const url = `${import.meta.env.VITE_APP_API_BASE_URL}/students/${id}`;
+    const response = await axios.get(url);
+    debugger
+    
+    if (response.status !== 200) {
+        throw new Error('Failed to fetch student');
+    }
+    return response.data;
+};
