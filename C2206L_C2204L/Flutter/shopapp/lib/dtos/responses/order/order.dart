@@ -1,5 +1,7 @@
 import 'package:foodapp/extensions/custon_string.dart';
 
+import 'order_detail.dart';
+
 class Order {
   final int id;
   final int userId;
@@ -15,7 +17,7 @@ class Order {
   final String shippingAddress;
   final DateTime shippingDate;
   final String paymentMethod;
-  //final List<OrderDetail> orderDetails;
+  final List<OrderDetail> orderDetails;
 
   Order({
     required this.id,
@@ -32,14 +34,14 @@ class Order {
     required this.shippingAddress,
     required this.shippingDate,
     required this.paymentMethod,
-    //required this.orderDetails,
+    required this.orderDetails,
   });
 
   factory Order.fromJson(Map<String, dynamic> json) {
     return Order(
       id: json['id'] as int,
       userId: json['user_id'] as int,
-      fullName: (json['fullName'] as String?)?.toUtf8() ?? '',
+      fullName: (json['fullname'] as String?)?.toUtf8() ?? '',
       phoneNumber: json['phone_number'] as String,
       email: json['email'] as String,
       address: (json['address'] as String?)?.toUtf8() ?? '',
@@ -51,11 +53,9 @@ class Order {
       shippingAddress: (json['shipping_address'] as String?)?.toUtf8() ?? '',
       shippingDate: DateTime.parse(json['shipping_date']) ,
       paymentMethod: (json['payment_method'] as String?)?.toUtf8() ?? '',
-      /*
       orderDetails: (json['order_details'] as List<dynamic>)
           .map((e) => OrderDetail.fromJson(e as Map<String, dynamic>))
           .toList(),
-       */
     );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:foodapp/dtos/requests/category/get_category_request.dart';
 import 'package:foodapp/dtos/requests/order/insert_order_request.dart';
 import 'package:foodapp/dtos/responses/api_response.dart';
+import 'package:foodapp/dtos/responses/order/order.dart';
 import 'package:foodapp/enums/http_method.dart';
 import 'package:foodapp/services/api_constants.dart';
 import 'dart:convert' as convert;
@@ -20,6 +21,19 @@ class OrderService extends BaseService {
       token: jwtToken
     );
     return response;
+  }
+  Future<List<Order>> getMyOrders() async {
+    final String apiUrl = '${APIConstants.baseUrl}/orders/';
+    String jwtToken = await tokenRepository.getJwtToken();
+    final ApiResponse response = await request(
+        apiUrl: apiUrl,
+        method: HttpMethod.GET,
+        //requestData: requestData,
+        token: jwtToken
+    );
+    return  (response.data as List).map((jsonItem) {
+      return Order.fromJson(jsonItem);
+    }).toList();
   }
 }
 

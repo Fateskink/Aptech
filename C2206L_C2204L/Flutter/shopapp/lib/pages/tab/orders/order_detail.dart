@@ -52,7 +52,7 @@ class OrderDetail extends StatelessWidget {
               child: ListView.builder(
                 itemCount: order.orderDetails.length,
                 itemBuilder: (context, index) {
-                  final item = order.orderDetails[index];
+                  final orderDetail = order.orderDetails[index];
                   return Container(
                     padding: EdgeInsets.all(8.0),
                     margin: EdgeInsets.symmetric(vertical: 4.0),
@@ -63,8 +63,8 @@ class OrderDetail extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(item.productName),
-                        Text('Quantity: ${item.quantity}, Price: \$${item.price.toStringAsFixed(2)}'),
+                        Text(orderDetail.productName),
+                        Text('Quantity: ${orderDetail.numberOfProducts}, Price: \$${orderDetail.price.toStringAsFixed(2)}'),
                       ],
                     ),
                   );

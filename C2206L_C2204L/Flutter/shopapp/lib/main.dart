@@ -92,7 +92,7 @@ final GoRouter _router = GoRouter(
         GoRoute(
           path: AppRoutes.orderDetail,
           builder: (BuildContext context, GoRouterState state) {
-            Order order = state.extra['order'] as Order;
+            Order order = (state.extra as Map)['order'] as Order;
             return OrderDetail(order: order);
           },
         ),
