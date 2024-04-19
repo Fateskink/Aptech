@@ -1,19 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:foodapp/dtos/responses/api_response.dart';
 import 'package:foodapp/dtos/responses/order/order.dart';
+import 'package:foodapp/enums/popup_type.dart';
+import 'package:foodapp/pages/app_routes.dart';
+import 'package:foodapp/services/order_service.dart';
+import 'package:foodapp/utils/utility.dart';
+import 'package:get_it/get_it.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import 'order_utils.dart'; // Để format ngày tháng
 
 class OrderDetail extends StatelessWidget {
   final Order order;
-
-  OrderDetail({required this.order});
-
+  OrderDetail({
+    super.key,
+    required this.order
+  });
+  final OrderService orderService = GetIt.instance<OrderService>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Order Detail'),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            context.go('/${AppRoutes.appTab}');
+          },
+        ),
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
@@ -103,37 +118,42 @@ class OrderDetail extends StatelessWidget {
   }
 
 
-  void _cancelOrder(BuildContext context) {
+  void _cancelOrder(BuildContext context) async {
     // Xử lý hủy đơn hàng ở đây
-    showDialog(
+    Utility.confirm(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text('Confirm'),
-        content: Text('Are you sure you want to cancel this order?'),
-        actions: [
-          TextButton(
-            onPressed: () {
-              // Đóng dialog
-              Navigator.of(context).pop();
-            },
-            child: Text('No'),
-          ),
-          TextButton(
-            onPressed: () {
-              // Xử lý hủy đơn hàng và đóng dialog
-              Navigator.of(context).pop();
-              _handleCancelOrder();
-            },
-            child: Text('Yes'),
-          ),
-        ],
-      ),
+      title: 'Confirm',
+      message: 'Are you sure you want to cancel this order?',
+      confirmActionText: 'Yes',
+      cancelActionText: 'No',
+      onConfirm: () {
+        orderService.cancelOrder(order.id).then((response) {
+          if (response.status.toLowerCase() == 'ok') {
+            Utility.alert(
+              context: context,
+              message: 'Order successfully cancelled',
+              popupType: PopupType.success,
+              onOkPressed: () {
+                context.go('/${AppRoutes.appTab}');
+              },
+            );
+          } else {
+            Utility.alert(
+              context: context,
+              message: response.message,
+              popupType: PopupType.failure,
+              onOkPressed: () {},
+            );
+          }
+        }).catchError((error) {
+          Utility.alert(
+            context: context,
+            message: error.toString(),
+            popupType: PopupType.failure,
+            onOkPressed: () {},
+          );
+        });
+      },
     );
   }
-
-  void _handleCancelOrder() {
-    // Xử lý hủy đơn hàng thực sự ở đây
-    print('Order cancelled');
-  }
 }
-

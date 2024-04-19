@@ -46,7 +46,7 @@ class _OrdersState extends State<Orders> {
                   Color statusColor = getStatusColor(order.status);
                   return InkWell(
                     onTap: () {
-                      //context.go('/${AppRoutes.orderDetail}', extra: {'order': order});
+                      context.go('/${AppRoutes.orderDetail}', extra: {'order': order});
                     },
                     child: Container(
                       margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),

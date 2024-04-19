@@ -53,4 +53,38 @@ class Utility {
       },
     );
   }
+  static void confirm({
+    required BuildContext context,
+    required String title,
+    required String message,
+    required String confirmActionText,
+    required String cancelActionText,
+    required VoidCallback onConfirm,
+  }) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(title),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () {
+              // Đóng dialog
+              Navigator.of(context).pop();
+            },
+            child: Text(cancelActionText),
+          ),
+          TextButton(
+            onPressed: () {
+              // Xử lý hành động khi bấm Yes và đóng dialog
+              Navigator.of(context).pop();
+              onConfirm();
+            },
+            child: Text(confirmActionText),
+          ),
+        ],
+      ),
+    );
+  }
+
 }

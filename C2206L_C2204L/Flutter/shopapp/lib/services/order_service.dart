@@ -35,5 +35,15 @@ class OrderService extends BaseService {
       return Order.fromJson(jsonItem);
     }).toList();
   }
+  Future<ApiResponse> cancelOrder(int orderId) async {
+    final String apiUrl = '${APIConstants.baseUrl}/orders/cancel/${orderId}';
+    String jwtToken = await tokenRepository.getJwtToken();
+    final ApiResponse response = await request(
+        apiUrl: apiUrl,
+        method: HttpMethod.PUT,
+        token: jwtToken
+    );
+    return response;
+  }
 }
 
