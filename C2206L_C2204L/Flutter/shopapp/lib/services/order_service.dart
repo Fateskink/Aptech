@@ -23,7 +23,7 @@ class OrderService extends BaseService {
     return response;
   }
   Future<List<Order>> getMyOrders() async {
-    final String apiUrl = '${APIConstants.baseUrl}/orders/';
+    final String apiUrl = '${APIConstants.baseUrl}/orders/user/0';
     String jwtToken = await tokenRepository.getJwtToken();
     final ApiResponse response = await request(
         apiUrl: apiUrl,

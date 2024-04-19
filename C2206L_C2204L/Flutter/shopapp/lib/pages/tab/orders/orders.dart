@@ -19,10 +19,6 @@ class _OrdersState extends State<Orders> {
     super.initState();
     orderService = GetIt.instance<OrderService>();
   }
-  List<Order> orders = [
-
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -35,6 +31,14 @@ class _OrdersState extends State<Orders> {
               return Text('Error: ${snapshot.error}');
             } else {
               final List<Order> orders = snapshot.data as List<Order>;
+              if (orders.isEmpty) {
+                return Center(
+                  child: Text(
+                    "No order found. You must order first.",
+                    style: TextStyle(fontSize: 16),
+                  ),
+                );
+              }
               return ListView.builder(
                 itemCount: orders.length,
                 itemBuilder: (context, index) {
@@ -42,7 +46,7 @@ class _OrdersState extends State<Orders> {
                   Color statusColor = getStatusColor(order.status);
                   return InkWell(
                     onTap: () {
-                      context.go('/${AppRoutes.orderDetail}', extra: {'order': order});
+                      //context.go('/${AppRoutes.orderDetail}', extra: {'order': order});
                     },
                     child: Container(
                       margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),

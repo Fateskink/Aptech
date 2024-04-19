@@ -263,9 +263,10 @@ class _ConfirmOrderState extends State<ConfirmOrder> {
                         fontWeight: FontWeight.bold),
                   ),
                   Text(
-                    '\$${totalPrice} USD',
+                    '\$${totalPrice.toStringAsFixed(2)} USD',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      fontWeight: FontWeight.bold),
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ],
               ),

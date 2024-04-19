@@ -38,6 +38,9 @@ class Order {
   });
 
   factory Order.fromJson(Map<String, dynamic> json) {
+    List<OrderDetail> orderDetails =  (json['order_details'] as List<dynamic>)
+        .map((e) => OrderDetail.fromJson(e as Map<String, dynamic>))
+        .toList();
     return Order(
       id: json['id'] as int,
       userId: json['user_id'] as int,
@@ -46,16 +49,16 @@ class Order {
       email: json['email'] as String,
       address: (json['address'] as String?)?.toUtf8() ?? '',
       note: (json['note'] as String?)?.toUtf8() ?? '',
-      orderDate: DateTime.parse(json['order_date']) ,
+      orderDate: DateTime.parse(json['order_date']),
       status: json['status'] as String,
       totalMoney: (json['total_money'] as num).toDouble(),
       shippingMethod: (json['shipping_method'] as String?)?.toUtf8() ?? '',
       shippingAddress: (json['shipping_address'] as String?)?.toUtf8() ?? '',
-      shippingDate: DateTime.parse(json['shipping_date']) ,
+      shippingDate: json['shipping_date'] != null
+                      ? DateTime.parse(json['shipping_date'])
+                      : DateTime.now(),
       paymentMethod: (json['payment_method'] as String?)?.toUtf8() ?? '',
-      orderDetails: (json['order_details'] as List<dynamic>)
-          .map((e) => OrderDetail.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      orderDetails: orderDetails,
     );
   }
 }
