@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:foodapp/dtos/responses/order/order.dart';
 import 'package:foodapp/pages/app_routes.dart';
 import 'package:foodapp/pages/login/login.dart';
 import 'package:foodapp/pages/order/confirm_order.dart';
 import 'package:foodapp/pages/order_list/order_list.dart';
 import 'package:foodapp/pages/register/register.dart';
 import 'package:foodapp/pages/tab/apptab.dart';
+import 'package:foodapp/pages/tab/orders/order_detail.dart';
 import 'package:foodapp/services/order_service.dart';
 import 'package:foodapp/services/user_service.dart';
 import 'package:foodapp/services/coupon_service.dart';
@@ -85,6 +87,13 @@ final GoRouter _router = GoRouter(
           path: AppRoutes.appTab,
           builder: (BuildContext context, GoRouterState state) {
             return AppTab();
+          },
+        ),
+        GoRoute(
+          path: AppRoutes.orderDetail,
+          builder: (BuildContext context, GoRouterState state) {
+            Order order = state.extra['order'] as Order;
+            return OrderDetail(order: order);
           },
         ),
       ],

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:foodapp/dtos/responses/order/order.dart';
+import 'package:foodapp/pages/app_routes.dart';
+import 'package:foodapp/pages/tab/orders/order_utils.dart';
+import 'package:go_router/go_router.dart';
 
 class Orders extends StatefulWidget {
   @override
@@ -7,7 +10,7 @@ class Orders extends StatefulWidget {
 }
 
 class _OrdersState extends State<Orders> {
-  List<Order> fakeOrders = [
+  List<Order> orders = [
     Order(
       id: 1,
       userId: 1,
@@ -175,28 +178,33 @@ class _OrdersState extends State<Orders> {
   Widget build(BuildContext context) {
     return Container(
       child: ListView.builder(
-        itemCount: fakeOrders.length,
+        itemCount: orders.length,
         itemBuilder: (context, index) {
-          Order order = fakeOrders[index];
-          Color statusColor = _getStatusColor(order.status);
-          return Container(
-            margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-            padding: EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.grey),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Đơn hàng #${order.id.toString()}', style: TextStyle(fontWeight: FontWeight.bold)),
-                SizedBox(height: 8),
-                Text('Ngày đặt: ${order.orderDate.toString()}'),
-                SizedBox(height: 8),
-                Text('Tổng tiền: \$${order.totalMoney.toStringAsFixed(2)}'),
-                SizedBox(height: 8),
-                Text('Trạng thái: ${order.status}', style: TextStyle(color: statusColor)),
-              ],
+          Order order = orders[index];
+          Color statusColor = getStatusColor(order.status);
+          return InkWell(
+            onTap: () {
+              context.go('/${AppRoutes.orderDetail}', extra: {'order': order});
+            },
+            child: Container(
+              margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+              padding: EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.grey),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Order #${order.id.toString()}', style: TextStyle(fontWeight: FontWeight.bold)),
+                  SizedBox(height: 8),
+                  Text('Order Date: ${order.orderDate.toString()}'),
+                  SizedBox(height: 8),
+                  Text('Total Amount: \$${order.totalMoney.toStringAsFixed(2)}'),
+                  SizedBox(height: 8),
+                  Text('Status: ${order.status}', style: TextStyle(color: statusColor)),
+                ],
+              ),
             ),
           );
         },
@@ -204,17 +212,4 @@ class _OrdersState extends State<Orders> {
     );
   }
 
-  Color _getStatusColor(String status) {
-    switch (status) {
-      case 'delivered':
-        return Colors.green;
-      case 'processing':
-        return Colors.orange;
-      case 'cancelled':
-        return Colors.red;
-      default:
-        return Colors.black;
-    }
-  }
-}
 
