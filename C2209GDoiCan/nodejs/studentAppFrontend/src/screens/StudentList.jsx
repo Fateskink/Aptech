@@ -7,7 +7,7 @@ function StudentList(props) {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const data = await fetchStudents();
+                const data = await fetchStudents();                
                 setStudents(data);
             } catch (error) {
                 console.error('Error fetching students:', error);
@@ -20,8 +20,6 @@ function StudentList(props) {
         // Implement delete logic here
         console.log(`Delete student with ID: ${id}`);
     };
-ggsdsf
-
     return (
         <>
             <h1>This is Student list</h1>            
@@ -45,7 +43,7 @@ ggsdsf
                         <td>{student.phone}</td>
                         <td>
                             <button onClick={() => handleDelete(student.id)}>Delete</button>
-                            <Link to={`/update/${student.id}`}>
+                            <Link to={`/update/${student._id}`}>
                                 <button>Update</button>
                             </Link>
                         </td>
