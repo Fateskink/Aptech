@@ -41,8 +41,14 @@ class TokenRepository {
     await prefs.remove(_refreshTokenKey);
     await prefs.remove(_userIdKey);
   }
-  Future<int?> getLoginUserId() async {
+  Future<int> getLoginUserId() async {
     Map<String, dynamic> tokens = await getTokens();
-    return int.parse(tokens['userId']);
+
+    // Check if 'userId' key exists and its value is not null
+    if (tokens.containsKey('userId') && tokens['userId'] != null) {
+      return int.parse(tokens['userId']);
+    } else {
+      return 0;
+    }
   }
 }

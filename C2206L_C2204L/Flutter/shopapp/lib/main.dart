@@ -6,7 +6,7 @@ import 'package:foodapp/pages/order/confirm_order.dart';
 import 'package:foodapp/pages/order_list/order_list.dart';
 import 'package:foodapp/pages/register/register.dart';
 import 'package:foodapp/pages/tab/apptab.dart';
-import 'package:foodapp/pages/tab/orders/order_detail.dart';
+import 'package:foodapp/pages/tab/orders/detail_order_screen.dart';
 import 'package:foodapp/services/order_service.dart';
 import 'package:foodapp/services/user_service.dart';
 import 'package:foodapp/services/coupon_service.dart';

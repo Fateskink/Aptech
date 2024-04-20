@@ -11,7 +11,7 @@ import 'package:intl/intl.dart';
 
 import 'order_utils.dart'; // Để format ngày tháng
 
-class OrderDetail extends StatelessWidget {
+class DetailOrderScreen extends StatelessWidget {
   final Order order;
   OrderDetail({
     super.key,
@@ -22,7 +22,7 @@ class OrderDetail extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Order Detail'),
+        title: Text('Detail Order'),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
@@ -63,29 +63,58 @@ class OrderDetail extends StatelessWidget {
               'Order Items:',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
-            Expanded(
-              child: ListView.builder(
-                itemCount: order.orderDetails.length,
-                itemBuilder: (context, index) {
-                  final orderDetail = order.orderDetails[index];
-                  return Container(
-                    padding: EdgeInsets.all(8.0),
-                    margin: EdgeInsets.symmetric(vertical: 4.0),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey),
-                      borderRadius: BorderRadius.circular(8.0),
+        Expanded(
+          child: ListView.builder(
+            itemCount: order.orderDetails.length,
+            itemBuilder: (context, index) {
+              final orderDetail = order.orderDetails[index];
+              return Container(
+                padding: EdgeInsets.all(12.0),
+                margin: EdgeInsets.symmetric(vertical: 8.0),
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey),
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Product Image
+                    Container(
+                      width: 60,
+                      height: 60,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8.0),
+                        image: DecorationImage(
+                          fit: BoxFit.cover,
+                          image: NetworkImage(orderDetail.thumbnail), // Assuming thumbnail is a URL
+                        ),
+                      ),
                     ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(orderDetail.productName),
-                        Text('Quantity: ${orderDetail.numberOfProducts}, Price: \$${orderDetail.price.toStringAsFixed(2)}'),
-                      ],
+                    SizedBox(width: 12), // Spacer between image and text
+
+                    // Product Details
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            orderDetail.productName,
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(height: 4),
+                          Text('Quantity: ${orderDetail.numberOfProducts}'),
+                          SizedBox(height: 4),
+                          Text('Price: \$${orderDetail.price.toStringAsFixed(2)}'),
+                        ],
+                      ),
                     ),
-                  );
-                },
-              ),
-            ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ),
+      ),
             SizedBox(height: 16),
             Container(
               decoration: BoxDecoration(
