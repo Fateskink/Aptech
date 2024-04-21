@@ -1,6 +1,6 @@
+import 'package:foodapp/dtos/responses/order/order_detail.dart';
 import 'package:foodapp/extensions/custon_string.dart';
 
-import 'detail_order_screen.dart';
 
 class Order {
   final int id;

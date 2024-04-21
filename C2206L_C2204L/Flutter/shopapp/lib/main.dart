@@ -6,7 +6,7 @@ import 'package:foodapp/pages/order/confirm_order.dart';
 import 'package:foodapp/pages/order_list/order_list.dart';
 import 'package:foodapp/pages/register/register.dart';
 import 'package:foodapp/pages/tab/apptab.dart';
-import 'package:foodapp/pages/tab/orders/detail_order_screen.dart';
+import 'package:foodapp/pages/order_detail/order_detail_screen.dart';
 import 'package:foodapp/services/order_service.dart';
 import 'package:foodapp/services/user_service.dart';
 import 'package:foodapp/services/coupon_service.dart';
@@ -93,7 +93,7 @@ final GoRouter _router = GoRouter(
           path: AppRoutes.orderDetail,
           builder: (BuildContext context, GoRouterState state) {
             Order order = (state.extra as Map)['order'] as Order;
-            return OrderDetail(order: order);
+            return OrderDetailScreen(order: order);
           },
         ),
       ],

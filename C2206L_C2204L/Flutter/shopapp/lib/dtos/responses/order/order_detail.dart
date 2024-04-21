@@ -1,4 +1,6 @@
-class DetailOrder {
+import 'package:foodapp/utils/utility.dart';
+
+class OrderDetail {
   int id;
   String color;
   int orderId;
@@ -9,7 +11,7 @@ class DetailOrder {
   int numberOfProducts;
   double totalMoney;
 
-  DetailOrder({
+  OrderDetail({
     required this.id,
     required this.color,
     required this.orderId,
@@ -21,7 +23,7 @@ class DetailOrder {
     required this.totalMoney,
   });
 
-  factory DetailOrder.fromJson(Map<String, dynamic> json) {
+  factory OrderDetail.fromJson(Map<String, dynamic> json) {
     return OrderDetail(
       id: json['id'] ?? 0,
       color: json['color'] ?? '',

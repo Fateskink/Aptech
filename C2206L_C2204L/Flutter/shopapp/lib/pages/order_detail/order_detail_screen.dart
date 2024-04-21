@@ -3,21 +3,24 @@ import 'package:foodapp/dtos/responses/api_response.dart';
 import 'package:foodapp/dtos/responses/order/order.dart';
 import 'package:foodapp/enums/popup_type.dart';
 import 'package:foodapp/pages/app_routes.dart';
+import 'package:foodapp/pages/tab/orders/order_utils.dart';
 import 'package:foodapp/services/order_service.dart';
 import 'package:foodapp/utils/utility.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
-import 'order_utils.dart'; // Để format ngày tháng
 
-class DetailOrderScreen extends StatelessWidget {
+
+class OrderDetailScreen extends StatelessWidget {
   final Order order;
-  OrderDetail({
-    super.key,
-    required this.order
+
+  OrderDetailScreen({
+    required this.order,
   });
+
   final OrderService orderService = GetIt.instance<OrderService>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,66 +66,65 @@ class DetailOrderScreen extends StatelessWidget {
               'Order Items:',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
-        Expanded(
-          child: ListView.builder(
-            itemCount: order.orderDetails.length,
-            itemBuilder: (context, index) {
-              final orderDetail = order.orderDetails[index];
-              return Container(
-                padding: EdgeInsets.all(12.0),
-                margin: EdgeInsets.symmetric(vertical: 8.0),
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey),
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Product Image
-                    Container(
-                      width: 60,
-                      height: 60,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8.0),
-                        image: DecorationImage(
-                          fit: BoxFit.cover,
-                          image: NetworkImage(orderDetail.thumbnail), // Assuming thumbnail is a URL
-                        ),
-                      ),
+            Expanded(
+              child: ListView.builder(
+                itemCount: order.orderDetails.length,
+                itemBuilder: (context, index) {
+                  final orderDetail = order.orderDetails[index];
+                  return Container(
+                    padding: EdgeInsets.all(12.0),
+                    margin: EdgeInsets.symmetric(vertical: 8.0),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      borderRadius: BorderRadius.circular(8.0),
                     ),
-                    SizedBox(width: 12), // Spacer between image and text
-
-                    // Product Details
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            orderDetail.productName,
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Product Image
+                        Container(
+                          width: 60,
+                          height: 60,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8.0),
+                            image: DecorationImage(
+                              fit: BoxFit.cover,
+                              image: NetworkImage(orderDetail.thumbnail), // Assuming thumbnail is a URL
+                            ),
                           ),
-                          SizedBox(height: 4),
-                          Text('Quantity: ${orderDetail.numberOfProducts}'),
-                          SizedBox(height: 4),
-                          Text('Price: \$${orderDetail.price.toStringAsFixed(2)}'),
-                        ],
-                      ),
+                        ),
+                        SizedBox(width: 12), // Spacer between image and text
+                        // Product Details
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                orderDetail.productName,
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(height: 4),
+                              Text('Quantity: ${orderDetail.numberOfProducts}'),
+                              SizedBox(height: 4),
+                              Text('Price: \$${orderDetail.price.toStringAsFixed(2)}'),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              );
-            },
-          ),
-        ),
-      ),
+                  );
+                },
+              ),
+            ),
             SizedBox(height: 16),
             Container(
+              width: double.infinity,
               decoration: BoxDecoration(
                 color: Colors.red,
                 borderRadius: BorderRadius.circular(8.0),
               ),
-              child: InkWell(
-                onTap: () {
+              child: TextButton(
+                onPressed: () {
                   // Xử lý hủy đơn hàng
                   _cancelOrder(context);
                 },
@@ -139,7 +141,7 @@ class DetailOrderScreen extends StatelessWidget {
                   ),
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),
