@@ -26,7 +26,7 @@ class _OrdersState extends State<Orders> {
           future: orderService.getMyOrders(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Expanded(child: Loading(size: 50,));
+              return Loading(size: 50,);
             } else if (snapshot.hasError) {
               return Text('Error: ${snapshot.error}');
             } else {
