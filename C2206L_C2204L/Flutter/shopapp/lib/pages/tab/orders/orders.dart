@@ -6,6 +6,8 @@ import 'package:foodapp/services/order_service.dart';
 import 'package:foodapp/widgets/loading.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
+
 
 class Orders extends StatefulWidget {
   @override
@@ -52,22 +54,30 @@ class _OrdersState extends State<Orders> {
                       margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                       padding: EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
+                        border: Border.all(color: statusColor), // Màu viền dựa trên trạng thái
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Order #${order.id.toString()}',
-                              style: TextStyle(fontWeight: FontWeight.bold)),
-                          SizedBox(height: 8),
-                          Text('Order Date: ${order.orderDate.toString()}'),
+                          Text(
+                            'Order #${order.id.toString()}',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
                           SizedBox(height: 8),
                           Text(
-                              'Total Amount: \$${order.totalMoney.toStringAsFixed(2)}'),
+                            'Order Date: ${DateFormat('dd/MM/yyyy HH:mm').format(order.orderDate)}', // Format ngày giờ phút
+                          ),
                           SizedBox(height: 8),
-                          Text('Status: ${order.status}',
-                              style: TextStyle(color: statusColor)),
+                          Text(
+                            'Total Amount: \$${order.totalMoney.toStringAsFixed(2)}',
+                            style: TextStyle(color: Colors.purple), // Màu tím cho tổng số tiền
+                          ),
+                          SizedBox(height: 8),
+                          Text(
+                            'Status: ${order.status}',
+                            style: TextStyle(color: statusColor),
+                          ),
                         ],
                       ),
                     ),
