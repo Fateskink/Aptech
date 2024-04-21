@@ -79,12 +79,13 @@ class OrderDetailScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(8.0),
                     ),
                     child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+
                       children: [
                         // Product Image
                         Container(
-                          width: 60,
-                          height: 60,
+                          width: 70,
+                          height: 70,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8.0),
                             image: DecorationImage(

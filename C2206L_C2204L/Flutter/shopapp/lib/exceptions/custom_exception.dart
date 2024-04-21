@@ -1,3 +1,4 @@
+import 'package:foodapp/extensions/custon_string.dart';
 class CustomException implements Exception {
   final int statusCode;
   final String message;
