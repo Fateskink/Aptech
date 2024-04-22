@@ -30,7 +30,7 @@ class OrderDetail {
       orderId: json['order_id'] ?? 0,
       productId: json['product_id'] ?? 0,
       productName: json['product_name'] ?? '',
-      thumbnail: Utility.getImageUrl(json['thumbnail'] ?? ''),
+      thumbnail: Utility.getProductImageUrl(json['thumbnail'] ?? ''),
       price: json['price']?.toDouble() ?? 0.0,
       numberOfProducts: json['number_of_products'] ?? 0,
       totalMoney: json['total_money']?.toDouble() ?? 0.0,

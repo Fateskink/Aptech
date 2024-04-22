@@ -1,11 +1,14 @@
 import 'package:foodapp/extensions/custon_string.dart';
 import 'package:foodapp/dtos/responses/role/role.dart';
+import 'package:foodapp/utils/utility.dart';
 
 class User {
   final int? id;
   final String? fullName;
   final String phoneNumber;
+  final String email;
   final String? address;
+  final String? profileImage;
   final bool isActive;
   final DateTime? dateOfBirth;
   final int? facebookAccountId;
@@ -17,6 +20,8 @@ class User {
     this.fullName,
     required this.phoneNumber,
     this.address,
+    required this.email,
+    this.profileImage,
     required this.isActive,
     this.dateOfBirth,
     this.facebookAccountId,
@@ -25,12 +30,14 @@ class User {
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
-
+    print("haha");
     return User(
       id: json['id'] as int?,
       fullName:  (json['fullname'] as String?)?.toUtf8() ?? '',
-      phoneNumber: json['phone_number'] as String,
+      phoneNumber: (json['phone_number'] as String) ?? '',
+      email: json['email'] == null ? '' : ((json['email'] as String) ?? ''),
       address: (json['address'] as String?)?.toUtf8() ?? '',
+      profileImage: Utility.getUserProfileImageUrl(json['profile_image'] ?? ''),
       isActive: json['is_active'] as bool,
       dateOfBirth: json['date_of_birth'] == null
           ? null

@@ -26,7 +26,8 @@ class UserService extends BaseService {
     int userId = data["id"];
     String refreshToken = data['refresh_token'];
     //save to local
-    await tokenRepository.saveTokens(token: token, refreshToken: refreshToken, userId: userId);
+    await tokenRepository.saveTokens(
+        token: token, refreshToken: refreshToken, userId: userId);
     return response;
   }
 
@@ -39,6 +40,7 @@ class UserService extends BaseService {
     );
     return response;
   }
+
   Future<User> getUserDetails() async {
     final String apiUrl = '${APIConstants.baseUrl}/users/details';
     String jwtToken = await tokenRepository.getJwtToken();
@@ -49,25 +51,32 @@ class UserService extends BaseService {
     );
     return User.fromJson(response.data);
   }
-  Future<void> saveCredentials({required String phoneNumber, required String password}) async {
-    authRepository.saveCredentials(phoneNumber: phoneNumber, password: password);
+
+  Future<void> saveCredentials(
+      {required String phoneNumber, required String password}) async {
+    authRepository.saveCredentials(
+        phoneNumber: phoneNumber, password: password);
   }
 
   // Retrieve credentials from local storage
   Future<Map<String, String>> getCredentials() async {
     return authRepository.getCredentials();
   }
+
   Future<void> logout() async {
     await tokenRepository.clearTokens();
     await cartRepository.clearCart();
   }
+
   Future<int?> getLoginUserId() async {
     return await tokenRepository.getLoginUserId();
   }
+
   // Method to upload image
   Future<void> uploadImage(String imagePath) async {
     final String apiUrl = '${APIConstants.baseUrl}/users/upload-profile-image';
-    final http.MultipartRequest request = http.MultipartRequest('POST', Uri.parse(apiUrl));
+    final http.MultipartRequest request = http.MultipartRequest(
+        'POST', Uri.parse(apiUrl));
     // Attach image to request
     request.files.add(await http.MultipartFile.fromPath('file', imagePath));
     // Send request
@@ -81,4 +90,5 @@ class UserService extends BaseService {
       // Handle error
       print('Failed to upload image');
     }
+  }
 }

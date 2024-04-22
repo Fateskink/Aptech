@@ -24,13 +24,24 @@ class Utility {
       return 'unknown';
     }
   }
-  static String getImageUrl(String? imageUrl) {
+  static String getProductImageUrl(String? imageUrl) {
     if (imageUrl == null || imageUrl.isEmpty) {
       return '${APIConstants.baseUrl}/products/images/notfound.jpeg';
     }
 
     if (!imageUrl.contains('http')) {
       return '${APIConstants.baseUrl}/products/images/$imageUrl';
+    }
+
+    return imageUrl;
+  }
+  static String getUserProfileImageUrl(String? imageUrl) {
+    if (imageUrl == null || imageUrl.isEmpty) {
+      return '${APIConstants.baseUrl}/users/profile-images/default-profile-image.jpeg';
+    }
+
+    if (!imageUrl.contains('http')) {
+      return '${APIConstants.baseUrl}/users/profile-images/$imageUrl';
     }
 
     return imageUrl;

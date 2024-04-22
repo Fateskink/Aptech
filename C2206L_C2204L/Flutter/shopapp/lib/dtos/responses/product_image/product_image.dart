@@ -13,7 +13,7 @@ class ProductImage {
   factory ProductImage.fromJson(Map<String, dynamic> json) {
     return ProductImage(
       id: json['id'],
-      imageUrl: Utility.getImageUrl(json['image_url'] ?? ''),
+      imageUrl: Utility.getProductImageUrl(json['image_url'] ?? ''),
     );
   }
 }
