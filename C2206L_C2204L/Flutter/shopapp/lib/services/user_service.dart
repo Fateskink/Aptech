@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:ffi';
 
 import 'package:foodapp/dtos/requests/user/login_request.dart';
@@ -63,4 +64,21 @@ class UserService extends BaseService {
   Future<int?> getLoginUserId() async {
     return await tokenRepository.getLoginUserId();
   }
+  // Method to upload image
+  Future<void> uploadImage(String imagePath) async {
+    final String apiUrl = '${APIConstants.baseUrl}/users/upload-profile-image';
+    final http.MultipartRequest request = http.MultipartRequest('POST', Uri.parse(apiUrl));
+    // Attach image to request
+    request.files.add(await http.MultipartFile.fromPath('file', imagePath));
+    // Send request
+    final http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      final String responseString = await response.stream.bytesToString();
+      final jsonResponse = jsonDecode(responseString);
+      print(jsonResponse);
+    } else {
+      // Handle error
+      print('Failed to upload image');
+    }
 }

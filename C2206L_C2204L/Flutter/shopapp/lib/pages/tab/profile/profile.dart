@@ -4,6 +4,7 @@ import 'package:foodapp/services/user_service.dart';
 import 'package:foodapp/utils/app_colors.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
+import 'package:image_picker/image_picker.dart';
 
 class Profile extends StatefulWidget {
   @override
@@ -29,7 +30,7 @@ class _ProfileState extends State<Profile> {
               SizedBox(height: 20),
               GestureDetector(
                 onTap: () {
-                  // Display form for uploading an image
+                  _pickImage();
                 },
                 child: CircleAvatar(
                   radius: 50,
@@ -83,4 +84,15 @@ class _ProfileState extends State<Profile> {
       ],
     );
   }
+  // Method to pick image
+  Future<void> _pickImage() async {
+    final ImagePicker _picker = ImagePicker();
+    final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery); // You can also use ImageSource.camera
+    if (pickedFile != null) {
+      userService.uploadImage(pickedFile.path);
+    } else {
+      // User canceled the picker
+    }
+  }
+
 }

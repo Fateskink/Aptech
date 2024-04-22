@@ -26,6 +26,7 @@ flutter pub add intl
 flutter pub add build_runner
 flutter pub add loading_animation_widget
 flutter pub add carousel_slider
+flutter pub add image_picker
 * */
 void main() {
   //register services
