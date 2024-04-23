@@ -8,7 +8,6 @@
  //const bodyParser = require('body-parser');
  const cors = require('cors')
  
-
  const {
 	SERVER_PORT,
     DB_HOST,
@@ -16,4 +15,9 @@
     MYSQL_USER,
     MYSQL_PASSWORD,
 } = process.env;
- console.log(MYSQL_PASSWORD);
+ //console.log(MYSQL_PASSWORD);
+app.use('/actors', actorRoute);
+app.use('//movies', movieRoute);
+app.listen(SERVER_PORT, () => {
+    console.log(`Server is running on port ${SERVER_PORT}`);
+});
