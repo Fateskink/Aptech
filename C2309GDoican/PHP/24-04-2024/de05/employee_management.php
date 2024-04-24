@@ -11,7 +11,7 @@ class EmployeeManagement {
     // Create
     public function createEmployee($name, $position, $salary) {
         try {
-            $stmt = $this->pdo->prepare("INSERT INTO employees (name, position, salary) VALUES (?, ?, ?)");
+            $stmt = $this->pdo->prepare("INSERT INTO employee (name, position, salary) VALUES (?, ?, ?)");
             $stmt->execute([$name, $position, $salary]);
             return true;
         } catch (PDOException $e) {
@@ -21,13 +21,24 @@ class EmployeeManagement {
     }
 
     // Read
-    public function getAllEmployees() {
-        $stmt = $this->pdo->query("SELECT * FROM employees");
+    public function getAllemployees() {
+        $sqlCommand = "
+            SELECT 
+                employee.id,
+                employee.name as employee_name, 
+                employee.age, 
+                employee.sex,                 
+                department.id as department_name
+            FROM employee
+            INNER JOIN department
+            ON employee.dept_id = department.id
+            ";        
+        $stmt = $this->pdo->query($sqlCommand);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function getEmployeeById($id) {
-        $stmt = $this->pdo->prepare("SELECT * FROM employees WHERE id = ?");
+        $stmt = $this->pdo->prepare("SELECT * FROM employee WHERE id = ?");
         $stmt->execute([$id]);
         
         $employee = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -36,19 +47,18 @@ class EmployeeManagement {
     }
 
     // Update
-    public function updateEmployee($id, $name, $position, $salary) {
+    public function updateEmployee($id, $name, $age, $sex) {
         try {
             $stmt = $this->pdo->prepare("
-                UPDATE employees 
+                UPDATE employee 
                 SET 
                     name = ?, 
-                    position = ?, 
-                    salary = ? 
+                    age = ?, 
+                    sex = ? 
                 WHERE 
                     id = ?
-            ");
-            
-            $stmt->execute([$name, $position, $salary, $id]);
+            ");            
+            $stmt->execute([$name, $age, $sex, $id]);
             return true;
         } catch (PDOException $e) {
             // Handle error
@@ -59,7 +69,7 @@ class EmployeeManagement {
     // Delete
     public function deleteEmployee($id) {
         try {
-            $stmt = $this->pdo->prepare("DELETE FROM employees WHERE id = ?");
+            $stmt = $this->pdo->prepare("DELETE FROM employee WHERE id = ?");
             $stmt->execute([$id]);
             return true;
         } catch (PDOException $e) {
