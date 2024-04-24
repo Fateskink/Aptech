@@ -1,13 +1,22 @@
 /**
  yarn add cors dotenv express express-validator mysql2
+
  npm install --save-dev nodemon
  */
- const express = require('express');
- require('dotenv').config();
- const getConnection = require('./db/db')
- //const bodyParser = require('body-parser');
- const cors = require('cors')
- 
+const express = require('express');
+require('dotenv').config();
+const getConnection = require('./db/db')
+const movieRoute = require('./routes/movieRoute')
+
+//const bodyParser = require('body-parser');
+const cors = require('cors')
+const app = express();
+app.use(express.json());
+app.use(express.urlencoded({ extended: true}));
+app.use(cors())
+
+getConnection();
+
  const {
 	SERVER_PORT,
     DB_HOST,
@@ -16,8 +25,9 @@
     MYSQL_PASSWORD,
 } = process.env;
  //console.log(MYSQL_PASSWORD);
-app.use('/actors', actorRoute);
-app.use('//movies', movieRoute);
+//app.use('/actors', actorRoute);
+app.use('/movies', movieRoute);
 app.listen(SERVER_PORT, () => {
     console.log(`Server is running on port ${SERVER_PORT}`);
 });
+
