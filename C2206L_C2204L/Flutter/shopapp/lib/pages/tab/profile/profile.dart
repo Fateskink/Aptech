@@ -52,6 +52,8 @@ class _ProfileState extends State<Profile> {
                       ),
                     ),
                     SizedBox(height: 10),
+                    //{{API_PREFIX}}users/profile-images/default-profile-image.jpeg
+                    //              users/profile-images/default-profile-image.jpeg
                     Text(
                       user.fullName ?? 'Username',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
