@@ -72,23 +72,35 @@ class UserService extends BaseService {
     return await tokenRepository.getLoginUserId();
   }
 
-  // Method to upload image
-  Future<void> uploadImage(String imagePath) async {
+  Future<String> uploadImage(String imagePath) async {
     final String apiUrl = '${APIConstants.baseUrl}/users/upload-profile-image';
     final http.MultipartRequest request = http.MultipartRequest(
-        'POST', Uri.parse(apiUrl));
+      'POST',
+      Uri.parse(apiUrl),
+    );
+
+    // Add headers to the request
+    String jwtToken = await tokenRepository.getJwtToken();
+    request.headers.addAll({
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': 'Bearer $jwtToken',
+    });
+
     // Attach image to request
-    request.files.add(await http.MultipartFile.fromPath('file', imagePath));
+    request.files.add(
+      await http.MultipartFile.fromPath('file', imagePath),
+    );
+
     // Send request
     final http.StreamedResponse response = await request.send();
 
     if (response.statusCode == 200) {
       final String responseString = await response.stream.bytesToString();
       final jsonResponse = jsonDecode(responseString);
+      return jsonResponse['data'];//this is imageName
       print(jsonResponse);
     } else {
-      // Handle error
-      print('Failed to upload image');
+      return '';
     }
   }
 }
