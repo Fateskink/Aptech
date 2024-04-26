@@ -15,15 +15,22 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   late UserService userService;
+  late Future<User> _userDetailsFuture;
   @override
   void initState() {
     super.initState();
     userService = GetIt.instance<UserService>();
+    _userDetailsFuture = userService.getUserDetails();
+  }
+  void _refreshUserDetails() {
+    setState(() {
+      _userDetailsFuture = userService.getUserDetails();
+    });
   }
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<User>(
-      future: userService.getUserDetails(),
+      future: _userDetailsFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Loading();
@@ -108,9 +115,9 @@ class _ProfileState extends State<Profile> {
     final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery); // You can also use ImageSource.camera
     if (pickedFile != null) {
       userService.uploadImage(pickedFile.path);
+      _refreshUserDetails();
     } else {
       // User canceled the picker
     }
   }
-
 }
