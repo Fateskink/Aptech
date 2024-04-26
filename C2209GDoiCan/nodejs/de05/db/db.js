@@ -15,4 +15,4 @@ async function getConnection() {
         throw new Error('Failed to connect to the database');
     }
 }
-module.exports = getConnection
+module.exports = getConnection;
