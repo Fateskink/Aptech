@@ -120,11 +120,49 @@ const deleteMovie = async (req, res) => {
       connection.release();
   }
 };
+//router.get('/:movie_id/actors/:actor_id', movieController.addAnActorToAMovie);
+const addAnActorToAMovie = async (req, res) => {
+    
+    const { movie_id, actor_id  } = req.params;
+    const {role} = req.body;
+    debugger
+    const connection = await getConnection();
+    try {
+        //insert into movie_casts(actor_id, movie_id, role) values(1, 2, 'abc')
 
-  module.exports = { 
-    getMovies, 
-    getMovieById, 
-    createMovie,  
-    updateMovie, 
-    deleteMovie, 
- };
+        const result = await connection.execute(
+            'insert into movie_casts(actor_id, movie_id, role) values(?, ?, ?)', 
+            [actor_id, movie_id, role]);
+        res.status(200).json({
+            message: 'Successfully update movie_casts',
+            data: result
+        });
+    } catch (error) {        
+        res.status(500).json({
+            message: error?.message ?? "Error changing movie_casts",
+            code: error.code
+        });
+    } finally {
+        // Release the connection back to the pool
+        connection.release();
+    }
+  };
+
+module.exports = {
+    getMovies,
+    getMovieById,
+    createMovie,
+    updateMovie,
+    deleteMovie,
+    addAnActorToAMovie,
+};
+/*
+insert into movies(title, year, time, release_date, country) 
+values('Di choi thoi', 2024, 120,'2024-12-02', 'vn');
+
+insert into movies(title, year, time, release_date, country) 
+values('dsmfkdf', 2023, 120,'2023-05-02', 'uk');
+
+insert into movie_casts(actor_id, movie_id, role) values(1, 2, 'abc');
+
+*/

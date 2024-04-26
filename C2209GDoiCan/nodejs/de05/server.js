@@ -27,8 +27,8 @@ getConnection();
 } = process.env;
  //console.log(MYSQL_PASSWORD);
 //app.use('/actors', actorRoute);
-app.use('/movies', movieRoute);
-app.use('/actors', actorRoute);
+app.use('/api/movies', movieRoute);
+app.use('/api/actors', actorRoute);
 app.listen(SERVER_PORT, () => {
     console.log(`Server is running on port ${SERVER_PORT}`);
 });

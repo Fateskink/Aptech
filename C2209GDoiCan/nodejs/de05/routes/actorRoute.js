@@ -17,5 +17,8 @@ router.post('/',
 router.get('/', actorController.getActors);//no validation
 router.get('/:id', actorController.getActorById);
 
+//GET /api/actors/:id/movies: Get a list of movies for an actor by ID (2 points).
+//router.get('/:id/movies', movieController.getMovieForAnActor);
+
 
 module.exports = router;

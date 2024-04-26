@@ -20,7 +20,6 @@ router.post('/',
       }    
       res.send({ errors: result.array() });                  
 });
-
-
-
+//router.get('/:id/actors', movieController.getActorsForAMovie);
+router.post('/:movie_id/actors/:actor_id', movieController.addAnActorToAMovie);
 module.exports = router;

@@ -31,3 +31,5 @@ ALTER TABLE movie_casts ADD CONSTRAINT FK_MovieCastMovie
 FOREIGN KEY (movie_id) REFERENCES movies(id);
 
 ALTER TABLE movies ADD CONSTRAINT unique_title UNIQUE (title);
+
+ALTER TABLE movie_casts ADD CONSTRAINT unique_movie_casts UNIQUE (actor_id, movie_id, role);
