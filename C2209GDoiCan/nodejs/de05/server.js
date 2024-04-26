@@ -7,6 +7,7 @@ const express = require('express');
 require('dotenv').config();
 const getConnection = require('./db/db')
 const movieRoute = require('./routes/movieRoute')
+const actorRoute = require('./routes/actorRoute')
 
 //const bodyParser = require('body-parser');
 const cors = require('cors')
@@ -27,6 +28,7 @@ getConnection();
  //console.log(MYSQL_PASSWORD);
 //app.use('/actors', actorRoute);
 app.use('/movies', movieRoute);
+app.use('/actors', actorRoute);
 app.listen(SERVER_PORT, () => {
     console.log(`Server is running on port ${SERVER_PORT}`);
 });
