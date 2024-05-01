@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:foodapp/bloc/cubits/app_config_cubit.dart';
+import 'package:foodapp/bloc/models/app_config.dart';
 import 'package:foodapp/pages/tab/orders/orders.dart';
 import 'package:foodapp/pages/tab/favorites/favorites.dart';
 import 'package:foodapp/pages/tab/home/home.dart';
@@ -35,6 +38,7 @@ class _AppTabState extends State<AppTab> {
         curve: Curves.ease,
       );
     });
+    context.read<AppConfigCubit>().updateSelectedTab(index);
   }
 
   @override
@@ -55,29 +59,33 @@ class _AppTabState extends State<AppTab> {
           Profile(),
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed, // Ensure all tabs are visible
-        currentIndex: _selectedIndex,
-        selectedItemColor: AppColors.primaryColor,
-        onTap: _onItemTapped,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.favorite),
-            label: 'Favorites',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_cart),
-            label: 'Orders',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-        ],
+      bottomNavigationBar: BlocBuilder<AppConfigCubit, AppConfig>(
+        builder: (context, state) {
+          return BottomNavigationBar(
+            type: BottomNavigationBarType.fixed, // Ensure all tabs are visible
+            currentIndex: state.selectedTabIndex,
+            selectedItemColor: AppColors.primaryColor,
+            onTap: _onItemTapped,
+            items: [
+              BottomNavigationBarItem(
+                icon: Icon(Icons.home),
+                label: 'Home',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.favorite),
+                label: 'Favorites',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.shopping_cart),
+                label: 'Orders',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.person),
+                label: 'Profile',
+              ),
+            ],
+          );
+        },
       ),
     );
   }

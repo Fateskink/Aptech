@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:foodapp/bloc/app_observer.dart';
+import 'package:foodapp/bloc/cubits/app_config_cubit.dart';
 import 'package:foodapp/dtos/responses/order/order.dart';
 import 'package:foodapp/pages/app_routes.dart';
 import 'package:foodapp/pages/login/login.dart';
@@ -18,7 +21,7 @@ import 'package:go_router/go_route'
 import 'pages/detail_product/detail_product.dart';
 import 'services/category_service.dart';
 import 'services/product_service.dart';
-
+import 'package:bloc/bloc.dart';
 /*
 flutter pub add http shared_preferences get_it
 flutter pub add go_router
@@ -27,6 +30,7 @@ flutter pub add build_runner
 flutter pub add loading_animation_widget
 flutter pub add carousel_slider
 flutter pub add image_picker
+flutter pub add flutter_bloc
 * */
 void main() {
   //register services
@@ -35,6 +39,7 @@ void main() {
   GetIt.instance.registerLazySingleton<CategoryService>(() => CategoryService());  
   GetIt.instance.registerLazySingleton<CouponService>(() => CouponService());
   GetIt.instance.registerLazySingleton<OrderService>(() => OrderService());
+  Bloc.observer = const AppObserver();
   runApp(const MyApp());
 }
 /*
@@ -123,12 +128,19 @@ class MyApp extends StatelessWidget {
         )
       ),
     );
-
+    return BlocProvider(
+      create: (_) => AppConfigCubit(),
+      child: MaterialApp.router(
+          routerConfig: _router,
+          theme: theme
+      ),
+    );
+  /*
     return MaterialApp.router(
       routerConfig: _router,
       theme: theme
     );
-
+  */
     return MaterialApp(
       title: 'Flutter Demo',
       theme: theme,

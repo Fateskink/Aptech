@@ -38,6 +38,7 @@ class _ProfileState extends State<Profile> {
           return Center(child: Text('Error: ${snapshot.error}'));
         } else {
           final User user = snapshot.data!;
+          print(user.profileImage);
           return ListView(
             children: [
               AnimatedContainer(
@@ -114,10 +115,16 @@ class _ProfileState extends State<Profile> {
     final ImagePicker _picker = ImagePicker();
     final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery); // You can also use ImageSource.camera
     if (pickedFile != null) {
-      userService.uploadImage(pickedFile.path);
-      _refreshUserDetails();
+      try {
+        String imageName = await userService.uploadImage(pickedFile.path);
+        print(imageName); // Corrected print statement
+        _refreshUserDetails();
+      } catch (e) {
+        print("Error uploading image: $e");
+      }
     } else {
-      // User canceled the picker
+      print("Image picking was canceled by the user.");
     }
   }
+
 }

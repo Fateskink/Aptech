@@ -98,7 +98,6 @@ class UserService extends BaseService {
       final String responseString = await response.stream.bytesToString();
       final jsonResponse = jsonDecode(responseString);
       return jsonResponse['data'];//this is imageName
-      print(jsonResponse);
     } else {
       return '';
     }
