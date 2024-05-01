@@ -31,6 +31,7 @@ flutter pub add loading_animation_widget
 flutter pub add carousel_slider
 flutter pub add image_picker
 flutter pub add flutter_bloc
+flutter pub add flutter_facebook_auth
 * */
 void main() {
   //register services
