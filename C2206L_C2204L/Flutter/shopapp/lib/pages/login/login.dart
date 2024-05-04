@@ -221,6 +221,71 @@ class _LoginState extends State<Login> {
                       ),
                     ),
                   ),
+                  Container(
+                    width: double.infinity,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        // Existing code here...
+                        SizedBox(height: 20), // Space between login and social media login
+                        Text('Or login with',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            // Google Login Button
+                            GestureDetector(
+                              onTap: () {
+                                // Implement your Google login logic here
+                                print('Login with Google');
+                              },
+                              child: Container(
+                                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                                decoration: BoxDecoration(
+                                  color: Colors.red, // Google color
+                                  borderRadius: BorderRadius.circular(22),
+                                ),
+                                child: Text('Google',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            // Facebook Login Button
+                            GestureDetector(
+                              onTap: () {
+                                // Implement your Facebook login logic here
+                                print('Login with Facebook');
+                              },
+                              child: Container(
+                                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                                decoration: BoxDecoration(
+                                  color: Colors.blue, // Facebook color
+                                  borderRadius: BorderRadius.circular(22),
+                                ),
+                                child: Text('Facebook',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Expanded(child: Container()),
+                        Expanded(child: Container()),
+                      ],
+                    ),
+                  ),
                   Expanded(child: Container(),),
                   Expanded(child: Container(),),
                 ],

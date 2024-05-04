@@ -32,6 +32,7 @@ flutter pub add carousel_slider
 flutter pub add image_picker
 flutter pub add flutter_bloc
 flutter pub add flutter_facebook_auth
+flutter pub add google_sign_in
 Enable Google signin: https://console.firebase.google.com/project/shopapp-58f10/authentication/providers
 * */
 void main() {
