@@ -22,6 +22,7 @@ import 'pages/detail_product/detail_product.dart';
 import 'services/category_service.dart';
 import 'services/product_service.dart';
 import 'package:bloc/bloc.dart';
+import 'package:firebase_core/firebase_core.dart';
 /*
 flutter pub add http shared_preferences get_it
 flutter pub add go_router
@@ -33,9 +34,21 @@ flutter pub add image_picker
 flutter pub add flutter_bloc
 flutter pub add flutter_facebook_auth
 flutter pub add google_sign_in
+flutter pub add sign_in_button
+flutter pub add firebase_core
+flutter pub add firebase_auth
 Enable Google signin: https://console.firebase.google.com/project/shopapp-58f10/authentication/providers
+
+npm install -g firebase-tools
+dart pub global activate flutterfire_cli
+
+firebase login
+flutterfire configure
+
+
+
 * */
-void main() {
+void main() async {
   //register services
   GetIt.instance.registerLazySingleton<UserService>(() => UserService());
   GetIt.instance.registerLazySingleton<ProductService>(() => ProductService());
@@ -43,8 +56,13 @@ void main() {
   GetIt.instance.registerLazySingleton<CouponService>(() => CouponService());
   GetIt.instance.registerLazySingleton<OrderService>(() => OrderService());
   Bloc.observer = const AppObserver();
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
+
 /*
  GoRoute(
       path: '/',

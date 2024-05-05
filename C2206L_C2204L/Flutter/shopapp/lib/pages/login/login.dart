@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:foodapp/dtos/requests/user/login_request.dart';
 import 'package:foodapp/enums/popup_type.dart';
@@ -11,6 +14,8 @@ import 'package:get_it/get_it.dart';
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
 import 'package:go_router/go_router.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:sign_in_button/sign_in_button.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -19,12 +24,25 @@ class Login extends StatefulWidget {
   State<Login> createState() => _LoginState();
 }
 
+List<String> scopes = <String>[
+  'email',
+  'https://www.googleapis.com/auth/contacts.readonly',
+];
+
 class _LoginState extends State<Login> {
   final emailOrPhoneNumberController = TextEditingController();
   final passwordController = TextEditingController();
   bool rememberPassword = false;
-
   late UserService userService;
+  GoogleSignInAccount? _currentUser;
+  bool _isAuthorized = false;
+
+  GoogleSignIn _googleSignIn = GoogleSignIn(
+    // Optional clientId
+    // clientId: 'your-client_id.apps.googleusercontent.com',
+    scopes: scopes,
+  );
+
 
   @override
   void initState() {
@@ -46,6 +64,25 @@ class _LoginState extends State<Login> {
     if (passwordController.text.isEmpty) {
       passwordController.text = "123456789";
     }
+    _googleSignIn.onCurrentUserChanged
+        .listen((GoogleSignInAccount? account) async {
+      // In mobile, being authenticated means being authorized...
+      bool isAuthorized = account != null;
+      if (kIsWeb && account != null) {
+        isAuthorized = await _googleSignIn.canAccessScopes(scopes);//kiểm tra xem tài khoản đã được cấp quyền truy cập vào các phạm vi (scopes) đã được chỉ định hay chưa.
+      }
+      setState(() {
+        _currentUser = account;
+        _isAuthorized = isAuthorized;
+      });
+
+      // Now that we know that the user can access the required scopes, the app
+      // can call the REST API.
+      if (isAuthorized) {
+        context.go('/${AppRoutes.appTab}');
+      }
+    });
+    _googleSignIn.signInSilently();
   }
   @override
   Widget build(BuildContext context) {
@@ -240,44 +277,17 @@ class _LoginState extends State<Login> {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             // Google Login Button
-                            GestureDetector(
-                              onTap: () {
-                                // Implement your Google login logic here
-                                print('Login with Google');
+                            SignInButton(
+                              Buttons.google,
+                              onPressed: () {
+                                _googleSignIn.signIn();
                               },
-                              child: Container(
-                                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                                decoration: BoxDecoration(
-                                  color: Colors.red, // Google color
-                                  borderRadius: BorderRadius.circular(22),
-                                ),
-                                child: Text('Google',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                              ),
                             ),
-                            // Facebook Login Button
-                            GestureDetector(
-                              onTap: () {
-                                // Implement your Facebook login logic here
+                            SignInButton(
+                              Buttons.facebookNew,
+                              onPressed: () {
                                 print('Login with Facebook');
                               },
-                              child: Container(
-                                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                                decoration: BoxDecoration(
-                                  color: Colors.blue, // Facebook color
-                                  borderRadius: BorderRadius.circular(22),
-                                ),
-                                child: Text('Facebook',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                              ),
                             ),
                           ],
                         ),
