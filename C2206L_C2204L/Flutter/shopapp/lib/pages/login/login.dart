@@ -15,6 +15,9 @@ import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
 import 'package:go_router/go_router.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+// Create an alias FirebaseUser for User
+typedef FirebaseUser = User;
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -33,6 +36,7 @@ class _LoginState extends State<Login> {
   final passwordController = TextEditingController();
   bool rememberPassword = false;
   late UserService userService;
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
   @override
   void initState() {
@@ -46,8 +50,14 @@ class _LoginState extends State<Login> {
       emailOrPhoneNumberController.text = credentials['phoneNumber'] ?? '';
       passwordController.text = credentials['password'] ?? '';
     });
-    //fake
-    // Set default values if controllers are still empty
+    _firebaseAuth.authStateChanges()
+        .listen((FirebaseUser? user) {
+      if (user == null) {
+        print('User is currently signed out!');
+      } else {
+        print('User is signed in!');
+      }
+    });
   }
 
   @override
@@ -77,9 +87,17 @@ class _LoginState extends State<Login> {
                     style: TextStyle(color: Colors.white, fontSize: 50),
                   ),
                   SizedBox(height: 20),
-                  loginTextField('Enter phone number or email', emailOrPhoneNumberController, false),
+                  loginTextField(
+                      hint: 'Enter phone number or email',
+                      controller: emailOrPhoneNumberController,
+                      isObscure: false
+                  ),
                   SizedBox(height: 20),
-                  loginTextField('Enter your password', passwordController, true),
+                  loginTextField(
+                      hint: 'Enter your password',
+                      controller: passwordController,
+                      isObscure: true
+                  ),
                   rememberPasswordRow(),
                   loginButton('Login'),
                   registerRow(),
@@ -93,7 +111,11 @@ class _LoginState extends State<Login> {
     );
   }
 
-  Widget loginTextField(String hint, TextEditingController controller, bool isObscure) {
+  Widget loginTextField({
+    required String hint,
+    required TextEditingController controller,
+    required bool isObscure,
+  }) {
     return Container(
       height: 54,
       alignment: Alignment.center,
@@ -182,19 +204,34 @@ class _LoginState extends State<Login> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          socialButton("Google", Icons.account_circle, Colors.red, () {
-            print('Google');
-          }),
-          SizedBox(width: 10),
-          socialButton("Facebook", Icons.facebook, Colors.blueAccent, () {
-            print('Facebook');
-          }),
+        socialButton(
+          text: "Login with Google",
+          icon: Icons.account_circle,
+          color: Colors.red,
+          onTap: () {
+            print("Google login tapped");
+          },
+        ),
+        SizedBox(width: 10),
+        socialButton(
+          text: "Login with Facebook",
+          icon: Icons.facebook,
+          color: Colors.blue,
+          onTap: () {
+            print("Facebook login tapped");
+          },
+        )
         ],
       ),
     );
   }
 
-  Widget socialButton(String text, IconData icon, Color color, VoidCallback onTap) {
+  Widget socialButton({
+    required String text,
+    required IconData icon,
+    required Color color,
+    required VoidCallback onTap,
+  }) {
     return Expanded(
       child: InkWell(
         onTap: onTap,
@@ -241,9 +278,14 @@ class _LoginState extends State<Login> {
           if (Validations.isValidEmail(input)) {
             await userService.login(
                 LoginRequest(email: input, password: password));
+            await loginToFirebaseWithEmaiAndlPassword(
+                email: input,
+                password: password,
+                context: context
+            );
           } else if (Validations.isValidPhoneNumber(input)) {
-            await userService.login(
-                LoginRequest(phoneNumber: input, password: password));
+            await userService.login(LoginRequest(phoneNumber: input, password: password));
+            await loginToFirebaseWithPhone(phoneNumber: input, context: context);
           } else {
             Utility.alert(
               context: context,
@@ -266,5 +308,135 @@ class _LoginState extends State<Login> {
       ),
     );
   }
-
+  Future<void> loginToFirebaseWithEmaiAndlPassword({
+    required String email,
+    required String password,
+    required BuildContext context
+  }) async {
+    try {
+      UserCredential userCredential = await _firebaseAuth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      print("Firebase login successful!");
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        Utility.alert(
+            context: context,
+            message: 'The password provided is too weak.',
+            popupType: PopupType.failure,
+            onOkPressed: () => print('OK button pressed')
+        );
+      } else if (e.code == 'email-already-in-use') {
+        Utility.alert(
+            context: context,
+            message: 'The email address is already in use by another account.',
+            popupType: PopupType.failure,
+            onOkPressed: () async {
+              // Attempt to sign in instead of creating a new account
+              try {
+                await _firebaseAuth.signInWithEmailAndPassword(
+                  email: email,
+                  password: password,
+                );
+                print("Signed in with existing account.");
+              } catch (e) {
+                Utility.alert(
+                    context: context,
+                    message: 'Failed to sign in with existing account: ${e.toString()}',
+                    popupType: PopupType.failure,
+                    onOkPressed: () => print('OK button pressed')
+                );
+              }
+            }
+        );
+      }
+    } catch (e) {
+      Utility.alert(
+          context: context,
+          message: 'An unexpected error occurred: ${e.toString()}',
+          popupType: PopupType.failure,
+          onOkPressed: () => print('OK button pressed')
+      );
+    }
+  }
+  Future<void> loginToFirebaseWithPhone({
+    required String phoneNumber,
+    required BuildContext context
+  }) async {
+    // Trigger the verification process
+    _firebaseAuth.verifyPhoneNumber(
+        phoneNumber: phoneNumber,
+        verificationCompleted: (PhoneAuthCredential credential) async {
+          // Android only: Firebase automatically signs in when verification is completed
+          try {
+            final UserCredential userCredential = await _firebaseAuth.signInWithCredential(credential);
+            print("Phone authentication successful!");
+            // Optionally notify user with a success message
+          } catch (e) {
+            Utility.alert(
+                context: context,
+                message: 'An error occurred while signing in: ${e.toString()}',
+                popupType: PopupType.failure,
+                onOkPressed: () => print('OK button pressed')
+            );
+          }
+        },
+        verificationFailed: (FirebaseAuthException e) {
+          // Handle the error if verification fails
+          Utility.alert(
+              context: context,
+              message: 'Verification failed: ${e.message}',
+              popupType: PopupType.failure,
+              onOkPressed: () => print('OK button pressed')
+          );
+        },
+        codeSent: (String verificationId, int? resendToken) {
+          // This callback is called when the verification code has been sent to the user
+          // Display a dialog to the user to enter the OTP
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (context) => AlertDialog(
+              title: Text('Enter OTP'),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  TextField(
+                    onChanged: (value) {
+                      // Store the entered OTP
+                    },
+                  ),
+                ],
+              ),
+              actions: <Widget>[
+                TextButton(
+                  child: Text('Confirm'),
+                  onPressed: () async {
+                    // Create a PhoneAuthCredential with the code
+                    PhoneAuthCredential phoneAuthCredential = PhoneAuthProvider.credential(verificationId: verificationId, smsCode: '123456'); // Assume '123456' is the code entered by the user
+                    try {
+                      final UserCredential userCredential = await _firebaseAuth.signInWithCredential(phoneAuthCredential);
+                      print("Phone OTP verification successful!");
+                      Navigator.pop(context); // Close the dialog
+                    } catch (e) {
+                      Navigator.pop(context); // Close the dialog
+                      Utility.alert(
+                          context: context,
+                          message: 'Failed to sign in: ${e.toString()}',
+                          popupType: PopupType.failure,
+                          onOkPressed: () => print('OK button pressed')
+                      );
+                    }
+                  },
+                ),
+              ],
+            ),
+          );
+        },
+        codeAutoRetrievalTimeout: (String verificationId) {
+          // Auto-resolution timed out...
+        }
+    );
+  }
 }
