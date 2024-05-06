@@ -37,6 +37,8 @@ flutter pub add flutter_facebook_auth
 flutter pub add google_sign_in
 flutter pub add firebase_core
 flutter pub add firebase_auth
+flutter pub add flutter_facebook_auth
+
 Enable Google signin: https://console.firebase.google.com/project/shopapp-58f10/authentication/providers
 
 npm install -g firebase-tools
