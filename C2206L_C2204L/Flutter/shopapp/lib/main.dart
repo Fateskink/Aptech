@@ -18,6 +18,7 @@ import 'package:foodapp/pages/splash/splash.dart';
 import 'package:go_router/go_route'
     'r.dart';
 
+import 'firebase_options.dart';
 import 'pages/detail_product/detail_product.dart';
 import 'services/category_service.dart';
 import 'services/product_service.dart';
@@ -34,7 +35,6 @@ flutter pub add image_picker
 flutter pub add flutter_bloc
 flutter pub add flutter_facebook_auth
 flutter pub add google_sign_in
-flutter pub add sign_in_button
 flutter pub add firebase_core
 flutter pub add firebase_auth
 Enable Google signin: https://console.firebase.google.com/project/shopapp-58f10/authentication/providers
@@ -44,7 +44,7 @@ dart pub global activate flutterfire_cli
 
 firebase login
 flutterfire configure
-
+sudo gem install drb -v 2.0.6
 
 
 * */
