@@ -94,25 +94,14 @@ services:
     volumes:
       - mongo-data:/data/db
     networks:
-      - learning
-
-  mongo-express:
-    image: mongo-express
-    container_name: mongo-express
-    restart: always
-    ports:
-      - 8091:8081
-    environment:
-      ME_CONFIG_MONGODB_ADMINUSERNAME: root
-      ME_CONFIG_MONGODB_ADMINPASSWORD: "${MONGO_PASSWORD}"
-      ME_CONFIG_MONGODB_URL: "mongodb://root:${MONGO_PASSWORD}@mongo:27017/"
-    networks:
-      - learning
+      - learning  
 
   mariadb:
     image: mariadb:11.3.2-jammy
     environment:
       MARIADB_ROOT_PASSWORD: "${MARIADB_PASSWORD}"
+    ports:
+      - 3310:3306
     networks:
       - learning
     container_name: mariadb
