@@ -19,5 +19,11 @@
         <button type="submit">Login</button>
     </div>
 </form>
+<!-- Display validation errors -->
+<div th:if="${errors != null}">
+    <ul>
+        <li th:each="error : ${errors}" th:text="${error.defaultMessage}"></li>
+    </ul>
+</div>
 </body>
 </html>

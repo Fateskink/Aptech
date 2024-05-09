@@ -1,5 +1,6 @@
 package com.aptech.de09.dtos.requests;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -17,6 +18,6 @@ public class LoginRequest {
     private String username;
 
     @NotBlank(message = "Password is required")
-    @Size(min = 5, max = 20, message = "Password must be between 5 and 20 characters")
+    @Size(min = 5, max = 100, message = "Password must be between 5 and 100 characters")
     private String password;
 }
