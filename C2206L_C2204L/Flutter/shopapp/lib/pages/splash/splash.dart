@@ -116,7 +116,7 @@ class _SplashState extends State<Splash> {
                     const SizedBox(height: 20.0),
                     Text(
                       item['title'] ?? '',
-                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                     ),
                     const SizedBox(height: 20.0),
                     Container(
@@ -125,7 +125,7 @@ class _SplashState extends State<Splash> {
                         item['description'] ?? '',
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          fontSize: 15,
+                          fontSize: 17,
                         ),
                       ),
                     ),

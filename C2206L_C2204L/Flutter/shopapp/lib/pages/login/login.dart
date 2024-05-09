@@ -233,17 +233,38 @@ class _LoginState extends State<Login> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
         socialButton(
-          text: "Login with Google",
+          text: "Google",
           icon: Icons.account_circle,
           color: Colors.red,
-          onTap: () {
-            //print("Google login tapped");
-            signInWithGoogle();
+          onTap: () async {
+            try {
+              // Attempt to sign in with Google.
+              UserCredential userCredential = await signInWithGoogle();
+
+              // Check if the user successfully signed in.
+              if (userCredential.user != null) {
+                FirebaseUser user = userCredential.user!;
+                String displayName = user.displayName ?? '';
+                String email = user.email ?? '';
+                String photoURL = user.photoURL ?? '';
+                String phoneNumber = user.phoneNumber ?? '';
+                String uid = user.uid;
+                // Navigate to AppTab only if sign-in is successful.
+                context.go('/${AppRoutes.appTab}');
+              } else {
+                // Handle the situation where the user is not returned.
+                print("Sign-in failed: No user returned.");
+              }
+            } catch (e) {
+              // Handle any errors that occur during sign-in.
+              print("Sign-in error: $e");
+            }
           },
+
         ),
         SizedBox(width: 10),
         socialButton(
-          text: "Login with Facebook",
+          text: "Facebook",
           icon: Icons.facebook,
           color: Colors.blue,
           onTap: () {

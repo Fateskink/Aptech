@@ -38,7 +38,7 @@ flutter pub add google_sign_in
 flutter pub add firebase_core
 flutter pub add firebase_auth
 flutter pub add flutter_facebook_auth
-
+flutter pub add firebase_core_platform_interface
 Enable Google signin: https://console.firebase.google.com/project/shopapp-58f10/authentication/providers
 
 npm install -g firebase-tools
@@ -47,6 +47,8 @@ dart pub global activate flutterfire_cli
 firebase login
 flutterfire configure
 sudo gem install drb -v 2.0.6
+
+cd android && ./gradlew signingReport
 
 
 * */
