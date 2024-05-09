@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: de09
+  datasource:
+    url: jdbc:mysql://localhost:3309/c2206ldoican?useSSL=false&serverTimezone=UTC
+    username: root
+    password: Abc123456789
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+  servlet:
+    multipart:
+      max-file-size: 2MB
+      max-request-size: 2MB
+server:
+  port: 8088
